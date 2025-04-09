@@ -126,11 +126,14 @@ const InputText = ({
       {label && (
         <Text
           style={[
-            tw`text-sm font-NunitoSansRegular px-4 py-2 text-gray-400`,
+            tw`text-sm font-NunitoSansRegular  py-2 text-black`,
             labelStyle,
           ]}
         >
-          {label} {required && <Text style={tw`text-red-500`}> *</Text>}
+          {label}{" "}
+          {required && (
+            <Text style={tw`text-red-500 font-DegularDisplayMedium`}> *</Text>
+          )}
         </Text>
       )}
 
@@ -191,9 +194,10 @@ const InputText = ({
           </TouchableOpacity>
         )}
       </View>
-      {errorText && touched && errorSvgIcon && (
+      {errorText && touched && (
         <View style={tw`px-2 py-1 flex-row gap-1 items-center`}>
-          <SvgXml xml={errorSvgIcon} />
+          {errorSvgIcon && <SvgXml xml={errorSvgIcon} />}
+
           <Text style={tw`text-red-500 text-xs`}>{errorText}</Text>
         </View>
       )}

@@ -1,13 +1,16 @@
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import { ActivityIndicator, Image, View } from "react-native";
+import { ActivityIndicator, Image, LogBox, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import { PrimaryColor } from "@/utils/utils";
 
 SplashScreen.preventAutoHideAsync(); // Prevent Expo's splash screen from auto-hiding
+
+LogBox.ignoreLogs([""]);
 
 export default function App() {
   const route = useRouter();
@@ -31,19 +34,16 @@ export default function App() {
     });
     SplashScreen.hideAsync();
     setTimeout(() => {
-      route?.replace("/welcome");
+      route?.replace("/login");
     }, 1000);
   }, []);
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-[#5c7b7e] pb-[25%]`}>
-      <Image
-        source={require("@/assets/images/splash-icon.png")}
-        style={tw`h-80 w-80 `}
-      />
+    <View style={tw`flex-1 justify-center items-center bg-white pb-[25%]`}>
+      <Image source={require("@/assets/images/logo.png")} />
       <ActivityIndicator
         size="large"
-        color="white"
+        color={PrimaryColor}
         style={tw`absolute bottom-16`}
       />
     </View>

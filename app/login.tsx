@@ -1,13 +1,14 @@
 import { View, Text, TextInput, Button } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import tw from "@/lib/tailwind";
 import { useForm, Controller } from "react-hook-form";
 import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
-import { IconEmail } from "@/assets/icon/icon";
+import { IconEmail, IconEyaClose, IconPassword } from "@/assets/icon/icon";
 
 const login = () => {
+  const [isSelected, setSelection] = useState(false);
   const {
     control,
     handleSubmit,
@@ -19,6 +20,8 @@ const login = () => {
     },
   });
   const onSubmit = (data) => console.log(data);
+
+  console.log(errors);
 
   return (
     <>
@@ -34,50 +37,63 @@ const login = () => {
           </Text>
         </View>
 
-        <View style={tw`w-full`}>
-          <Text style={tw`mb-1`}>Email</Text>
+        <View style={tw`w-full gap-2`}>
           <Controller
             control={control}
             rules={{
-              required: true,
+              required: {
+                value: true,
+                message: "Email is required",
+              },
+              pattern: {
+                value: /^[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}/,
+                message: "Please input valid email",
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="richard344@gmail.com"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                style={tw`h-11 w-full border  rounded-lg p-3 mb-4`}
-              />
-            )}
-            name="email"
-          />
-          {errors.email && <Text>This is required.</Text>}
-
-          <Text style={tw`mb-1`}>Password</Text>
-          <Controller
-            control={control}
-            rules={{
-              maxLength: 100,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              //   <TextInput
-              //     placeholder="*****"
-              //     onBlur={onBlur}
-              //     onChangeText={onChange}
-              //     value={value}
-              //     style={tw`h-11 w-full border rounded-lg p-3 mb-4`}
-              //   />
               <InputText
+                label="Email"
                 value={value}
-                onChangeText={onChange}
+                onChangeText={(test) => onChange(test)}
                 onBlur={onBlur}
-                // placeholderStyle={tw`bg-transparent`}
+                touched
+                errorText={errors?.email?.message}
                 textInputProps={{
                   placeholder: "Email",
                 }}
                 svgFirstIcon={IconEmail}
-                containerStyle={tw`mb-3`}
+                containerStyle={tw``}
+              />
+            )}
+            name="email"
+          />
+
+          <Controller
+            control={control}
+            rules={{
+              minLength: {
+                value: 8,
+                message: "At least 8 character needed ",
+              },
+              required: {
+                value: true,
+                message: "Passowrd is required",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                label="Password"
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.password?.message}
+                textInputProps={{
+                  placeholder: "******",
+                }}
+                svgFirstIcon={IconPassword}
+                svgSecondIcon={IconEyaClose}
+                containerLayoutStyle={tw`mb-3`}
               />
             )}
             name="password"
@@ -85,14 +101,26 @@ const login = () => {
 
           <View style={tw`flex-row justify-between mb-10`}>
             <View style={tw`flex-row gap-1 items-center rounded-none`}>
-              <Checkbox style={tw`w-4 h-4`} />
+              <Checkbox
+                value={isSelected}
+                onValueChange={setSelection}
+                style={tw`w-4 h-4 border-black rounded-none`}
+              />
               <Text>Remember me</Text>
             </View>
-            <Text>Forget password?</Text>
+            <Text
+              style={tw`text-primary text-[12px] font-DegularDisplayRegular`}
+            >
+              Forget password?
+            </Text>
           </View>
 
           <View style={tw`rounded-full h-12`}>
-            <TButton title="Sign in" containerStyle={tw``} />
+            <TButton
+              onPress={handleSubmit(onSubmit)}
+              title="Sign in"
+              containerStyle={tw``}
+            />
           </View>
         </View>
       </View>
