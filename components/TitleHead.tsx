@@ -3,15 +3,15 @@ import React from "react";
 import tw from "@/lib/tailwind";
 
 interface HeasdrProps {
-  titile: string;
+  title: string;
 }
 
-const Heading = ({ titile }: HeasdrProps) => {
+const Heading = ({ title }: HeasdrProps) => {
   return (
     <Text
       style={tw`text-3xl font-bold font-DegularDisplayRegular text-black mb-4`}
     >
-      {titile}
+      {title}
     </Text>
   );
 };

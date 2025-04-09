@@ -40,7 +40,7 @@ const singup = () => {
     <ScrollView>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
-          <Heading titile={"Welcome Back"} />
+          <Heading title={"Welcome Back"} />
           <SubHeading
             title={
               "Please sign in with valid information for access your account."
@@ -209,7 +209,7 @@ const singup = () => {
               svg={IconGoogle}
               onPress={handleSubmit(onSubmit)}
               title="Continue with google"
-              containerStyle={tw`border-sendary border bg-white rounded-lg text-black`}
+              containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
             />
           </View>
           <View style={tw`rounded-full mt-2 h-12`}>
@@ -217,11 +217,13 @@ const singup = () => {
               svg={IconFacebook}
               onPress={handleSubmit(onSubmit)}
               title="Continue with facebook"
-              containerStyle={tw`border-sendary border  rounded-lg text-black`}
+              containerStyle={tw` rounded-lg text-black`}
             />
           </View>
         </View>
-        <Text style={tw`font-normal mt-12 text-sm font-DegularDisplayMedium`}>
+        <Text
+          style={tw`font-normal mt-12 mb-2 text-sm font-DegularDisplayMedium`}
+        >
           Don’t have an account?{" "}
           <Link style={tw`text-primary font-bold`} href={"/login"}>
             Sign in

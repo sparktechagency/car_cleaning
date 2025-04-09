@@ -30,7 +30,7 @@ const login = () => {
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
-          <Heading titile={"Welcome Back"} />
+          <Heading title={"Welcome Back"} />
           <SubHeading
             title={
               "Please sign in with valid information for access your account."
@@ -75,7 +75,7 @@ const login = () => {
             rules={{
               pattern: {
                 value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-                message: "Please speacial char password",
+                message: "Please spacial char password",
               },
               required: {
                 value: true,
