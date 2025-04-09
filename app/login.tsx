@@ -6,6 +6,9 @@ import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import { IconEmail, IconEyaClose, IconPassword } from "@/assets/icon/icon";
+import { Link } from "expo-router";
+import Heading from "@/components/TitleHead";
+import SubHeading from "@/components/SubTileHead";
 
 const login = () => {
   const [isSelected, setSelection] = useState(false);
@@ -27,14 +30,12 @@ const login = () => {
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
-          <Text
-            style={tw`text-3xl font-bold font-DegularDisplayRegular text-black mb-4`}
-          >
-            Welcome back
-          </Text>
-          <Text style={tw` text-sm tracking-tight font-medium text-[#6D6D6D]`}>
-            Please sign in with valid information for access your account.
-          </Text>
+          <Heading titile={"Welcome Back"} />
+          <SubHeading
+            title={
+              "Please sign in with valid information for access your account."
+            }
+          />
         </View>
 
         <View style={tw`w-full gap-2`}>
@@ -46,7 +47,8 @@ const login = () => {
                 message: "Email is required",
               },
               pattern: {
-                value: /^[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,}/,
+                value:
+                  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 message: "Please input valid email",
               },
             }}
@@ -71,9 +73,9 @@ const login = () => {
           <Controller
             control={control}
             rules={{
-              minLength: {
-                value: 8,
-                message: "At least 8 character needed ",
+              pattern: {
+                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                message: "Please speacial char password",
               },
               required: {
                 value: true,
@@ -100,7 +102,7 @@ const login = () => {
           />
 
           <View style={tw`flex-row justify-between mb-10`}>
-            <View style={tw`flex-row gap-1 items-center rounded-none`}>
+            <View style={tw`flex-row gap-2 items-center rounded-none`}>
               <Checkbox
                 value={isSelected}
                 onValueChange={setSelection}
@@ -111,7 +113,7 @@ const login = () => {
             <Text
               style={tw`text-primary text-[12px] font-DegularDisplayRegular`}
             >
-              Forget password?
+              <Link href={"/forgetPass"}>Forget password?</Link>
             </Text>
           </View>
 
@@ -123,6 +125,14 @@ const login = () => {
             />
           </View>
         </View>
+      </View>
+      <View style={tw`justify-end items-center mb-2`}>
+        <Text style={tw`font-normal text-sm font-DegularDisplayMedium`}>
+          Don’t have an account?{" "}
+          <Link style={tw`text-primary font-bold`} href={"/singup"}>
+            Sign up
+          </Link>
+        </Text>
       </View>
     </>
   );
