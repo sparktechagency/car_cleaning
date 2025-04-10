@@ -6,11 +6,12 @@ import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import { IconEmail, IconEyaClose, IconPassword } from "@/assets/icon/icon";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Heading from "@/components/TitleHead";
 import SubHeading from "@/components/SubTileHead";
 
 const login = () => {
+  const route = useRouter();
   const [isSelected, setSelection] = useState(false);
   const {
     control,
@@ -119,7 +120,8 @@ const login = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
-              onPress={handleSubmit(onSubmit)}
+              // onPress={handleSubmit(onSubmit)}
+              onPress={() => route.push("/drewer/home")}
               title="Sign in"
               containerStyle={tw``}
             />
