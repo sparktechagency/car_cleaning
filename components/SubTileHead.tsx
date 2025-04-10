@@ -8,7 +8,9 @@ interface SubHeadingProps {
 
 const SubHeading = ({ title }: SubHeadingProps) => {
   return (
-    <Text style={tw` text-sm tracking-tight font-medium text-[#6D6D6D]`}>
+    <Text
+      style={tw` text-sm tracking-tight font-DegularDisplayMedium text-[#6D6D6D]`}
+    >
       {title}
     </Text>
   );

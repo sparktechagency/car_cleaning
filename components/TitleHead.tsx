@@ -8,9 +8,7 @@ interface HeasdrProps {
 
 const Heading = ({ title }: HeasdrProps) => {
   return (
-    <Text
-      style={tw`text-3xl font-bold font-DegularDisplayRegular text-black mb-4`}
-    >
+    <Text style={tw`text-4xl font-DegularDisplayBold  text-black mb-4`}>
       {title}
     </Text>
   );

@@ -66,7 +66,7 @@ const forgetPass = () => {
             )}
             name="email"
           />
-          F
+
           <View style={tw`gap-3 mt-10`}>
             <View style={tw`rounded-full h-12`}>
               <TButton
@@ -77,9 +77,10 @@ const forgetPass = () => {
             </View>
             <View style={tw`rounded-full h-12`}>
               <TButton
-                onPress={handleSubmit(onSubmit)}
-                title="Cencle"
-                containerStyle={tw`bg-white border-secondary text-black `}
+                onPress={() => route.back()}
+                title="cancel"
+                containerStyle={tw`bg-white border-secondary  `}
+                titleStyle={tw`text-black font-DegularDisplaySemibold text-base`}
               />
             </View>
           </View>
