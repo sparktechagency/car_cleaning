@@ -10,7 +10,7 @@ import {
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
 
-const services = () => {
+const services = (): JSX.Element => {
   const servicesItem = [
     {
       title: "Truck",
@@ -34,20 +34,24 @@ const services = () => {
     },
   ];
 
-  const renderItem = ({ item }): JSX.Element => (
-    <TouchableOpacity>
-      <View
-        style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
-      >
-        <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
-          <SvgXml xml={item.icon} />
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity>
+        <View
+          style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
+        >
+          <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
+            <SvgXml xml={item.icon} />
+          </View>
+          <Text
+            style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
+          >
+            {item.title}
+          </Text>
         </View>
-        <Text style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}>
-          {item.title}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={tw`p-4 bg-[#F6F6F6]`}>

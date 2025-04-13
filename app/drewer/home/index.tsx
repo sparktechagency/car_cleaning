@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   FlatList,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import { SvgXml } from "react-native-svg";
@@ -19,11 +20,12 @@ import {
   IconTrack,
 } from "@/assets/icon/icon";
 import { useNavigation } from "expo-router";
-import Services from "./services";
+import image1 from "../../../assets/images/photo1.png";
+import image2 from "../../../assets/images/photo2.png";
 
 const Home = () => {
   const navigation = useNavigation();
-
+  //  services data ===============================
   const servicesItem = [
     {
       title: "Truck",
@@ -36,6 +38,18 @@ const Home = () => {
     {
       title: "Suv car",
       icon: IconSubCar,
+    },
+  ];
+
+  // work section data =====================
+  const work = [
+    {
+      id: 1,
+      image: image1,
+    },
+    {
+      id: 2,
+      image: image2,
     },
   ];
 
@@ -54,10 +68,20 @@ const Home = () => {
     </TouchableOpacity>
   );
 
+  const workRenderItem = ({ item }) => {
+    return (
+      <TouchableOpacity>
+        <View style={tw`mb-4 mr-2`}>
+          <Image style={tw`w-44 h-32 rounded-2xl`} source={item.image} />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View style={tw`px-6 bg-[#F6F6F6]`}>
+    <View style={tw`flex-1 px-6 bg-[#F6F6F6]`}>
       {/* header parts  */}
-      <View style={tw`py-4 flex-row items-center justify-between mb-11`}>
+      <View style={tw`py-4 flex-row items-center justify-between `}>
         <View style={tw`flex-row items-center gap-4`}>
           <TouchableOpacity
             onPress={() => {
@@ -92,60 +116,94 @@ const Home = () => {
         </TouchableOpacity>
       </View>
 
-      {/* ========== Banner section =========== */}
-      <View>
-        <ImageBackground
-          source={require("../../../assets/images/banner-bg.png")}
-          resizeMethod="cover"
-          style={tw`h-56 rounded-full`}
-        >
-          <Image
-            style={tw`w-[220px] h-40 mx-auto mb-1`}
-            source={require("../../../assets/images/car-white.png")}
-          />
-          <View style={tw`mx-auto items-center`}>
-            <Text style={tw`font-DegularDisplayBold text-2xl`}>
-              Keep your <Text style={tw`text-primary`}> car clean</Text> always
-            </Text>
-            <Text
-              style={tw`text-sm  text-center font-DegularDisplayMedium mb-4`}
-            >
-              Car wash is a brand which is latterly going to change the people
-              think about car cleaning.
-            </Text>
-            <TouchableOpacity>
-              <View
-                style={tw`bg-primary w-28 h-11 rounded-full mx-auto justify-center items-center`}
-              >
-                <Text style={tw`text-sm font-DegularDisplayBold text-white`}>
-                  Book now!
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={tw`pb-20`}
+      >
+        {/* ========== Banner section =========== */}
+        <View>
+          <View style={tw`relative min-h-72 mt-8`}>
+            <View style={tw`top-10`}>
+              <Image
+                source={require("../../../assets/images/banner-bg.png")}
+                style={tw`h-56 w-full rounded-3xl`}
+              />
+            </View>
 
-      {/* ======== service category section ============= */}
-      <View>
-        <View style={tw`mt-6 bg-[#F6F6F6]`}>
+            <View style={tw`absolute z-50`}>
+              <Image
+                style={tw`w-[220px] h-40 mx-auto mb-1`}
+                source={require("../../../assets/images/car-white.png")}
+              />
+              <View style={tw`mx-auto items-center`}>
+                <Text style={tw`font-DegularDisplayBold text-2xl`}>
+                  Keep your <Text style={tw`text-primary`}> car clean</Text>{" "}
+                  always
+                </Text>
+                <Text
+                  style={tw`text-sm  text-center font-DegularDisplayMedium mb-4`}
+                >
+                  Car wash is a brand which is latterly going to change the
+                  people think about car cleaning.
+                </Text>
+                <TouchableOpacity>
+                  <View
+                    style={tw`bg-primary w-28 h-11 rounded-full mx-auto justify-center items-center`}
+                  >
+                    <Text
+                      style={tw`text-sm font-DegularDisplayBold text-white`}
+                    >
+                      Book now!
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* ======== service category section ============= */}
+        <View>
+          <View style={tw`mt-6 bg-[#F6F6F6]`}>
+            <Text style={tw`font-DegularDisplayBold text-2xl`}>
+              Quick access for get service
+            </Text>
+            <View style={tw``}>
+              <FlatList
+                data={servicesItem}
+                renderItem={renderItem}
+                numColumns={3}
+                keyExtractor={(item) => item.title}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={tw`flex  items-center`}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* ========= work section with home page  ====== */}
+
+        <View>
           <Text style={tw`font-DegularDisplayBold text-2xl`}>
             Quick access for get service
           </Text>
-          <View style={tw``}>
-            <FlatList
-              data={servicesItem}
-              renderItem={renderItem}
-              numColumns={3}
-              keyExtractor={(item) => item.title}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={tw`flex  items-center`}
-            />
-          </View>
-        </View>
-      </View>
 
-      {/*  */}
+          <FlatList
+            data={work}
+            renderItem={workRenderItem}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={tw`mt-4`}
+          />
+          <FlatList
+            data={work}
+            renderItem={workRenderItem}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={tw`mt-4`}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
