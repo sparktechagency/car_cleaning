@@ -9,7 +9,7 @@ export default function Layout() {
           headerShown: false,
         }}
       >
-        <Drawer.Screen name="home" />
+        <Drawer.Screen name="login" />
       </Drawer>
     </GestureHandlerRootView>
   );

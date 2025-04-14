@@ -3,7 +3,6 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  ImageBackground,
   FlatList,
   ScrollView,
 } from "react-native";
@@ -22,9 +21,20 @@ import {
 import { useNavigation } from "expo-router";
 import image1 from "../../../assets/images/photo1.png";
 import image2 from "../../../assets/images/photo2.png";
+import { Dialog, PanningProvider, Wizard } from "react-native-ui-lib";
+import { PrimaryColor } from "@/utils/utils";
+import CarType from "@/components/CarType";
+import TButton from "@/lib/buttons/TButton";
+import SecondStep from "@/components/SecondStep";
+import ThreeStep from "@/components/ThreeStep";
+import FourthStep from "@/components/FourthStep";
 
 const Home = () => {
   const navigation = useNavigation();
+
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [step, setStep] = React.useState(0);
+
   //  services data ===============================
   const servicesItem = [
     {
@@ -146,7 +156,7 @@ const Home = () => {
                   Car wash is a brand which is latterly going to change the
                   people think about car cleaning.
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <View
                     style={tw`bg-primary w-28 h-11 rounded-full mx-auto justify-center items-center`}
                   >
@@ -204,6 +214,92 @@ const Home = () => {
           />
         </View>
       </ScrollView>
+
+      {/* ============= booking modal ====================== */}
+      <Dialog
+        width={"100%"}
+        height={"70%"}
+        containerStyle={tw`bg-[#F6F6F6] flex-1 items-center py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
+        visible={modalVisible}
+        onDismiss={() => setModalVisible(false)}
+        panDirection={PanningProvider.Directions.DOWN}
+        bottom={true}
+      >
+        <View style={tw`px-4`}>
+          <Wizard
+            containerStyle={tw`bg-transparent border-0 shadow-none`}
+            activeIndex={step}
+            onActiveIndexChanged={(index) => setStep(index)}
+            activeConfig={{
+              circleColor: PrimaryColor,
+              state: "enabled",
+              color: PrimaryColor,
+              icon: require("@/assets/images/check_circle.png"),
+            }}
+          >
+            <Wizard.Step
+              circleColor={PrimaryColor}
+              circleSize={20}
+              state={step > 0 ? Wizard.States.COMPLETED : Wizard.States.ENABLED}
+              icon={require("@/assets/images/check_circle.png")}
+            />
+            <Wizard.Step
+              circleColor={PrimaryColor}
+              circleSize={20}
+              state={
+                step > 1
+                  ? Wizard.States.COMPLETED
+                  : step === 1
+                  ? Wizard.States.ENABLED
+                  : Wizard.States.DISABLED
+              }
+              icon={require("@/assets/images/check_circle.png")}
+            />
+            <Wizard.Step
+              circleColor={PrimaryColor}
+              circleSize={20}
+              state={
+                step > 2
+                  ? Wizard.States.COMPLETED
+                  : step === 2
+                  ? Wizard.States.ENABLED
+                  : Wizard.States.DISABLED
+              }
+              icon={require("@/assets/images/check_circle.png")}
+            />
+            <Wizard.Step
+              circleColor={PrimaryColor}
+              circleSize={20}
+              state={
+                step === 3 ? Wizard.States.ENABLED : Wizard.States.DISABLED
+              }
+              icon={require("@/assets/images/check_circle.png")}
+            />
+          </Wizard>
+        </View>
+        {step === 0 && <CarType />}
+        {step === 1 && <SecondStep />}
+        {step === 2 && <ThreeStep />}
+        {step === 3 && <FourthStep />}
+
+        <View style={tw`flex-row flex-1 items-end px-4 gap-2 mt-10`}>
+          <TButton
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            title="Cancel"
+            containerStyle={tw`bg-transparent border rounded-lg border-primary flex-1`}
+            titleStyle={tw`text-primary`}
+          />
+          <TButton
+            onPress={() => {
+              setStep(step + 1);
+            }}
+            title="Next"
+            containerStyle={tw`flex-1 rounded-lg`}
+          />
+        </View>
+      </Dialog>
     </View>
   );
 };

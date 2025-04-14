@@ -34,7 +34,7 @@ export default function App() {
     });
     SplashScreen.hideAsync();
     setTimeout(() => {
-      route?.replace("/login");
+      route?.replace("/drewer/home");
     }, 1000);
   }, []);
 
