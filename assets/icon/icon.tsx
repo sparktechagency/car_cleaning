@@ -427,3 +427,13 @@ export const IconBackArrow = `<svg width="11" height="16" viewBox="0 0 11 16" fi
 <path d="M8.66675 16L0.666748 8L8.66675 0L10.5334 1.86667L4.40008 8L10.5334 14.1333L8.66675 16Z" fill="#262626"/>
 </svg>
 `;
+export const IconStartColor = `<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z" fill="#FFC107"/>
+</svg>
+
+`;
+export const IconStart = `<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.85 14.825L10 12.925L13.15 14.85L12.325 11.25L15.1 8.85L11.45 8.525L10 5.125L8.55 8.5L4.9 8.825L7.675 11.25L6.85 14.825ZM3.825 19L5.45 11.975L0 7.25L7.2 6.625L10 0L12.8 6.625L20 7.25L14.55 11.975L16.175 19L10 15.275L3.825 19Z" fill="#D1D1D1"/>
+</svg>
+
+`;

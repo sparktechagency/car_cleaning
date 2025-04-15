@@ -12,6 +12,9 @@ export default function RootLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="tramsCondition" />
+      <Stack.Screen name="privacyPolicy" />
+      <Stack.Screen name="support" />
+      <Stack.Screen name="(notification)/notification" />
       {/* <Stack.Screen name="index" />
       <Stack.Screen name="index" /> */}
     </Stack>

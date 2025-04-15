@@ -2,6 +2,7 @@ import {
   Animated,
   Easing,
   NativeSyntheticEvent,
+  StyleProp,
   Text,
   TextInput,
   TextInputFocusEventData,
@@ -41,6 +42,7 @@ interface InputTextProps {
   containerLayoutStyle?: any;
   containerStyle?: any;
   editable?: boolean;
+  inputStyle?: any;
 }
 
 const InputText = ({
@@ -70,6 +72,7 @@ const InputText = ({
   containerStyle,
   editable = true,
   placeholderStyle,
+  inputStyle,
 }: InputTextProps) => {
   const [focus, setFocus] = React.useState(false);
   const [text, setText] = React.useState("");
@@ -177,7 +180,10 @@ const InputText = ({
           onBlur={(e) => {
             onBlur && onBlur(e);
           }}
-          style={tw`flex-1 px-2 text-base font-NunitoSansSemiBold`}
+          style={[
+            tw`flex-1 px-2 text-base font-NunitoSansSemiBold`,
+            inputStyle,
+          ]}
           {...textInputProps}
           value={value || text}
           onChangeText={(text) => {

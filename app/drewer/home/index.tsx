@@ -18,7 +18,7 @@ import {
   IconSubCar,
   IconTrack,
 } from "@/assets/icon/icon";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import image1 from "../../../assets/images/photo1.png";
 import image2 from "../../../assets/images/photo2.png";
 import { Dialog, PanningProvider, Wizard } from "react-native-ui-lib";
@@ -31,6 +31,7 @@ import FourthStep from "@/components/FourthStep";
 
 const Home = () => {
   const navigation = useNavigation();
+  const router = useRouter();
 
   const [modalVisible, setModalVisible] = React.useState(false);
   const [step, setStep] = React.useState(0);
@@ -89,7 +90,7 @@ const Home = () => {
   };
 
   return (
-    <View style={tw`flex-1 px-6 bg-[#F6F6F6]`}>
+    <View style={tw`flex-1 px-6 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
         <View style={tw`flex-row items-center gap-4`}>
@@ -120,6 +121,7 @@ const Home = () => {
         </View>
 
         <TouchableOpacity
+          onPress={() => router.push("/(notification)/notification")}
           style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
         >
           <SvgXml xml={IconNotification} />

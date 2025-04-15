@@ -1,5 +1,7 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
+import { StatusBar } from "react-native";
+import { Base } from "@/utils/utils";
 
 export default function Layout() {
   return (
@@ -11,6 +13,7 @@ export default function Layout() {
       >
         <Drawer.Screen name="login" />
       </Drawer>
+      <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} />
     </GestureHandlerRootView>
   );
 }

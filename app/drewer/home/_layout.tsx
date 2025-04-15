@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { SvgXml } from "react-native-svg";
@@ -19,6 +19,7 @@ import {
   ParamListBase,
   TabNavigationState,
 } from "@react-navigation/native";
+import { Base } from "@/utils/utils";
 
 // Define your route params
 type RouteParamList = {
@@ -146,6 +147,7 @@ export default function _layout() {
       <Tabs.Screen name="services" />
       <Tabs.Screen name="work" />
       <Tabs.Screen name="profile" />
+      <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} />
     </Tabs>
   );
 }

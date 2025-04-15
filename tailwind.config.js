@@ -28,6 +28,8 @@ module.exports = {
       colors: {
         primary: "#0063E5",
         secondary: "#E7E7E7",
+        primaryBase: "#F6F6F6",
+        regularText: "#262626",
       },
     },
   },
