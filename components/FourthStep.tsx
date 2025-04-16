@@ -4,7 +4,7 @@ import { View, Text, Button, TouchableOpacity } from "react-native";
 
 const FourthStep = () => {
   return (
-    <View style={tw`px-6`}>
+    <View style={tw``}>
       <Text style={tw`font-DegularDisplaySemibold text-xl text-regularText`}>
         Select time
       </Text>

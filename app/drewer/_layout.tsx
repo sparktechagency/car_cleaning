@@ -3,6 +3,13 @@ import { Drawer } from "expo-router/drawer";
 import { StatusBar } from "react-native";
 import { Base } from "@/utils/utils";
 
+
+
+const CustomDrawerContent = () => {
+
+}
+
+
 export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -10,6 +17,7 @@ export default function Layout() {
         screenOptions={{
           headerShown: false,
         }}
+        drawerContent={(props) => }
       >
         <Drawer.Screen name="login" />
       </Drawer>

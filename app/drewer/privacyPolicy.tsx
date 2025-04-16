@@ -6,12 +6,12 @@ import { useNavigation } from "expo-router";
 import tw from "@/lib/tailwind";
 
 const privacyPolicy = () => {
-  const router = useNavigation();
+  const navigation = useNavigation();
   return (
     <View style={tw`px-6`}>
       <Pressable
         onPress={() => {
-          router.goBack();
+          navigation.goBack();
         }}
         style={tw`flex-row items-center mt-5 gap-2`}
       >

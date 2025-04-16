@@ -5,12 +5,14 @@ import {
   Image,
   FlatList,
   ScrollView,
+  Modal,
 } from "react-native";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 import tw from "@/lib/tailwind";
 import {
   IconCompact,
+  IconCross,
   IconHi,
   IconLocation,
   IconMenu,
@@ -34,6 +36,8 @@ const Home = () => {
   const router = useRouter();
 
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [workDetailsModalVisible, setWorkDetailsModalVisible] =
+    React.useState(false);
   const [step, setStep] = React.useState(0);
 
   //  services data ===============================
@@ -62,10 +66,18 @@ const Home = () => {
       id: 2,
       image: image2,
     },
+    {
+      id: 3,
+      image: image2,
+    },
+    {
+      id: 4,
+      image: image2,
+    },
   ];
 
   const renderItem = ({ item }): JSX.Element => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => router.push("/(order)/calendersDate")}>
       <View
         style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
       >
@@ -81,7 +93,11 @@ const Home = () => {
 
   const workRenderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          setWorkDetailsModalVisible(true);
+        }}
+      >
         <View style={tw`mb-4 mr-2`}>
           <Image style={tw`w-44 h-32 rounded-2xl`} source={item.image} />
         </View>
@@ -134,7 +150,7 @@ const Home = () => {
       >
         {/* ========== Banner section =========== */}
         <View>
-          <View style={tw`relative min-h-72 mt-8`}>
+          <View style={tw`relative w-full items-center min-h-72 mt-8`}>
             <View style={tw`top-10`}>
               <Image
                 source={require("../../../assets/images/banner-bg.png")}
@@ -144,16 +160,16 @@ const Home = () => {
 
             <View style={tw`absolute z-50`}>
               <Image
-                style={tw`w-[220px] h-40 mx-auto mb-1`}
+                style={tw` h-40 mx-auto mb-1`}
                 source={require("../../../assets/images/car-white.png")}
               />
-              <View style={tw`mx-auto items-center`}>
+              <View style={tw`mx-auto w-full text-center items-center`}>
                 <Text style={tw`font-DegularDisplayBold text-2xl`}>
                   Keep your <Text style={tw`text-primary`}> car clean</Text>{" "}
                   always
                 </Text>
                 <Text
-                  style={tw`text-sm  text-center font-DegularDisplayMedium mb-4`}
+                  style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
                 >
                   Car wash is a brand which is latterly going to change the
                   people think about car cleaning.
@@ -201,17 +217,10 @@ const Home = () => {
           </Text>
 
           <FlatList
+            scrollEnabled={false}
             data={work}
             renderItem={workRenderItem}
             numColumns={2}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={tw`mt-4`}
-          />
-          <FlatList
-            data={work}
-            renderItem={workRenderItem}
-            numColumns={2}
-            keyExtractor={(item) => item.id}
             contentContainerStyle={tw`mt-4`}
           />
         </View>
@@ -221,7 +230,7 @@ const Home = () => {
       <Dialog
         width={"100%"}
         height={"70%"}
-        containerStyle={tw`bg-[#F6F6F6] flex-1 items-center py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
+        containerStyle={tw`bg-[#F6F6F6] flex-1 items-center px-6 py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
         panDirection={PanningProvider.Directions.DOWN}
@@ -284,7 +293,7 @@ const Home = () => {
         {step === 2 && <ThreeStep />}
         {step === 3 && <FourthStep />}
 
-        <View style={tw`flex-row flex-1 items-end px-4 gap-2 mt-10`}>
+        <View style={tw`flex-row flex-1 items-end gap-2 mt-10`}>
           <TButton
             onPress={() => {
               setModalVisible(!modalVisible);
@@ -302,6 +311,59 @@ const Home = () => {
           />
         </View>
       </Dialog>
+
+      {/* ========== Work Item Details ================ */}
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={workDetailsModalVisible}
+        onRequestClose={() => setWorkDetailsModalVisible(false)}
+      >
+        <View
+          style={tw`flex-1 bg-black bg-opacity-50 justify-center items-center`}
+        >
+          <View
+            style={tw`w-7/8 bg-white p-6 rounded-2xl items-center shadow-lg`}
+          >
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setWorkDetailsModalVisible(false)}
+              style={tw` mb-3 rounded-lg  w-full flex-row justify-end text-end `}
+            >
+              <SvgXml xml={IconCross} />
+            </TouchableOpacity>
+            {/* Check Icon */}
+            <Image
+              style={tw`w-full h-32 rounded-2xl`}
+              source={require("../../../assets/images/work/image1.png")}
+            />
+
+            {/* Success Message */}
+            <View style={tw`w-full flex-row justify-between items-center mt-6`}>
+              <Text style={tw`text-xl font-DegularDisplaySemibold `}>
+                Interior & Exterior Cleaning
+              </Text>
+              <Text style={tw`text-xl font-DegularDisplayBold text-primary`}>
+                $542.00
+              </Text>
+            </View>
+            <Text
+              style={tw`text-base text-[#6D6D6D] font-DegularDisplayMedium mt-2`}
+            >
+              Step into a realm of luxury and innovation with our expertly
+              designed car interiors, where every detail is meticulously crafted
+              to elevate your driving experience. Imagine plush seating that
+              cradles you in comfort, seamlessly integrated technology that
+              enhances convenience, and ambient lighting that sets the perfect
+              mood for your journey. Our interiors are not just about
+              aesthetics; they are designed with functionality in mind,
+              featuring intuitive layouts and smart storage solutions that cater
+              to your every need.
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

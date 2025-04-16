@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import {
   IconCompact,
@@ -35,12 +35,12 @@ const CarType = (): JSX.Element => {
   ];
 
   return (
-    <View style={tw`flex-row flex-wrap justify-start items-center gap-4 px-4`}>
+    <View style={tw`flex-row flex-wrap justify-start items-center gap-4 `}>
       <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
         Which type of vehicle you want to wash?
       </Text>
       {servicesItem.map((item, index) => (
-        <View
+        <TouchableOpacity
           key={index}
           style={tw`w-[30%] h-28 mb-4 rounded-2xl bg-white items-center text-center  justify-center`}
         >
@@ -52,7 +52,7 @@ const CarType = (): JSX.Element => {
           >
             {item.title}
           </Text>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );

@@ -9,8 +9,10 @@ import {
 } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
+import { useRouter } from "expo-router";
 
 const services = (): JSX.Element => {
+  const router = useRouter();
   const servicesItem = [
     {
       title: "Truck",
@@ -36,7 +38,7 @@ const services = (): JSX.Element => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push("/(order)/calendersDate")}>
         <View
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
