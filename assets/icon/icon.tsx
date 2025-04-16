@@ -503,3 +503,8 @@ export const IconCongratulation = `<svg width="81" height="80" viewBox="0 0 81 8
 </svg>
 
 `;
+export const IconLogOut = `<svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.875 4.125L12.6413 5.35875L14.8988 7.625H6V9.375H14.8988L12.6413 11.6325L13.875 12.875L18.25 8.5M2.5 2.375H9.5V0.625H2.5C1.5375 0.625 0.75 1.4125 0.75 2.375V14.625C0.75 15.5875 1.5375 16.375 2.5 16.375H9.5V14.625H2.5V2.375Z" fill="#CA3535"/>
+</svg>
+
+`;
