@@ -56,7 +56,7 @@ const services = (): JSX.Element => {
   };
 
   return (
-    <View style={tw`p-4 bg-[#F6F6F6]`}>
+    <View style={tw`p-4 `}>
       <Text style={tw`font-DegularDisplayBold text-2xl`}>
         Quick access for get service
       </Text>

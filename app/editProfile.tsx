@@ -86,7 +86,7 @@ const editProfile = () => {
         </Text>
       </Pressable>
 
-      <View style={tw`w-full mx-auto mb-6 items-center`}>
+      <View style={tw`w-full mx-auto mb-4 items-center`}>
         <Image
           source={ProfileImage}
           style={{ width: 124, height: 124, borderRadius: 100 }}
@@ -103,7 +103,7 @@ const editProfile = () => {
 
       <View>
         <Text
-          style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-4`}
+          style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-4 m2-4`}
         >
           Basic information
         </Text>
@@ -136,12 +136,12 @@ const editProfile = () => {
 
       <View>
         <Text
-          style={tw`font-DegularDisplaySemibold text-xl text-regularText my-4`}
+          style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-2 mt-4`}
         >
           Car details
         </Text>
 
-        <View style={tw` flex-row w-full justify-between`}>
+        <View style={tw` `}>
           <Controller
             control={control}
             rules={{
@@ -188,7 +188,7 @@ const editProfile = () => {
                   placeholder: "Enter Your Car model Name",
                 }}
                 svgFirstIcon={IconEditProfile}
-                containerStyle={tw`w-full  border-red-500`}
+                containerStyle={tw`w-full`}
               />
             )}
             name="user_name"
@@ -218,7 +218,7 @@ const editProfile = () => {
           ))}
         </View>
 
-        <View style={tw`rounded-full w-full h-12 mt-6 `}>
+        <View style={tw`rounded-full w-full h-12 mt-3 `}>
           <TButton
             onPress={() => setModalVisible(true)}
             title="Save & Change"
