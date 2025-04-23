@@ -1,13 +1,14 @@
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Drawer } from "expo-router/drawer";
 import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+
+import { IconLogOut } from "@/assets/icon/icon";
+import tw from "@/lib/tailwind";
 import { Base } from "@/utils/utils";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
-import tw from "@/lib/tailwind";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { Drawer } from "expo-router/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
-import { IconLogOut } from "@/assets/icon/icon";
 import { Avatar } from "react-native-ui-lib";
 
 const CustomDrawerContent = (props) => {

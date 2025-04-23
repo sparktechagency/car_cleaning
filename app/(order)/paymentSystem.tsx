@@ -1,24 +1,25 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import React from "react";
-import tw from "@/lib/tailwind";
-import {
   IconCamera,
   IconCongratulation,
   IconMaster,
   IconVisa,
 } from "@/assets/icon/icon";
-import { SvgXml } from "react-native-svg";
-import { Dropdown } from "react-native-element-dropdown";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Checkbox, Modal } from "react-native-ui-lib";
+
 import TButton from "@/lib/buttons/TButton";
-import { useRouter } from "expo-router";
+import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
+import { router } from "expo-router";
+import React from "react";
+import { Dropdown } from "react-native-element-dropdown";
+import { SvgXml } from "react-native-svg";
 
 const data = [
   { label: "United States", value: "1" },
@@ -54,7 +55,7 @@ const paymentSystem = () => {
   };
 
   return (
-    <View style={tw`px-6`}>
+    <View style={tw`px-6 pt-3 `}>
       <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
         Payment procedure
       </Text>
@@ -183,7 +184,7 @@ const paymentSystem = () => {
 
             {/* Close Button */}
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => router.replace("/drewer/home")}
               style={tw`bg-primary w-full text-center rounded-full px-5 py-2  mt-8`}
             >
               <Text style={tw`text-white text-center text-lg font-bold`}>

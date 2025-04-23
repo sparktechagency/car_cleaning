@@ -1,12 +1,11 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import React from "react";
-import tw from "@/lib/tailwind";
-import { SvgXml } from "react-native-svg";
 import { IconCameraProfile, IconCar, IconEdit } from "@/assets/icon/icon";
-
-import { FlatList } from "react-native-gesture-handler";
 import { Car1, Car2, Car3, Car4, Car5, Car6 } from "@/assets/images/images";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+
+import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 const profile = () => {
   const router = useRouter();
@@ -78,8 +77,8 @@ const profile = () => {
   ];
 
   return (
-    <View style={tw`px-6`}>
-      <View style={tw`flex-row justify-between items-center my-6`}>
+    <View style={tw`flex-1 `}>
+      <View style={tw`flex-row px-6 justify-between items-center my-6`}>
         <Text style={tw`font-DegularDisplayBold text-2xl`}>My Profile</Text>
         <TouchableOpacity onPress={() => router.push("/editProfile")}>
           <View
@@ -93,8 +92,11 @@ const profile = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView>
-        <View style={tw`w-full mx-auto  items-center`}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={tw`pb-2 px-6`}
+      >
+        <View style={tw`w-full   items-center`}>
           <View style={tw`relative`}>
             <Image
               source={{

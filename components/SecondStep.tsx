@@ -1,8 +1,9 @@
-import { View, Text } from "react-native";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { View } from "react-native";
+
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import React from "react";
 
 const SecondStep = (): JSX.Element => {
   const {

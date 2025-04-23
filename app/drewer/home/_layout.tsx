@@ -1,7 +1,3 @@
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
-import { SvgXml } from "react-native-svg";
 import {
   IconHome,
   IconHomeSelect,
@@ -12,14 +8,19 @@ import {
   IconWork,
   IconWorkSelect,
 } from "@/assets/icon/icon";
-import tw from "@/lib/tailwind";
-import { BottomTabNavigationEventMap } from "@react-navigation/bottom-tabs";
 import {
   NavigationHelpers,
   ParamListBase,
   TabNavigationState,
 } from "@react-navigation/native";
+import { StatusBar, TouchableOpacity, View } from "react-native";
+
+import tw from "@/lib/tailwind";
 import { Base } from "@/utils/utils";
+import { BottomTabNavigationEventMap } from "@react-navigation/bottom-tabs";
+import { Tabs } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 // Define your route params
 type RouteParamList = {
@@ -42,7 +43,7 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
       style={tw`absolute bottom-3 justify-center items-center w-full flex-1`}
     >
       <View
-        style={tw`bg-[#00004C] h-[70px] w-[90%] rounded-full flex-row items-center px-4 flex-1`}
+        style={tw`bg-[#00004C] h-[70px] w-[90%] rounded-full flex-row items-center   flex-1`}
       >
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -100,7 +101,7 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
-              style={[tw`flex-1 items-center justify-center`]}
+              style={tw`flex-1 w-full items-center justify-between`}
             >
               <View
                 style={[

@@ -1,5 +1,3 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React from "react";
 import {
   IconCompact,
   IconLargeCar,
@@ -7,9 +5,12 @@ import {
   IconSubCar,
   IconTrack,
 } from "@/assets/icon/icon";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+
 import tw from "@/lib/tailwind";
-import { SvgXml } from "react-native-svg";
 import { useRouter } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 const services = (): JSX.Element => {
   const router = useRouter();
@@ -38,7 +39,10 @@ const services = (): JSX.Element => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => router.push("/(order)/calendersDate")}>
+      <TouchableOpacity
+        style={tw`w-1/3 `}
+        onPress={() => router.push("/(order)/calendersDate")}
+      >
         <View
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
@@ -65,9 +69,10 @@ const services = (): JSX.Element => {
           data={servicesItem}
           renderItem={renderItem}
           numColumns={3}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.title}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={tw`flex  items-center`}
+          // contentContainerStyle={tw`gap-5`}
         />
       </View>
     </View>

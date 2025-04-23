@@ -1,16 +1,4 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ScrollView,
-  Modal,
-} from "react-native";
-import React from "react";
-import { SvgXml } from "react-native-svg";
-import tw from "@/lib/tailwind";
-import {
   IconCompact,
   IconCross,
   IconHi,
@@ -21,15 +9,28 @@ import {
   IconTrack,
 } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
-import image1 from "../../../assets/images/photo1.png";
-import image2 from "../../../assets/images/photo2.png";
+import {
+  FlatList,
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Dialog, PanningProvider, Wizard } from "react-native-ui-lib";
-import { PrimaryColor } from "@/utils/utils";
+
 import CarType from "@/components/CarType";
-import TButton from "@/lib/buttons/TButton";
+import FourthStep from "@/components/FourthStep";
 import SecondStep from "@/components/SecondStep";
 import ThreeStep from "@/components/ThreeStep";
-import FourthStep from "@/components/FourthStep";
+import TButton from "@/lib/buttons/TButton";
+import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import React from "react";
+import { SvgXml } from "react-native-svg";
+import image1 from "../../../assets/images/photo1.png";
+import image2 from "../../../assets/images/photo2.png";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -114,7 +115,7 @@ const Home = () => {
             onPress={() => {
               (navigation as any)?.openDrawer();
             }}
-            style={tw`mb-4`}
+            style={tw`pb-4 items-center justify-center `}
           >
             <SvgXml xml={IconMenu} />
           </TouchableOpacity>
@@ -230,73 +231,86 @@ const Home = () => {
       <Dialog
         width={"100%"}
         height={"70%"}
-        containerStyle={tw`bg-[#F6F6F6] flex-1 items-center px-6 py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
+        containerStyle={tw`flex-1 bg-white rounded-t-3xl `}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
         panDirection={PanningProvider.Directions.DOWN}
         bottom={true}
+        renderPannableHeader={() => {
+          return (
+            <View
+              style={tw`bg-[#F6F6F6] z-50 flex-1 items-center p-6  py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
+            >
+              <Wizard
+                containerStyle={tw`bg-transparent border-0 shadow-none`}
+                activeIndex={step}
+                onActiveIndexChanged={(index) => setStep(index)}
+                activeConfig={{
+                  circleColor: PrimaryColor,
+                  state: "enabled",
+                  color: PrimaryColor,
+                  icon: require("@/assets/images/check_circle.png"),
+                }}
+              >
+                <Wizard.Step
+                  circleColor={PrimaryColor}
+                  circleSize={20}
+                  state={
+                    step > 0 ? Wizard.States.COMPLETED : Wizard.States.ENABLED
+                  }
+                  icon={require("@/assets/images/check_circle.png")}
+                />
+                <Wizard.Step
+                  circleColor={PrimaryColor}
+                  circleSize={20}
+                  state={
+                    step > 1
+                      ? Wizard.States.COMPLETED
+                      : step === 1
+                      ? Wizard.States.ENABLED
+                      : Wizard.States.DISABLED
+                  }
+                  icon={require("@/assets/images/check_circle.png")}
+                />
+                <Wizard.Step
+                  circleColor={PrimaryColor}
+                  circleSize={20}
+                  state={
+                    step > 2
+                      ? Wizard.States.COMPLETED
+                      : step === 2
+                      ? Wizard.States.ENABLED
+                      : Wizard.States.DISABLED
+                  }
+                  icon={require("@/assets/images/check_circle.png")}
+                />
+                <Wizard.Step
+                  circleColor={PrimaryColor}
+                  circleSize={20}
+                  state={
+                    step === 3 ? Wizard.States.ENABLED : Wizard.States.DISABLED
+                  }
+                  icon={require("@/assets/images/check_circle.png")}
+                />
+              </Wizard>
+            </View>
+          );
+        }}
       >
-        <View style={tw`px-4`}>
-          <Wizard
-            containerStyle={tw`bg-transparent border-0 shadow-none`}
-            activeIndex={step}
-            onActiveIndexChanged={(index) => setStep(index)}
-            activeConfig={{
-              circleColor: PrimaryColor,
-              state: "enabled",
-              color: PrimaryColor,
-              icon: require("@/assets/images/check_circle.png"),
-            }}
-          >
-            <Wizard.Step
-              circleColor={PrimaryColor}
-              circleSize={20}
-              state={step > 0 ? Wizard.States.COMPLETED : Wizard.States.ENABLED}
-              icon={require("@/assets/images/check_circle.png")}
-            />
-            <Wizard.Step
-              circleColor={PrimaryColor}
-              circleSize={20}
-              state={
-                step > 1
-                  ? Wizard.States.COMPLETED
-                  : step === 1
-                  ? Wizard.States.ENABLED
-                  : Wizard.States.DISABLED
-              }
-              icon={require("@/assets/images/check_circle.png")}
-            />
-            <Wizard.Step
-              circleColor={PrimaryColor}
-              circleSize={20}
-              state={
-                step > 2
-                  ? Wizard.States.COMPLETED
-                  : step === 2
-                  ? Wizard.States.ENABLED
-                  : Wizard.States.DISABLED
-              }
-              icon={require("@/assets/images/check_circle.png")}
-            />
-            <Wizard.Step
-              circleColor={PrimaryColor}
-              circleSize={20}
-              state={
-                step === 3 ? Wizard.States.ENABLED : Wizard.States.DISABLED
-              }
-              icon={require("@/assets/images/check_circle.png")}
-            />
-          </Wizard>
-        </View>
-        {step === 0 && <CarType />}
-        {step === 1 && <SecondStep />}
-        {step === 2 && <ThreeStep />}
-        {step === 3 && <FourthStep />}
-
-        <View style={tw`flex-row flex-1 items-end gap-2 mt-10`}>
+        <ScrollView keyboardShouldPersistTaps="always" style={tw`px-4`}>
+          {step === 0 && <CarType />}
+          {step === 1 && <SecondStep />}
+          {step === 2 && <ThreeStep />}
+          {step === 3 && <FourthStep />}
+        </ScrollView>
+        <View style={tw`flex-row flex-1 py-6 px-4 items-end gap-2 mt-10`}>
           <TButton
             onPress={() => {
-              setModalVisible(!modalVisible);
+              if (step > 0) {
+                setStep(step - 1);
+              } else {
+                setModalVisible(false);
+              }
             }}
             title="Cancel"
             containerStyle={tw`bg-transparent border rounded-lg border-primary flex-1`}
@@ -304,7 +318,11 @@ const Home = () => {
           />
           <TButton
             onPress={() => {
-              setStep(step + 1);
+              if (step < 3) {
+                setStep(step + 1);
+              } else {
+                setModalVisible(false);
+              }
             }}
             title="Next"
             containerStyle={tw`flex-1 rounded-lg`}

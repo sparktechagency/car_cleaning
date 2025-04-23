@@ -1,22 +1,16 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+
+import { IconCross } from "@/assets/icon/icon";
+import tw from "@/lib/tailwind";
 import React from "react";
+import { SvgXml } from "react-native-svg";
+import { Modal } from "react-native-ui-lib";
 import image1 from "../../../assets/images/work/image1.png";
 import image2 from "../../../assets/images/work/image2.png";
 import image3 from "../../../assets/images/work/image3.png";
 import image4 from "../../../assets/images/work/image4.png";
 import image5 from "../../../assets/images/work/image5.png";
 import image6 from "../../../assets/images/work/image6.png";
-import tw from "@/lib/tailwind";
-import { Modal } from "react-native-ui-lib";
-import { SvgXml } from "react-native-svg";
-import { IconCross } from "@/assets/icon/icon";
 
 const work = (): JSX.Element => {
   const [workDetailsModalVisible, setWorkDetailsModalVisible] =
@@ -88,22 +82,20 @@ const work = (): JSX.Element => {
   // console.log(renderItem);
 
   return (
-    <>
-      <ScrollView contentContainerStyle={tw`pb-16`}>
-        <View style={tw`p-4 bg-[#F6F6F6]`}>
-          <Text style={tw`font-DegularDisplayBold text-2xl`}>
-            Quick access for get service
-          </Text>
+    <View style={tw`flex-1`}>
+      <View style={tw`p-4 bg-[#F6F6F6]`}>
+        <Text style={tw`font-DegularDisplayBold text-2xl`}>
+          Quick access for get service
+        </Text>
 
-          <FlatList
-            data={work}
-            renderItem={renderItem}
-            numColumns={2}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={tw`mt-4`}
-          />
-        </View>
-      </ScrollView>
+        <FlatList
+          data={work}
+          renderItem={renderItem}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={tw`mt-4 pb-30`}
+        />
+      </View>
 
       {/*  ------- modal section ------------------- */}
       <Modal
@@ -156,7 +148,7 @@ const work = (): JSX.Element => {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 

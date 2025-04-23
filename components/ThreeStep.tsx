@@ -1,12 +1,13 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { Text, View } from "react-native";
+
 import tw from "@/lib/tailwind";
+import React from "react";
 import { Checkbox } from "react-native-ui-lib";
 
 const ThreeStep = () => {
-  const [interiorValue, setInteriorValue] = React.useState(false);
-  const [exteriorValue, setExteriorValue] = React.useState(false);
-  const [bothValue, setBothValue] = React.useState(false);
+  const [interiorValue, setInteriorValue] = React.useState<
+    "interior" | "exterior" | "both"
+  >("interior");
 
   return (
     <View style={tw`w-full space-y-2 mt-4`}>
@@ -22,8 +23,10 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Interior Cleaning"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={interiorValue}
-            onValueChange={setInteriorValue}
+            value={interiorValue === "interior"}
+            onValueChange={() => {
+              setInteriorValue("interior");
+            }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}
@@ -38,8 +41,10 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Exterior Cleaning"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={exteriorValue}
-            onValueChange={setExteriorValue}
+            value={interiorValue === "exterior"}
+            onValueChange={() => {
+              setInteriorValue("exterior");
+            }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}
@@ -54,8 +59,10 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Both"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={bothValue}
-            onValueChange={setBothValue}
+            value={interiorValue === "both"}
+            onValueChange={() => {
+              setInteriorValue("both");
+            }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}

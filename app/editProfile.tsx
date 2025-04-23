@@ -1,8 +1,3 @@
-import { View, Text, Pressable, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { useNavigation } from "expo-router";
-import tw from "@/lib/tailwind";
-import { SvgXml } from "react-native-svg";
 import {
   IconBackArrow,
   IconChange,
@@ -23,8 +18,21 @@ import {
   ProfileImage,
 } from "@/assets/images/images";
 import { Controller, useForm } from "react-hook-form";
-import InputText from "@/lib/inputs/InputText";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { useNavigation } from "expo-router";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 import { Modal } from "react-native-ui-lib";
 
 const editProfile = () => {
@@ -73,12 +81,12 @@ const editProfile = () => {
   console.log(errors);
 
   return (
-    <View style={tw`px-6`}>
+    <View style={tw`flex-1`}>
       <Pressable
         onPress={() => {
           navigation.goBack();
         }}
-        style={tw`flex-row items-center mt-5 mb-6 gap-2`}
+        style={tw`flex-row items-center  px-6 mt-5 mb-6 gap-2`}
       >
         <SvgXml xml={IconBackArrow} />
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
@@ -86,146 +94,158 @@ const editProfile = () => {
         </Text>
       </Pressable>
 
-      <View style={tw`w-full mx-auto mb-4 items-center`}>
-        <Image
-          source={ProfileImage}
-          style={{ width: 124, height: 124, borderRadius: 100 }}
-        />
-        <TouchableOpacity
-          style={tw`flex-row gap-2 items-center border border-primary px-2 py-1 rounded-lg mt-4`}
-        >
-          <SvgXml xml={IconChange} />
-          <Text style={tw`font-DegularDisplaySemibold text-base text-primary`}>
-            Change
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={tw`pb-20 px-6`}
+      >
+        <View style={tw`w-full mx-auto mb-4 items-center`}>
+          <Image
+            source={ProfileImage}
+            style={{ width: 124, height: 124, borderRadius: 100 }}
+          />
+          <TouchableOpacity
+            style={tw`flex-row gap-2 items-center border border-primary px-2 py-1 rounded-lg mt-4`}
+          >
+            <SvgXml xml={IconChange} />
+            <Text
+              style={tw`font-DegularDisplaySemibold text-base text-primary`}
+            >
+              Change
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <View>
-        <Text
-          style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-4 m2-4`}
-        >
-          Basic information
-        </Text>
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <InputText
-              label="Username"
-              value={value}
-              onChangeText={(test) => onChange(test)}
-              onBlur={onBlur}
-              touched
-              errorText={errors?.user_name?.message}
-              textInputProps={{
-                placeholder: "Enter Your User Name",
-              }}
-              svgFirstIcon={IconEditProfile}
+        <View>
+          <Text
+            style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-4 m2-4`}
+          >
+            Basic information
+          </Text>
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Email is required",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                label="Username"
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.user_name?.message}
+                textInputProps={{
+                  placeholder: "Enter Your User Name",
+                }}
+                svgFirstIcon={IconEditProfile}
+                containerStyle={tw``}
+              />
+            )}
+            name="user_name"
+          />
+        </View>
+
+        <View>
+          <Text
+            style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-2 mt-4`}
+          >
+            Car details
+          </Text>
+
+          <View style={tw`flex-row gap-2 w-full  `}>
+            <View style={tw` w-1/2`}>
+              <Controller
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Email is required",
+                  },
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InputText
+                    label="Brand name"
+                    value={value}
+                    onChangeText={(test) => onChange(test)}
+                    onBlur={onBlur}
+                    touched
+                    errorText={errors?.user_name?.message}
+                    textInputProps={{
+                      placeholder: "Your Car brand",
+                      numberOfLines: 1,
+                    }}
+                    containerStyle={tw`w-full flex-1`}
+                  />
+                )}
+                name="user_name"
+              />
+            </View>
+
+            <View style={tw` w-1/2`}>
+              <Controller
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Email is required",
+                  },
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <InputText
+                    label="Model name"
+                    value={value}
+                    onChangeText={(test) => onChange(test)}
+                    onBlur={onBlur}
+                    touched
+                    errorText={errors?.user_name?.message}
+                    textInputProps={{
+                      placeholder: "Car model Name",
+                      numberOfLines: 1,
+                    }}
+                    containerStyle={tw`w-full flex-1`}
+                  />
+                )}
+                name="user_name"
+              />
+            </View>
+          </View>
+
+          <View style={tw`flex-row flex-wrap justify-between mt-2`}>
+            {images.map((item) => (
+              <TouchableOpacity
+                disabled
+                style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
+                key={item.id}
+              >
+                <View style={tw`relative`}>
+                  <Image
+                    // style={tw`w-120 h-64 rounded-lg`}
+                    style={{ width: 120, height: 64, borderRadius: 8 }}
+                    source={item.image}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setSelectModalVisible(true)}
+                    style={tw`absolute p-1.5 top-1 justify-center items-center right-1 w-6 h-6 rounded-full bg-primary`}
+                  >
+                    <SvgXml height={16} width={16} xml={IconThreeDot} />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={tw`rounded-full w-full h-12 mt-3 `}>
+            <TButton
+              onPress={() => setModalVisible(true)}
+              title="Save & Change"
               containerStyle={tw``}
             />
-          )}
-          name="user_name"
-        />
-      </View>
-
-      <View>
-        <Text
-          style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-2 mt-4`}
-        >
-          Car details
-        </Text>
-
-        <View style={tw` `}>
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: "Email is required",
-              },
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputText
-                label="Brand name"
-                value={value}
-                onChangeText={(test) => onChange(test)}
-                onBlur={onBlur}
-                touched
-                errorText={errors?.user_name?.message}
-                textInputProps={{
-                  placeholder: "Enter Your Car brand",
-                }}
-                svgFirstIcon={IconEditProfile}
-                containerStyle={tw`w-full`}
-              />
-            )}
-            name="user_name"
-          />
-
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: "Email is required",
-              },
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputText
-                label="Model name"
-                value={value}
-                onChangeText={(test) => onChange(test)}
-                onBlur={onBlur}
-                touched
-                errorText={errors?.user_name?.message}
-                textInputProps={{
-                  placeholder: "Enter Your Car model Name",
-                }}
-                svgFirstIcon={IconEditProfile}
-                containerStyle={tw`w-full`}
-              />
-            )}
-            name="user_name"
-          />
+          </View>
         </View>
-
-        <View style={tw`flex-row flex-wrap justify-between mt-2`}>
-          {images.map((item) => (
-            <TouchableOpacity
-              style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
-              key={item.id}
-            >
-              <View style={tw`relative`}>
-                <Image
-                  // style={tw`w-120 h-64 rounded-lg`}
-                  style={{ width: 120, height: 64, borderRadius: 8 }}
-                  source={item.image}
-                />
-                <TouchableOpacity
-                  onPress={() => setSelectModalVisible(true)}
-                  style={tw`absolute p-1.5 top-1 right-1 rounded-full bg-primary`}
-                >
-                  <SvgXml xml={IconThreeDot} />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={tw`rounded-full w-full h-12 mt-3 `}>
-          <TButton
-            onPress={() => setModalVisible(true)}
-            title="Save & Change"
-            containerStyle={tw``}
-          />
-        </View>
-      </View>
+      </ScrollView>
 
       {/*  ========== successful modal open ============ */}
 
