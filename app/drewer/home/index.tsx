@@ -312,7 +312,7 @@ const Home = () => {
                 setModalVisible(false);
               }
             }}
-            title="Cancel"
+            title={step > 0 ? "Previous" : "Cancel"}
             containerStyle={tw`bg-transparent border rounded-lg border-primary flex-1`}
             titleStyle={tw`text-primary`}
           />
@@ -321,10 +321,11 @@ const Home = () => {
               if (step < 3) {
                 setStep(step + 1);
               } else {
+                router?.push("/cmodal");
                 setModalVisible(false);
               }
             }}
-            title="Next"
+            title={step < 3 ? "Next" : "Checkout"}
             containerStyle={tw`flex-1 rounded-lg`}
           />
         </View>

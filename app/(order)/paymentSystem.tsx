@@ -1,9 +1,4 @@
-import {
-  IconCamera,
-  IconCongratulation,
-  IconMaster,
-  IconVisa,
-} from "@/assets/icon/icon";
+import { IconCamera, IconMaster, IconVisa } from "@/assets/icon/icon";
 import {
   StyleSheet,
   Text,
@@ -11,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Checkbox, Modal } from "react-native-ui-lib";
+import { Checkbox } from "react-native-ui-lib";
 
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
@@ -156,44 +151,13 @@ const paymentSystem = () => {
             </Text>
           </View>
 
-          <TButton onPress={() => setModalVisible(true)} title="Pay $2563.00" />
+          <TButton
+            onPress={() => router.push("/cmodal")}
+            title="Pay $2563.00"
+          />
         </View>
       </View>
       {/*  ========== modal open ============ */}
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View
-          style={tw`flex-1 bg-black bg-opacity-50 justify-center items-center`}
-        >
-          <View
-            style={tw`w-7/8 bg-white p-5 rounded-2xl items-center shadow-lg`}
-          >
-            {/* Check Icon */}
-            <SvgXml xml={IconCongratulation} />
-
-            {/* Success Message */}
-            <Text style={tw`text-2xl font-bold mt-3`}>Congratulations</Text>
-            <Text style={tw`text-base text-gray-500 text-center mt-1`}>
-              Booking for your service is confirmed
-            </Text>
-
-            {/* Close Button */}
-            <TouchableOpacity
-              onPress={() => router.replace("/drewer/home")}
-              style={tw`bg-primary w-full text-center rounded-full px-5 py-2  mt-8`}
-            >
-              <Text style={tw`text-white text-center text-lg font-bold`}>
-                Done
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
