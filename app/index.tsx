@@ -4,9 +4,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { ActivityIndicator, Image, LogBox, View } from "react-native";
 
 import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { PrimaryColor } from "@/utils/utils";
 
 SplashScreen.preventAutoHideAsync(); // Prevent Expo's splash screen from auto-hiding
 
@@ -34,7 +34,7 @@ export default function App() {
     });
     SplashScreen.hideAsync();
     setTimeout(() => {
-      route?.replace("/drewer/home");
+      route?.replace("/login");
     }, 1000);
   }, []);
 

@@ -1,10 +1,3 @@
-import { View, Text, ScrollView } from "react-native";
-import React, { useState } from "react";
-import Heading from "@/components/TitleHead";
-import SubHeading from "@/components/SubTileHead";
-import tw from "@/lib/tailwind";
-import { Controller, useForm } from "react-hook-form";
-import InputText from "@/lib/inputs/InputText";
 import {
   IconEmail,
   IconEyaClose,
@@ -13,10 +6,18 @@ import {
   IconPassword,
   IconUser,
 } from "@/assets/icon/icon";
-import { Checkbox } from "react-native-ui-lib";
-import { Link } from "expo-router";
-import TButton from "@/lib/buttons/TButton";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { ScrollView, Text, View } from "react-native";
+
+import SubHeading from "@/components/SubTileHead";
+import Heading from "@/components/TitleHead";
 import IwtButton from "@/lib/buttons/IwtButton";
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { Checkbox } from "react-native-ui-lib";
 
 const singup = () => {
   const [isSelected, setSelection] = useState(false);
@@ -193,7 +194,9 @@ const singup = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
-              onPress={handleSubmit(onSubmit)}
+              onPress={() => {
+                router.push("/OTPScreen");
+              }}
               title="Sign up"
               containerStyle={tw``}
             />
