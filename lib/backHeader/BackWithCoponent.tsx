@@ -49,7 +49,10 @@ const BackWithComponent = ({
           )}
           <Text
             numberOfLines={1}
-            style={[tw`text-black font-NunitoSansBold text-base`, titleStyle]}
+            style={[
+              tw`text-black font-DegularDisplayBold text-base`,
+              titleStyle,
+            ]}
           >
             {title ? title : "Back"}
           </Text>

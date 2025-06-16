@@ -60,7 +60,7 @@ const Times = [
 const calendersDate = () => {
   const navigation = useNavigation();
   const router = useRouter();
-  const [dropValue, setDropValue] = React.useState<{
+  const [setDropValue] = React.useState<{
     index: number;
     label: string;
     value: string;
@@ -302,7 +302,7 @@ const calendersDate = () => {
                       : !time.isOpen
                       ? "bg-gray-200"
                       : "bg-transparent"
-                  } rounded-lg border w-1/3 border-gray-50`}
+                  } rounded-lg border w-[32%] border-gray-50`}
                   key={index}
                   onPress={() => setSelectTime(time)}
                 >

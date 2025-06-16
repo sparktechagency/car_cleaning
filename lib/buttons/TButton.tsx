@@ -44,7 +44,10 @@ const TButton = ({
       )}
       {title && (
         <Text
-          style={[tw`text-white font-NunitoSansSemiBold text-sm`, titleStyle]}
+          style={[
+            tw`text-white font-DegularDisplaySemibold text-sm`,
+            titleStyle,
+          ]}
         >
           {title}
         </Text>

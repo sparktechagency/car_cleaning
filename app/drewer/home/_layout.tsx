@@ -13,10 +13,9 @@ import {
   ParamListBase,
   TabNavigationState,
 } from "@react-navigation/native";
-import { StatusBar, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
-import { Base } from "@/utils/utils";
 import { BottomTabNavigationEventMap } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -47,12 +46,6 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
       >
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
-          // const label =
-          //   options.tabBarLabel !== undefined
-          //     ? options.tabBarLabel
-          //     : options.title !== undefined
-          //     ? options.title
-          //     : route.name;
 
           const isFocused = state.index === index;
           console.log(state);
@@ -148,7 +141,6 @@ export default function _layout() {
       <Tabs.Screen name="services" />
       <Tabs.Screen name="work" />
       <Tabs.Screen name="profile" />
-      <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} />
     </Tabs>
   );
 }

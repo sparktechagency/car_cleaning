@@ -96,6 +96,7 @@ const editProfile = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={tw`pb-20 px-6`}
       >
         <View style={tw`w-full mx-auto mb-4 items-center`}>
@@ -117,7 +118,7 @@ const editProfile = () => {
 
         <View>
           <Text
-            style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-4 m2-4`}
+            style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-4 my-2`}
           >
             Basic information
           </Text>

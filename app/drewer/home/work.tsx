@@ -113,7 +113,7 @@ const work = (): JSX.Element => {
             {/* Close Button */}
             <TouchableOpacity
               onPress={() => setWorkDetailsModalVisible(false)}
-              style={tw` mb-3 rounded-lg  w-full flex-row justify-end text-end `}
+              style={tw` mb-3 rounded-lg  w-full flex-row justify-end items-end`}
             >
               <SvgXml xml={IconCross} />
             </TouchableOpacity>

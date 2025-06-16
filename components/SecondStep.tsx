@@ -21,7 +21,7 @@ const SecondStep = (): JSX.Element => {
   console.log(errors);
 
   return (
-    <View style={tw`w-full  space-y-2 mt-4`}>
+    <View style={tw`w-full  mt-4`}>
       <Controller
         control={control}
         rules={{

@@ -79,7 +79,7 @@ const notification = () => {
       {/*  */}
 
       <ScrollView>
-        {notification.map((item) => (
+        {notification.map((item, index) => (
           <TouchableOpacity
             onPress={() => {
               if (item.status === "Order completed") {
@@ -88,7 +88,7 @@ const notification = () => {
                 router.push("/(notification)/notificationDetails");
               }
             }}
-            key={item?.id}
+            key={index}
           >
             <View
               style={[

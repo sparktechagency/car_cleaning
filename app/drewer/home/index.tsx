@@ -129,7 +129,7 @@ const Home = () => {
               <SvgXml xml={IconHi} />
             </View>
             <View
-              style={tw`font-NunitoSansBold flex-row items-center gap-1 text-black text-base`}
+              style={tw`font-DegularDisplayBold flex-row items-center gap-1 text-black text-base`}
             >
               <SvgXml xml={IconLocation} />
               <Text>31/2 Los Angles, USA</Text>
@@ -202,6 +202,7 @@ const Home = () => {
                 data={servicesItem}
                 renderItem={renderItem}
                 numColumns={3}
+                scrollEnabled={false}
                 keyExtractor={(item) => item.title}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={tw`flex  items-center`}
@@ -348,7 +349,7 @@ const Home = () => {
             {/* Close Button */}
             <TouchableOpacity
               onPress={() => setWorkDetailsModalVisible(false)}
-              style={tw` mb-3 rounded-lg  w-full flex-row justify-end text-end `}
+              style={tw` mb-3 rounded-lg  w-full flex-row justify-end items-end `}
             >
               <SvgXml xml={IconCross} />
             </TouchableOpacity>

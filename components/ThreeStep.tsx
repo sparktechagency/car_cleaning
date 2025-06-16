@@ -10,7 +10,7 @@ const ThreeStep = () => {
   >("interior");
 
   return (
-    <View style={tw`w-full space-y-2 mt-4`}>
+    <View style={tw`w-full mt-4`}>
       <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
         Select the service that you want
       </Text>

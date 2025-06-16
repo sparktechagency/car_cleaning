@@ -30,7 +30,6 @@ const paymentSystem = () => {
   const [checkBox, setCheckBox] = React.useState(false);
   const [value, setValue] = React.useState(null);
   const [isFocus, setIsFocus] = React.useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
 
   const renderLabel = () => {
     if (value || isFocus) {
@@ -57,13 +56,13 @@ const paymentSystem = () => {
 
       <View style={tw`mt-6`}>
         <View style={tw`flex-row justify-between `}>
-          <Text style={tw`font-bold text-sm font-NunitoSansRegular`}>
+          <Text style={tw`font-bold text-sm font-DegularDisplayRegular`}>
             Card Information
           </Text>
           <TouchableOpacity style={tw`flex-row items-center gap-1`}>
             <SvgXml xml={IconCamera} />
             <Text
-              style={tw`text-primary  font-bold text-sm font-NunitoSansRegular`}
+              style={tw`text-primary  font-bold text-sm font-DegularDisplayRegular`}
             >
               Scan card
             </Text>

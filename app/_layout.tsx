@@ -1,5 +1,7 @@
+import { Base } from "@/utils/utils";
 import { Stack } from "expo-router";
 import React from "react";
+import { StatusBar } from "react-native";
 
 export default function RootLayout() {
   return (
@@ -12,10 +14,15 @@ export default function RootLayout() {
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="tramsCondition" />
-      <Stack.Screen name="privacyPolicy" />
-      <Stack.Screen name="support" />
-      <Stack.Screen name="(notification)/notification" />
+
+      <Stack.Screen name="editProfile" />
+      <Stack.Screen name="forgetPass" />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="OTPScreen" />
+      <Stack.Screen name="reset" />
+      <Stack.Screen name="singup" />
+      <Stack.Screen name="(order)" />
+      <Stack.Screen name="(notification)" />
       <Stack.Screen
         name="cmodal"
         options={{
@@ -24,8 +31,7 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen name="index" />
-      <Stack.Screen name="index" /> */}
+      <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} />
     </Stack>
   );
 }

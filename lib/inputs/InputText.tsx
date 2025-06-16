@@ -129,7 +129,7 @@ const InputText = ({
       {label && (
         <Text
           style={[
-            tw`text-sm font-NunitoSansRegular  py-2 text-black`,
+            tw`text-sm font-DegularDisplayRegular  py-2 text-black`,
             labelStyle,
           ]}
         >
@@ -154,7 +154,7 @@ const InputText = ({
           <Animated.Text
             numberOfLines={1}
             style={[
-              tw`absolute bg-base rounded-full text-base font-NunitoSansRegular py-2 px-2 ${
+              tw`absolute bg-base rounded-full text-base font-DegularDisplayRegular py-2 px-2 ${
                 errorText && touched ? "text-red-500" : "text-gray-400"
               }`,
               placeholderStyle,
@@ -181,7 +181,7 @@ const InputText = ({
             onBlur && onBlur(e);
           }}
           style={[
-            tw`flex-1 px-2 text-base font-NunitoSansSemiBold`,
+            tw`flex-1 px-2 text-base font-DegularDisplaySemibold`,
             inputStyle,
           ]}
           {...textInputProps}
