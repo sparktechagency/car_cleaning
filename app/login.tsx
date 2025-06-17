@@ -19,11 +19,11 @@ import { useLoginMutation } from "@/redux/apiSlices/authSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const login = () => {
-  const route = useRouter();
   const [isSelected, setSelection] = useState<boolean>(false);
   const [isShow, setIsShow] = useState(false);
-  const [loinInfo, setLoginInfo] = useState<any>(null);
+  const [loginInfo, setLoginInfo] = useState<any>(null);
   const [login, { isLoading }] = useLoginMutation();
+  console.log(loginInfo?.email, "login data");
   const {
     control,
     reset,
@@ -31,8 +31,8 @@ const login = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: loginInfo ? loginInfo?.email : "",
+      password: loginInfo ? loginInfo?.password : "",
     },
   });
   const handleLogin = async (loginUserData: any) => {
@@ -46,10 +46,7 @@ const login = () => {
       //   return;
       // }
       if (isSelected === true) {
-        await AsyncStorage.setItem(
-          "loginInfo",
-          JSON.stringify({ loginUserData })
-        );
+        await AsyncStorage.setItem("loginInfo", JSON.stringify(loginUserData));
       }
       const res = await login(loginUserData).unwrap();
       if (res.status) {

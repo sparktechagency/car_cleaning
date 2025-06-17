@@ -214,14 +214,9 @@ const singup = () => {
             />
             <Text style={tw`font-normal  text-xs`}>
               By creating this account, you are agree to our{" "}
-              <Link style={tw`text-primary `} href={"/"}>
-                terms of use
-              </Link>
+              <Text style={tw`text-primary `}>terms of use</Text>
               {""} & {""}
-              <Link style={tw`text-primary `} href={"/"}>
-                privacy policy
-              </Link>
-              .
+              <Text style={tw`text-primary `}>privacy policy</Text>.
             </Text>
           </View>
 
@@ -244,6 +239,7 @@ const singup = () => {
               // onPress={handleSubmit(onSubmit)}
               title="Continue with google"
               containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
+              titleStyle={tw`text-black`}
             />
           </View>
           <View style={tw`rounded-full mt-2 h-12`}>

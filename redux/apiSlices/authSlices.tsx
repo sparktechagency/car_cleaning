@@ -47,6 +47,14 @@ const authSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    verifyOtp: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/auth/check-otp`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `/admin/user/${id}`,
@@ -70,6 +78,7 @@ export const {
   useLazyUserListQuery,
   useLoginMutation,
   useRegisterMutation,
+  useVerifyOtpMutation,
   useUpdateUserMutation,
   useUserListQuery,
   useLogoutMutation,

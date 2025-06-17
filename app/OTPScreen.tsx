@@ -1,16 +1,28 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
 import tw from "@/lib/tailwind";
 import TButton from "@/lib/buttons/TButton";
-import { Link, useRouter } from "expo-router";
+import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
 import { PrimaryColor } from "@/utils/utils";
 import { OtpInput } from "react-native-otp-entry";
+import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const OTPScreen = () => {
   const route = useRouter();
-  const [isValue, setIsValue] = useState(0);
+  const [value, setValue] = useState("");
+
+  const [otpVerify] = useVerifyOtpMutation();
+  const { email } = useLocalSearchParams();
+
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
@@ -35,10 +47,29 @@ const OTPScreen = () => {
               focusStickBlinkingDuration={500}
               // onFocus={() => console.log("Focused")}
               // onBlur={() => console.log("Blurred")}
-              // onTextChange={(text) => console.log(text)}
+              onTextChange={(text) => {
+                setValue(text);
+              }}
               onFilled={async (text) => {
                 console.log(`OTP is ${text}`);
-                route.push("/");
+                try {
+                  const res = await otpVerify({
+                    email: email,
+                    otp: text,
+                  }).unwrap();
+                  if (res.status) {
+                    // console.log(res);
+
+                    router?.push("/drewer/home");
+                  } else {
+                    // console.log(res);
+                    Toast.show({
+                      type: ALERT_TYPE.DANGER,
+                      title: "Error!",
+                      textBody: "Wrong OTP",
+                    });
+                  }
+                } catch (error) {}
               }}
               textInputProps={{
                 accessibilityLabel: "One-Time Password",
@@ -54,12 +85,9 @@ const OTPScreen = () => {
 
           <View style={tw`w-full items-end mt-1`}>
             <TouchableOpacity style={tw``}>
-              <Link
-                href={"/"}
-                style={tw`text-primary font-semibold text-[12px]`}
-              >
+              <Pressable style={tw`text-primary font-semibold text-[12px]`}>
                 Send Again
-              </Link>
+              </Pressable>
             </TouchableOpacity>
           </View>
         </View>
