@@ -1,6 +1,7 @@
 import {
   IconEmail,
   IconEyaClose,
+  IconEyeShow,
   IconFacebook,
   IconGoogle,
   IconPassword,
@@ -18,29 +19,52 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { Checkbox } from "react-native-ui-lib";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRegisterMutation } from "@/redux/apiSlices/authSlices";
 
 const singup = () => {
   const [isSelected, setSelection] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [isShowConfirm, setIsShowConfirm] = useState(false);
+  const [register, { isLoading }] = useRegisterMutation();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      user_name: "",
+      name: "",
       email: "",
       password: "",
-      confirm_password: "",
+      c_password: "",
     },
   });
-  const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
+  const onRegisterInfoSubmit = async (registerValue) => {
+    try {
+      const res = await register(registerValue).unwrap();
+      if (res.status) {
+        router.replace("/OTPScreen");
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Failed !",
+          textBody: "Register failed. Please check your credentials.",
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error!",
+        textBody: "Something went wrong.",
+      });
+    }
+  };
 
   return (
-    <ScrollView>
-      <View style={tw`px-6 flex-1 justify-center items-center`}>
-        <View style={tw`items-center mb-14`}>
+    <ScrollView style={tw`px-6 flex-1`}>
+      <View style={tw`py-4 justify-center items-center`}>
+        <View style={tw`items-center mb-8`}>
           <Heading title={"Welcome Back"} />
           <SubHeading
             title={
@@ -49,7 +73,7 @@ const singup = () => {
           />
         </View>
 
-        <View style={tw`w-full gap-2`}>
+        <View style={tw`w-full gap-1`}>
           {/* User name */}
           <Controller
             control={control}
@@ -66,7 +90,7 @@ const singup = () => {
                 onChangeText={(test) => onChange(test)}
                 onBlur={onBlur}
                 touched
-                errorText={errors?.user_name?.message}
+                errorText={errors?.name?.message}
                 textInputProps={{
                   placeholder: "Enter your user name",
                 }}
@@ -74,7 +98,7 @@ const singup = () => {
                 containerStyle={tw``}
               />
             )}
-            name="user_name"
+            name="name"
           />
 
           {/* Email */}
@@ -114,7 +138,7 @@ const singup = () => {
             control={control}
             rules={{
               pattern: {
-                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                value: /^[0-9]+$/,
                 message: "Please speacial char password",
               },
               required: {
@@ -132,9 +156,11 @@ const singup = () => {
                 errorText={errors?.password?.message}
                 textInputProps={{
                   placeholder: "******",
+                  secureTextEntry: isShow ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={IconEyaClose}
+                svgSecondIcon={isShow ? IconEyeShow : IconEyaClose}
+                svgSecondOnPress={() => setIsShow(!isShow)}
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
@@ -146,7 +172,7 @@ const singup = () => {
             control={control}
             rules={{
               pattern: {
-                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                value: /^[0-9]+$/,
                 message: "Please speacial char password",
               },
               required: {
@@ -161,30 +187,37 @@ const singup = () => {
                 onChangeText={(test) => onChange(test)}
                 onBlur={onBlur}
                 touched
-                errorText={errors?.confirm_password?.message}
+                errorText={errors?.c_password?.message}
                 textInputProps={{
                   placeholder: "******",
+                  secureTextEntry: isShowConfirm ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={IconEyaClose}
+                svgSecondIcon={isShowConfirm ? IconEyeShow : IconEyaClose}
+                svgSecondOnPress={() => setIsShowConfirm(!isShow)}
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
-            name="confirm_password"
+            name="c_password"
           />
 
-          <View style={tw`flex-row gap-1 items-center rounded-none mb-10`}>
+          <View
+            style={tw`flex-row gap-1 justify-start items-center rounded-none mb-8`}
+          >
             <Checkbox
               value={isSelected}
-              onValueChange={setSelection}
+              onValueChange={async (value) => {
+                await AsyncStorage.setItem("check", JSON.stringify(value));
+                setSelection(value);
+              }}
               style={tw`w-4 h-4 border-black rounded-none`}
             />
-            <Text style={tw`font-normal text-[12px]`}>
+            <Text style={tw`font-normal  text-xs`}>
               By creating this account, you are agree to our{" "}
               <Link style={tw`text-primary `} href={"/"}>
                 terms of use
               </Link>
-              &
+              {""} & {""}
               <Link style={tw`text-primary `} href={"/"}>
                 privacy policy
               </Link>
@@ -194,9 +227,7 @@ const singup = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
-              onPress={() => {
-                router.push("/OTPScreen");
-              }}
+              onPress={handleSubmit(onRegisterInfoSubmit)}
               title="Sign up"
               containerStyle={tw``}
             />
@@ -210,7 +241,7 @@ const singup = () => {
           <View style={tw`rounded-full h-12`}>
             <IwtButton
               svg={IconGoogle}
-              onPress={handleSubmit(onSubmit)}
+              // onPress={handleSubmit(onSubmit)}
               title="Continue with google"
               containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
             />
@@ -218,7 +249,7 @@ const singup = () => {
           <View style={tw`rounded-full mt-2 h-12`}>
             <IwtButton
               svg={IconFacebook}
-              onPress={handleSubmit(onSubmit)}
+              // onPress={handleSubmit(onSubmit)}
               title="Continue with facebook"
               containerStyle={tw` rounded-lg text-black`}
             />

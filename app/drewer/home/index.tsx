@@ -27,10 +27,12 @@ import ThreeStep from "@/components/ThreeStep";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { SvgXml } from "react-native-svg";
 import image1 from "../../../assets/images/photo1.png";
 import image2 from "../../../assets/images/photo2.png";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -40,6 +42,8 @@ const Home = () => {
   const [workDetailsModalVisible, setWorkDetailsModalVisible] =
     React.useState(false);
   const [step, setStep] = React.useState(0);
+
+  const { data, isLoading, isError, isSuccess } = useGetServicesQuery();
 
   //  services data ===============================
   const servicesItem = [

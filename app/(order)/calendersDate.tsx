@@ -227,7 +227,7 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Dropdown
-                style={tw` h-12 bg-[#E7E7E7] w-full rounded-xl border-1  p-4`}
+                style={tw` h-12 bg-[#E7E7E7] w-full rounded-xl border  p-4`}
                 placeholderStyle={tw`text-base`}
                 containerStyle={tw`rounded-lg p-2`}
                 selectedTextStyle={tw`text-base`}

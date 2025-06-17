@@ -7,13 +7,21 @@ import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import { useGetTokenCheckQuery } from "@/redux/apiSlices/authSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-SplashScreen.preventAutoHideAsync(); // Prevent Expo's splash screen from auto-hiding
+SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs([""]);
 
 export default function App() {
   const route = useRouter();
+  const {
+    data: tokenCheck,
+    isError,
+    isFetching,
+    isLoading,
+  } = useGetTokenCheckQuery({});
 
   useEffect(() => {
     Font.loadAsync({
@@ -33,10 +41,34 @@ export default function App() {
       DegularDisplayThinItalic: require("@/assets/fonts/DegularDisplay-ThinItalic.otf"),
     });
     SplashScreen.hideAsync();
-    setTimeout(() => {
-      route?.replace("/login");
-    }, 1000);
+    // setTimeout(() => {
+    //   route?.replace("/login");
+    // }, 1000);
   }, []);
+  console.log(tokenCheck, "token");
+  const handlePathDecision = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      if (isFetching || isLoading) return;
+
+      if (token) {
+        if (tokenCheck) {
+          route.replace("/drewer/home");
+        } else {
+          route.replace("/login");
+        }
+      } else {
+        route.replace("/login");
+      }
+    } catch (e) {
+      route.replace("/login");
+    }
+  };
+
+  useEffect(() => {
+    handlePathDecision();
+  }, [tokenCheck, isFetching, isLoading]);
 
   return (
     <View style={tw`flex-1 justify-center items-center bg-white pb-[25%]`}>

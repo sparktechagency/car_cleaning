@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
 import { Avatar } from "react-native-ui-lib";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CustomDrawerContent = (props) => {
   const insets = useSafeAreaInsets();
@@ -68,9 +69,10 @@ const CustomDrawerContent = (props) => {
 
       <View style={tw`mt-auto px-4 pt-5 pl-2`}>
         <TouchableOpacity
-          // onPress={() => {
-          //   router?.replace("/auth/login");
-          // }}
+          onPress={async () => {
+            await AsyncStorage.removeItem("token");
+            router.push("/login");
+          }}
           style={tw`py-5  flex-row items-center gap-2`}
         >
           <SvgXml xml={IconLogOut} />

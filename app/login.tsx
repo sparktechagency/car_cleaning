@@ -5,16 +5,28 @@ import { useForm, Controller } from "react-hook-form";
 import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
-import { IconEmail, IconEyaClose, IconPassword } from "@/assets/icon/icon";
-import { Link, useRouter } from "expo-router";
+import {
+  IconEmail,
+  IconEyaClose,
+  IconEyeShow,
+  IconPassword,
+} from "@/assets/icon/icon";
+import { Link, router, useRouter } from "expo-router";
 import Heading from "@/components/TitleHead";
 import SubHeading from "@/components/SubTileHead";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLoginMutation } from "@/redux/apiSlices/authSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const login = () => {
   const route = useRouter();
-  const [isSelected, setSelection] = useState(false);
+  const [isSelected, setSelection] = useState<boolean>(false);
+  const [isShow, setIsShow] = useState(false);
+  const [loinInfo, setLoginInfo] = useState<any>(null);
+  const [login, { isLoading }] = useLoginMutation();
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -23,9 +35,52 @@ const login = () => {
       password: "",
     },
   });
-  const onSubmit = (data) => console.log(data);
+  const handleLogin = async (loginUserData: any) => {
+    try {
+      // if (!isSelected) {
+      //   Toast.show({
+      //     type: ALERT_TYPE.WARNING,
+      //     title: "Warning!",
+      //     textBody: "Please check 'Remember me' to continue.",
+      //   });
+      //   return;
+      // }
+      if (isSelected === true) {
+        await AsyncStorage.setItem(
+          "loginInfo",
+          JSON.stringify({ loginUserData })
+        );
+      }
+      const res = await login(loginUserData).unwrap();
+      if (res.status) {
+        await AsyncStorage.setItem("token", res?.data?.access_token);
+        router.replace("/drewer/home");
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Failed !",
+          textBody: "Login failed. Please check your credentials.",
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: "Error!",
+        textBody: "Something went wrong.",
+      });
+    }
+  };
 
-  console.log(errors);
+  const handleSaveLoginInfo = async () => {
+    const loginInfo = await AsyncStorage.getItem("loginInfo");
+    const checked = await AsyncStorage.getItem("check");
+    setSelection(JSON.parse(checked as any));
+    setLoginInfo(JSON.parse(loginInfo as any));
+  };
+
+  React.useEffect(() => {
+    handleSaveLoginInfo();
+  }, []);
 
   return (
     <>
@@ -75,7 +130,7 @@ const login = () => {
             control={control}
             rules={{
               pattern: {
-                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                value: /^[0-9]+$/,
                 message: "Please spacial char password",
               },
               required: {
@@ -92,10 +147,12 @@ const login = () => {
                 touched
                 errorText={errors?.password?.message}
                 textInputProps={{
-                  placeholder: "******",
+                  placeholder: "++++++++",
+                  secureTextEntry: isShow ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={IconEyaClose}
+                svgSecondIcon={isShow ? IconEyeShow : IconEyaClose}
+                svgSecondOnPress={() => setIsShow(!isShow)}
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
@@ -106,7 +163,10 @@ const login = () => {
             <View style={tw`flex-row gap-2 items-center rounded-none`}>
               <Checkbox
                 value={isSelected}
-                onValueChange={setSelection}
+                onValueChange={async (value) => {
+                  await AsyncStorage.setItem("check", JSON.stringify(value));
+                  setSelection(value);
+                }}
                 style={tw`w-4 h-4 border-black rounded-none`}
               />
               <Text>Remember me</Text>
@@ -120,8 +180,7 @@ const login = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
-              // onPress={handleSubmit(onSubmit)}
-              onPress={() => route.push("/drewer/home")}
+              onPress={handleSubmit(handleLogin)}
               title="Sign in"
               containerStyle={tw``}
             />
