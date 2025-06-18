@@ -8,7 +8,13 @@ const homeApiSlices = api.injectEndpoints({
       }),
       providesTags: ["category"],
     }),
+    getPhotos: builder.query({
+      query: () => ({
+        url: `/photo-gallery`,
+      }),
+      providesTags: ["category"],
+    }),
   }),
 });
 
-export const { useGetServicesQuery } = homeApiSlices;
+export const { useGetServicesQuery, useGetPhotosQuery } = homeApiSlices;

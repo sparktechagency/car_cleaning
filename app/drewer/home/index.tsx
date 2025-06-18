@@ -1,12 +1,8 @@
 import {
-  IconCompact,
-  IconCross,
   IconHi,
   IconLocation,
   IconMenu,
   IconNotification,
-  IconSubCar,
-  IconTrack,
 } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
@@ -27,87 +23,60 @@ import ThreeStep from "@/components/ThreeStep";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import React, { useEffect } from "react";
+import React from "react";
 import { SvgXml } from "react-native-svg";
-import image1 from "../../../assets/images/photo1.png";
-import image2 from "../../../assets/images/photo2.png";
-import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import {
+  useGetPhotosQuery,
+  useGetServicesQuery,
+} from "@/redux/apiSlices/homeApiSlices";
 
 const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
-
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [workDetailsModalVisible, setWorkDetailsModalVisible] =
-    React.useState(false);
   const [step, setStep] = React.useState(0);
 
   const { data, isLoading, isError, isSuccess } = useGetServicesQuery();
+  const { data: photoData } = useGetPhotosQuery();
 
-  //  services data ===============================
-  const servicesItem = [
-    {
-      title: "Truck",
-      icon: IconTrack,
-    },
-    {
-      title: "Compact",
-      icon: IconCompact,
-    },
-    {
-      title: "Suv car",
-      icon: IconSubCar,
-    },
-  ];
-
-  // work section data =====================
-  const work = [
-    {
-      id: 1,
-      image: image1,
-    },
-    {
-      id: 2,
-      image: image2,
-    },
-    {
-      id: 3,
-      image: image2,
-    },
-    {
-      id: 4,
-      image: image2,
-    },
-  ];
-
-  const renderItem = ({ item }): JSX.Element => (
-    <TouchableOpacity onPress={() => router.push("/(order)/calendersDate")}>
-      <View
-        style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
-      >
-        <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
-          <SvgXml xml={item.icon} />
-        </View>
-        <Text style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}>
-          {item.title}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-
-  const workRenderItem = ({ item }) => {
+  const renderItem = ({ item }): JSX.Element => {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          setWorkDetailsModalVisible(true);
-        }}
-      >
-        <View style={tw`mb-4 mr-2`}>
-          <Image style={tw`w-44 h-32 rounded-2xl`} source={item.image} />
+      <TouchableOpacity onPress={() => handleServiceDetails(item)}>
+        <View
+          style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
+        >
+          <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
+            <Image width={32} height={30} source={{ uri: item?.icon }} />
+          </View>
+          <Text
+            style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
+          >
+            {item?.car_type}
+          </Text>
         </View>
       </TouchableOpacity>
     );
+  };
+
+  const workRenderItem = ({ item }) => {
+    return (
+      <TouchableOpacity>
+        <View style={tw`mb-4 mr-2`}>
+          <Image
+            style={tw`w-44 h-32 rounded-2xl`}
+            source={{ uri: item?.photo }}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const handleServiceDetails = (item) => {
+    router.push({
+      pathname: "/(order)/calendersDate",
+      params: { id: item?.id },
+    });
   };
 
   return (
@@ -197,19 +166,19 @@ const Home = () => {
 
         {/* ======== service category section ============= */}
         <View>
-          <View style={tw`mt-6 bg-[#F6F6F6]`}>
+          <View style={tw`mt-6 `}>
             <Text style={tw`font-DegularDisplayBold text-2xl`}>
               Quick access for get service
             </Text>
             <View style={tw``}>
               <FlatList
-                data={servicesItem}
+                data={data?.data}
                 renderItem={renderItem}
                 numColumns={3}
                 scrollEnabled={false}
-                keyExtractor={(item) => item.title}
+                keyExtractor={(item) => item?.id.toLocaleString()}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={tw`flex  items-center`}
+                contentContainerStyle={tw`flex  items-center bg-transparent `}
               />
             </View>
           </View>
@@ -219,12 +188,12 @@ const Home = () => {
 
         <View>
           <Text style={tw`font-DegularDisplayBold text-2xl`}>
-            Quick access for get service
+            Photo gallery
           </Text>
 
           <FlatList
             scrollEnabled={false}
-            data={work}
+            data={photoData?.data?.data}
             renderItem={workRenderItem}
             numColumns={2}
             contentContainerStyle={tw`mt-4`}
@@ -335,59 +304,6 @@ const Home = () => {
           />
         </View>
       </Dialog>
-
-      {/* ========== Work Item Details ================ */}
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={workDetailsModalVisible}
-        onRequestClose={() => setWorkDetailsModalVisible(false)}
-      >
-        <View
-          style={tw`flex-1 bg-black bg-opacity-50 justify-center items-center`}
-        >
-          <View
-            style={tw`w-7/8 bg-white p-6 rounded-2xl items-center shadow-lg`}
-          >
-            {/* Close Button */}
-            <TouchableOpacity
-              onPress={() => setWorkDetailsModalVisible(false)}
-              style={tw` mb-3 rounded-lg  w-full flex-row justify-end items-end `}
-            >
-              <SvgXml xml={IconCross} />
-            </TouchableOpacity>
-            {/* Check Icon */}
-            <Image
-              style={tw`w-full h-32 rounded-2xl`}
-              source={require("../../../assets/images/work/image1.png")}
-            />
-
-            {/* Success Message */}
-            <View style={tw`w-full flex-row justify-between items-center mt-6`}>
-              <Text style={tw`text-xl font-DegularDisplaySemibold `}>
-                Interior & Exterior Cleaning
-              </Text>
-              <Text style={tw`text-xl font-DegularDisplayBold text-primary`}>
-                $542.00
-              </Text>
-            </View>
-            <Text
-              style={tw`text-base text-[#6D6D6D] font-DegularDisplayMedium mt-2`}
-            >
-              Step into a realm of luxury and innovation with our expertly
-              designed car interiors, where every detail is meticulously crafted
-              to elevate your driving experience. Imagine plush seating that
-              cradles you in comfort, seamlessly integrated technology that
-              enhances convenience, and ambient lighting that sets the perfect
-              mood for your journey. Our interiors are not just about
-              aesthetics; they are designed with functionality in mind,
-              featuring intuitive layouts and smart storage solutions that cater
-              to your every need.
-            </Text>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };

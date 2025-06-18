@@ -16,6 +16,7 @@ import React from "react";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
+import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
 
 const data = [
   { label: "Interior Cleaning ", value: "1", price: 7542.0 },
@@ -60,27 +61,14 @@ const Times = [
 const calendersDate = () => {
   const navigation = useNavigation();
   const router = useRouter();
-  const [setDropValue] = React.useState<{
+  const { id } = useLocalSearchParams();
+  const [dropDownValue, setDropValue] = React.useState<{
     index: number;
     label: string;
     value: string;
     price: number;
   } | null>(null);
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      brand_name: "",
-      model_name: "",
-      service_type: "",
-    },
-  });
-  const onSubmit = (data: any) => console.log(data);
-
-  // console.log(dropValue);
+  // console.log(id, "calnder id ========================");
 
   const [selectedDate, setSelectedDate] = React.useState("");
   const [markedDates, setMarkedDates] = React.useState({});
@@ -139,6 +127,22 @@ const calendersDate = () => {
         </Text>
       </TouchableOpacity>
     );
+  };
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      brand_name: "",
+      model_name: "",
+      service_type: "",
+    },
+  });
+
+  const handleServiceData = (item) => {
+    console.log(item, "this check out ------------------------------");
   };
 
   return (
@@ -245,7 +249,10 @@ const calendersDate = () => {
                     onPress={() => {
                       setDropValue(item);
                       onChange(item.value);
-                      // console.log(item);
+                      console.log(
+                        item,
+                        "dropdown data ----------------------------"
+                      );
                     }}
                   >
                     <View
@@ -329,7 +336,8 @@ const calendersDate = () => {
             titleStyle={tw`text-primary`}
           />
           <TButton
-            onPress={() => router.push("/(order)/paymentSystem")}
+            onPress={handleSubmit(handleServiceData)}
+            // onPress={() => router.push("/(order)/paymentSystem")}
             title="checkout"
             containerStyle={tw`flex-1 rounded-lg`}
           />

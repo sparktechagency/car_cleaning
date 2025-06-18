@@ -31,8 +31,8 @@ const login = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: loginInfo ? loginInfo?.email : "",
-      password: loginInfo ? loginInfo?.password : "",
+      email: "",
+      password: "",
     },
   });
   const handleLogin = async (loginUserData: any) => {
@@ -69,10 +69,20 @@ const login = () => {
   };
 
   const handleSaveLoginInfo = async () => {
-    const loginInfo = await AsyncStorage.getItem("loginInfo");
-    const checked = await AsyncStorage.getItem("check");
-    setSelection(JSON.parse(checked as any));
-    setLoginInfo(JSON.parse(loginInfo as any));
+    const loginInfoStr = await AsyncStorage.getItem("loginInfo");
+    const checkedStr = await AsyncStorage.getItem("check");
+
+    const savedLoginInfo = loginInfoStr ? JSON.parse(loginInfoStr) : null;
+    const checked = checkedStr ? JSON.parse(checkedStr) : false;
+
+    setSelection(checked);
+    setLoginInfo(savedLoginInfo);
+
+    // Reset form with saved login info
+    reset({
+      email: savedLoginInfo?.email || "",
+      password: savedLoginInfo?.password || "",
+    });
   };
 
   React.useEffect(() => {
