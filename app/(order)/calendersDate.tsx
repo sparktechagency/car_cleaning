@@ -16,7 +16,7 @@ import React from "react";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
-import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 
 const data = [
   { label: "Interior Cleaning ", value: "1", price: 7542.0 },
@@ -69,6 +69,7 @@ const calendersDate = () => {
     price: number;
   } | null>(null);
   // console.log(id, "calnder id ========================");
+  console.log(dropDownValue, "this is dropdown value");
 
   const [selectedDate, setSelectedDate] = React.useState("");
   const [markedDates, setMarkedDates] = React.useState({});
@@ -80,11 +81,6 @@ const calendersDate = () => {
   const today = new Date().toISOString().split("T")[0]; // Current date in YYYY-MM-DD format
   // Custom rendering for each day
   const handleDayPress = (day) => {
-    // Prevent selecting a day before today
-    // if (day.dateString < today) {
-    //   return;
-    // }
-
     setSelectedDate(day.dateString);
     setMarkedDates({
       [day.dateString]: {
@@ -137,7 +133,6 @@ const calendersDate = () => {
     defaultValues: {
       brand_name: "",
       model_name: "",
-      service_type: "",
     },
   });
 
@@ -242,6 +237,12 @@ const calendersDate = () => {
                 labelField="label"
                 valueField="value"
                 placeholder="Select service"
+                onChange={(item) =>
+                  console.log(
+                    item,
+                    "this onchange dropdown value------- line 240"
+                  )
+                }
                 onBlur={onBlur}
                 value={value}
                 renderItem={(item) => (
@@ -249,10 +250,6 @@ const calendersDate = () => {
                     onPress={() => {
                       setDropValue(item);
                       onChange(item.value);
-                      console.log(
-                        item,
-                        "dropdown data ----------------------------"
-                      );
                     }}
                   >
                     <View
