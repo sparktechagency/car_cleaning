@@ -6,7 +6,7 @@ import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
 
 const work = (): JSX.Element => {
-  const { data: photoData } = useGetPhotosQuery();
+  const { data: photoData } = useGetPhotosQuery({});
 
   const renderItem = (item: any) => {
     return (

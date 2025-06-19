@@ -17,66 +17,33 @@ import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-
-const data = [
-  { label: "Interior Cleaning ", value: "1", price: 7542.0 },
-  { label: "Exterior Cleaning", value: "2", price: 7542.0 },
-  { label: "Both", value: "3", price: 7542.0 },
-];
-const Times = [
-  {
-    label: "12:00 PM",
-    isOpen: false,
-  },
-  {
-    label: "01:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "02:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "03:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "04:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "05:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "06:00 PM",
-    isOpen: true,
-  },
-  {
-    label: "07:00 PM",
-    isOpen: false,
-  },
-];
+import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 
 const calendersDate = () => {
+  const { id } = useLocalSearchParams();
+  const {
+    data: singleServiceData,
+    isLoading: singleServiceLoading,
+    isFetching: singleServiceFetching,
+    refetch: singleServiceRefetch,
+  } = useGetServicesByIdQuery(id);
+
   const navigation = useNavigation();
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+
   const [dropDownValue, setDropValue] = React.useState<{
     index: number;
     label: string;
     value: string;
     price: number;
   } | null>(null);
-  // console.log(id, "calnder id ========================");
-  console.log(dropDownValue, "this is dropdown value");
+
+  const service_type = dropDownValue?.label;
+  const price = dropDownValue?.price;
 
   const [selectedDate, setSelectedDate] = React.useState("");
   const [markedDates, setMarkedDates] = React.useState({});
-  const [selectTime, setSelectTime] = React.useState<{
-    label: string;
-    isOpen: boolean;
-  } | null>(null);
+  const [selectTime, setSelectTime] = React.useState<any | null>(null);
 
   const today = new Date().toISOString().split("T")[0]; // Current date in YYYY-MM-DD format
   // Custom rendering for each day
@@ -113,10 +80,10 @@ const calendersDate = () => {
         <Text
           style={{
             color: isPastDate
-              ? "rgba(0, 0, 0, 0.5)" // Dim text color for past dates
+              ? "rgba(0, 0, 0, 0.5)"
               : selectedDate === day.dateString
               ? "#FFFFFF"
-              : "#000000", // Dim text color for past dates
+              : "#000000",
           }}
         >
           {day.day}
@@ -124,6 +91,20 @@ const calendersDate = () => {
       </TouchableOpacity>
     );
   };
+
+  const serviceSelectedData = [
+    {
+      label: "Interior Cleaning ",
+      value: "1",
+      price: singleServiceData?.data?.interior,
+    },
+    {
+      label: "Exterior Cleaning",
+      value: "2",
+      price: singleServiceData?.data?.exterior,
+    },
+    { label: "Both", value: "3", price: singleServiceData?.data?.both },
+  ];
 
   const {
     control,
@@ -133,15 +114,48 @@ const calendersDate = () => {
     defaultValues: {
       brand_name: "",
       model_name: "",
+      service_type: "",
+      booking_name: "",
     },
   });
 
   const handleServiceData = (item) => {
-    console.log(item, "this check out ------------------------------");
+    const car_brand = item?.brand_name;
+    const car_model = item?.model_name;
+    const booking_note = item?.booking_name;
+    const service_name = singleServiceData?.data?.car_type;
+    const service_id = singleServiceData?.data?.id;
+    const booking_date = Object.keys(markedDates)[0];
+    const booking_time = selectTime;
+    const bookingData = {
+      car_brand,
+      car_model,
+      service_name,
+      service_id,
+      service_type,
+      booking_date,
+      booking_time,
+      booking_note,
+      price,
+    };
+    router.push({
+      pathname: "/(order)/paymentSystem",
+      params: {
+        car_brand,
+        car_model,
+        service_name,
+        service_id,
+        service_type,
+        booking_date,
+        booking_time,
+        booking_note,
+        price,
+      },
+    });
   };
 
   return (
-    <View style={tw`px-6 `}>
+    <View style={tw`px-6 flex-1`}>
       <Pressable
         onPress={() => {
           navigation.goBack();
@@ -169,8 +183,6 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputText
-                // containerLayoutStyle={tw`bg-black`}
-                // containerStyle={tw`bg-black`}
                 label="Vehicle brand name"
                 labelStyle={tw`font-DegularDisplaySemibold text-xl`}
                 value={value}
@@ -232,7 +244,7 @@ const calendersDate = () => {
                 selectedTextStyle={tw`text-base`}
                 inputSearchStyle={tw`h-10 text-base`}
                 iconStyle={tw`w-5 h-5`}
-                data={data}
+                data={serviceSelectedData}
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
@@ -276,13 +288,9 @@ const calendersDate = () => {
           </Text>
 
           <Calendar
-            // Specify the current date
             current={new Date().toISOString().split("T")[0]}
-            // Mark the selected date
             markedDates={markedDates}
-            // Callback that gets called when the user selects a day
-
-            dayComponent={({ date, state }) => renderDay(date, state)} // Apply custom day rendering
+            dayComponent={({ date, state }) => renderDay(date, state)}
             style={tw`rounded-lg`}
           />
         </View>
@@ -297,35 +305,70 @@ const calendersDate = () => {
             <View
               style={tw`flex-row flex-wrap justify-start items-center w-full`}
             >
-              {Times.map((time, index) => (
-                <TouchableOpacity
-                  disabled={!time.isOpen}
-                  style={tw`${
-                    selectTime?.label === time.label
-                      ? "bg-primary"
-                      : !time.isOpen
-                      ? "bg-gray-200"
-                      : "bg-transparent"
-                  } rounded-lg border w-[32%] border-gray-50`}
-                  key={index}
-                  onPress={() => setSelectTime(time)}
-                >
-                  <Text
-                    style={tw`font-DegularDisplaySemibold text-base ${
-                      selectTime?.label === time.label
-                        ? "text-white"
-                        : "text-regularText"
-                    }   rounded-2xl text-center px-6 py-3`}
+              {singleServiceData?.data?.time ? (
+                singleServiceData?.data?.time?.map((time, index) => (
+                  <TouchableOpacity
+                    // disabled={!time}
+                    style={tw`${
+                      selectTime === time ? "bg-primary" : "bg-transparent"
+                    } rounded-lg border w-[32%] border-gray-50`}
+                    key={index}
+                    onPress={() => setSelectTime(time)}
                   >
-                    {time?.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      style={tw`font-DegularDisplaySemibold text-base ${
+                        selectTime?.label === time
+                          ? "text-white"
+                          : "text-regularText"
+                      }   rounded-2xl text-center px-6 py-3`}
+                    >
+                      {time}
+                    </Text>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text style={tw`font-bold text-xl text-center`}>
+                  No Date Available..!
+                </Text>
+              )}
             </View>
           </View>
         </View>
 
-        <View style={tw`flex-row flex-1 items-end gap-2 mt-10 mb-6`}>
+        <View>
+          <Text
+            style={tw`mt-3 font-DegularDisplaySemibold text-xl text-regularText`}
+          >
+            Appointment note
+          </Text>
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Please booking Note name",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                inputStyle={tw`justify-start items-start text-start`}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.booking_name?.message}
+                textInputProps={{
+                  placeholder: "Enter the Appointment note",
+                  textAlignVertical: "top",
+                }}
+                containerStyle={tw`w-full h-28`}
+              />
+            )}
+            name="booking_name"
+          />
+        </View>
+
+        <View style={tw`flex-row flex-1 items-end gap-2 mt-10 `}>
           <TButton
             onPress={() => router.back()}
             title="Cancel"

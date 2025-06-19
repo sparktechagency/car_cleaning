@@ -11,7 +11,7 @@ import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
@@ -27,6 +27,18 @@ const data = [
 ];
 
 const paymentSystem = () => {
+  const {
+    car_brand,
+    car_model,
+    service_name,
+    service_id,
+    service_type,
+    booking_date,
+    booking_time,
+    booking_note,
+    price,
+  } = useLocalSearchParams();
+
   const [checkBox, setCheckBox] = React.useState(false);
   const [value, setValue] = React.useState(null);
   const [isFocus, setIsFocus] = React.useState(false);
