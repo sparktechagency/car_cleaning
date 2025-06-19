@@ -23,7 +23,7 @@ const login = () => {
   const [isShow, setIsShow] = useState(false);
   const [loginInfo, setLoginInfo] = useState<any>(null);
   const [login, { isLoading }] = useLoginMutation();
-  console.log(loginInfo?.email, "login data");
+
   const {
     control,
     reset,

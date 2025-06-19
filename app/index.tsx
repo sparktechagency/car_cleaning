@@ -45,7 +45,6 @@ export default function App() {
     //   route?.replace("/login");
     // }, 1000);
   }, []);
-  console.log(tokenCheck, "token");
   const handlePathDecision = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
