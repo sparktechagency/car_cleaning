@@ -127,17 +127,7 @@ const calendersDate = () => {
     const service_id = singleServiceData?.data?.id;
     const booking_date = Object.keys(markedDates)[0];
     const booking_time = selectTime;
-    const bookingData = {
-      car_brand,
-      car_model,
-      service_name,
-      service_id,
-      service_type,
-      booking_date,
-      booking_time,
-      booking_note,
-      price,
-    };
+
     router.push({
       pathname: "/(order)/paymentSystem",
       params: {
@@ -353,15 +343,17 @@ const calendersDate = () => {
               <InputText
                 value={value}
                 onChangeText={(test) => onChange(test)}
-                inputStyle={tw`justify-start items-start text-start`}
+                // inputStyle={tw`justify-start items-start text-start`}
                 onBlur={onBlur}
                 touched
                 errorText={errors?.booking_name?.message}
                 textInputProps={{
                   placeholder: "Enter the Appointment note",
+                  verticalAlign: "top",
                   textAlignVertical: "top",
                 }}
-                containerStyle={tw`w-full h-28`}
+                inputStyle={tw`h-28`}
+                containerStyle={tw`h-36 justify-center`}
               />
             )}
             name="booking_name"

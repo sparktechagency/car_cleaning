@@ -3,11 +3,18 @@ import { Text, View } from "react-native";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { Checkbox } from "react-native-ui-lib";
-
-const ThreeStep = () => {
-  const [interiorValue, setInteriorValue] = React.useState<
+import { IBookingData } from "@/interface/interfaces";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+interface Props {
+  setBookingInfo: React.Dispatch<React.SetStateAction<IBookingData | null>>;
+  bookingInfo: IBookingData;
+}
+const ThreeStep = ({ bookingInfo, setBookingInfo }: Props) => {
+  const [typeValue, setTypeValue] = React.useState<
     "interior" | "exterior" | "both"
   >("interior");
+
+  const { data, isError, isLoading } = useGetServicesQuery({});
 
   return (
     <View style={tw`w-full mt-4`}>
@@ -23,9 +30,13 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Interior Cleaning"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={interiorValue === "interior"}
+            value={typeValue === "interior"}
             onValueChange={() => {
-              setInteriorValue("interior");
+              setTypeValue("interior");
+              setBookingInfo({
+                ...bookingInfo,
+                price: 55,
+              });
             }}
           />
           <Text
@@ -41,9 +52,13 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Exterior Cleaning"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={interiorValue === "exterior"}
+            value={typeValue === "exterior"}
             onValueChange={() => {
-              setInteriorValue("exterior");
+              setTypeValue("exterior");
+              setBookingInfo({
+                ...bookingInfo,
+                price: 60,
+              });
             }}
           />
           <Text
@@ -59,9 +74,13 @@ const ThreeStep = () => {
             borderRadius={100}
             label="Both"
             labelStyle={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
-            value={interiorValue === "both"}
+            value={typeValue === "both"}
             onValueChange={() => {
-              setInteriorValue("both");
+              setTypeValue("both");
+              setBookingInfo({
+                ...bookingInfo,
+                price: 65,
+              });
             }}
           />
           <Text

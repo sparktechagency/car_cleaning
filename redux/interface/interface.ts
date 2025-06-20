@@ -33,3 +33,12 @@ export interface IPrivacyPolicy {
 export interface IAboutUs {
   data: ITermsAndConditions;
 }
+
+export interface ISupport {
+  full_name: string;
+  subject: string;
+  message: string;
+  updated_at: string;
+  created_at: string;
+  id: number;
+}

@@ -1,16 +1,19 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { useNavigation, useRouter } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
 import { IconBackArrow } from "@/assets/icon/icon";
 import { Controller, useForm } from "react-hook-form";
 import InputText from "@/lib/inputs/InputText";
 import TButton from "@/lib/buttons/TButton";
+import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const support = () => {
-  const router = useNavigation();
-  const route = useRouter();
+  const navigation = useNavigation();
+  const [supportData, { isLoading, isError, isSuccess }] = useSupportMutation();
+  console.log(isSuccess, "if sucess 5555555555555555555");
 
   const {
     control,
@@ -18,19 +21,39 @@ const support = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "",
+      full_name: "",
       subject: "",
-      question: "",
+      message: "",
+      created_at: new Date(),
+      updated_at: new Date(),
     },
   });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await supportData(data).unwrap();
+      if (response?.status === true) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Congrats! Your Message send.",
+        });
+        router.push("/drewer/home");
+      }
+      console.log(response, "support server response +++++++++++++++++++++++");
+    } catch (error) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Failed",
+        textBody: "Please Try again.",
+      });
+    }
+  };
 
-  console.log(errors);
   return (
     <View style={tw`px-6`}>
       <Pressable
         onPress={() => {
-          router.goBack();
+          navigation.goBack();
         }}
         style={tw`flex-row items-center mt-5 gap-2`}
       >
@@ -48,11 +71,6 @@ const support = () => {
               value: true,
               message: "Email is required",
             },
-            //   pattern: {
-            //     value:
-            //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            //     message: "Please input valid email",
-            //   },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <InputText
@@ -61,14 +79,14 @@ const support = () => {
               onChangeText={(test) => onChange(test)}
               onBlur={onBlur}
               touched
-              errorText={errors?.name?.message}
+              errorText={errors?.full_name?.message}
               textInputProps={{
                 placeholder: "Enter your full name",
               }}
               containerStyle={tw``}
             />
           )}
-          name="name"
+          name="full_name"
         />
         <Controller
           control={control}
@@ -77,11 +95,6 @@ const support = () => {
               value: true,
               message: "Email is required",
             },
-            //   pattern: {
-            //     value:
-            //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            //     message: "Please input valid email",
-            //   },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <InputText
@@ -106,11 +119,6 @@ const support = () => {
               value: true,
               message: "Email is required",
             },
-            //   pattern: {
-            //     value:
-            //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            //     message: "Please input valid email",
-            //   },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <InputText
@@ -119,7 +127,7 @@ const support = () => {
               onChangeText={(test) => onChange(test)}
               onBlur={onBlur}
               touched
-              errorText={errors?.question?.message}
+              errorText={errors?.message?.message}
               textInputProps={{
                 placeholder: "Write your thoughts or questions",
                 verticalAlign: "top",
@@ -131,13 +139,13 @@ const support = () => {
               containerStyle={tw`h-36 justify-center`}
             />
           )}
-          name="question"
+          name="message"
         />
       </View>
 
       <View style={tw`rounded-full w-full h-12 mt-6 `}>
         <TButton
-          // onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(onSubmit)}
           title="Send"
           containerStyle={tw``}
         />

@@ -2,6 +2,7 @@ import { api } from "../api/baseApi";
 import {
   IAboutUs,
   IPrivacyPolicy,
+  ISupport,
   ITermsAndConditions,
 } from "../interface/interface";
 
@@ -25,6 +26,14 @@ const drawerApiSlices = api.injectEndpoints({
       }),
       providesTags: ["category"],
     }),
+    support: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/support-message`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -32,4 +41,5 @@ export const {
   useGetTermsAndConditionsQuery,
   useGetPrivacyAndPolicyQuery,
   useGetAboutUsQuery,
+  useSupportMutation,
 } = drawerApiSlices;

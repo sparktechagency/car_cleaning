@@ -17,7 +17,6 @@ import RenderHtml from "react-native-render-html";
 const privacyPolicy = () => {
   const navigation = useNavigation();
   const { data, isLoading } = useGetPrivacyAndPolicyQuery({});
-  console.log(data?.data, ";alskjd;flaksdj;flaksjdf;laksdjf;laksjd;alskj");
 
   return (
     <>

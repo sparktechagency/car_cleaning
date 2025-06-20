@@ -23,13 +23,14 @@ import ThreeStep from "@/components/ThreeStep";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import React from "react";
+import React, { useState } from "react";
 import { SvgXml } from "react-native-svg";
 
 import {
   useGetPhotosQuery,
   useGetServicesQuery,
 } from "@/redux/apiSlices/homeApiSlices";
+import { IBookingData } from "@/interface/interfaces";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -37,10 +38,13 @@ const Home = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [step, setStep] = React.useState(0);
 
-  const { data, isLoading, isError, isSuccess } = useGetServicesQuery();
-  const { data: photoData } = useGetPhotosQuery();
+  // ============================ services data =-======================================================================
+  const [bookingInfo, setBookingInfo] = useState<IBookingData | null>(null);
 
-  const renderItem = ({ item }): JSX.Element => {
+  const { data, isLoading, isError, isSuccess } = useGetServicesQuery({});
+  const { data: photoData } = useGetPhotosQuery({});
+
+  const renderItem = ({ item }: { item: any }): JSX.Element => {
     return (
       <TouchableOpacity onPress={() => handleServiceDetails(item)}>
         <View
@@ -59,7 +63,7 @@ const Home = () => {
     );
   };
 
-  const workRenderItem = ({ item }) => {
+  const workRenderItem = ({ item }: { item: any }) => {
     return (
       <TouchableOpacity>
         <View style={tw`mb-4 mr-2`}>
@@ -72,12 +76,14 @@ const Home = () => {
     );
   };
 
-  const handleServiceDetails = (item) => {
+  const handleServiceDetails = (item: any) => {
     router.push({
       pathname: "/(order)/calendersDate",
       params: { id: item?.id },
     });
   };
+
+  console.log(bookingInfo);
 
   return (
     <View style={tw`flex-1 px-6 `}>
@@ -216,7 +222,7 @@ const Home = () => {
               style={tw`bg-[#F6F6F6] z-50 flex-1 items-center p-6  py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
             >
               <Wizard
-                containerStyle={tw`bg-transparent border-0 shadow-none`}
+                containerStyle={tw`bg-transparent pb-4 border-0 border-b-0 shadow-none`}
                 activeIndex={step}
                 onActiveIndexChanged={(index) => setStep(index)}
                 activeConfig={{
@@ -272,10 +278,30 @@ const Home = () => {
         }}
       >
         <ScrollView keyboardShouldPersistTaps="always" style={tw`px-4`}>
-          {step === 0 && <CarType />}
-          {step === 1 && <SecondStep />}
-          {step === 2 && <ThreeStep />}
-          {step === 3 && <FourthStep />}
+          {step === 0 && (
+            <CarType
+              setBookingInfo={setBookingInfo}
+              bookingInfo={bookingInfo as any}
+            />
+          )}
+          {step === 1 && (
+            <SecondStep
+              setBookingInfo={setBookingInfo}
+              bookingInfo={bookingInfo as any}
+            />
+          )}
+          {step === 2 && (
+            <ThreeStep
+              setBookingInfo={setBookingInfo}
+              bookingInfo={bookingInfo}
+            />
+          )}
+          {step === 3 && (
+            <FourthStep
+              setBookingInfo={setBookingInfo}
+              bookingInfo={bookingInfo}
+            />
+          )}
         </ScrollView>
         <View style={tw`flex-row flex-1 py-6 px-4 items-end gap-2 mt-10`}>
           <TButton
@@ -291,6 +317,11 @@ const Home = () => {
             titleStyle={tw`text-primary`}
           />
           <TButton
+            disabled={
+              step == 1 && (!bookingInfo?.car_brand || !bookingInfo.car_model)
+                ? true
+                : false
+            }
             onPress={() => {
               if (step < 3) {
                 setStep(step + 1);

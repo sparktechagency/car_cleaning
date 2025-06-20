@@ -5,66 +5,73 @@ import {
   IconSubCar,
   IconTrack,
 } from "@/assets/icon/icon";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
-import React from "react";
-import { SvgXml } from "react-native-svg";
+import React, { useEffect } from "react";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import { IBookingData } from "@/interface/interfaces";
 
-const CarType = (): JSX.Element => {
+interface Props {
+  setBookingInfo: React.Dispatch<React.SetStateAction<IBookingData | null>>;
+  bookingInfo: IBookingData;
+}
+
+const CarType = ({ setBookingInfo, bookingInfo }: Props): JSX.Element => {
   const [selected, setSelected] = React.useState<number>(0);
+  // const [serviceId, setServiceId] = React.useState();
+  const { data, isError, isLoading } = useGetServicesQuery({});
 
-  const servicesItem = [
-    {
-      title: "Truck",
-      icon: IconTrack,
-    },
-    {
-      title: "Compact",
-      icon: IconCompact,
-    },
-    {
-      title: "Suv car",
-      icon: IconSubCar,
-    },
-    {
-      title: "Large car",
-      icon: IconLargeCar,
-    },
-    {
-      title: "Sport car",
-      icon: IconSport,
-    },
-  ];
-
-  // console.log(selected);
+  // console.log(serviceId, "service id ///////////////////");
 
   return (
     <View style={tw`flex-row flex-wrap justify-start items-center gap-4 `}>
       <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
         Which type of vehicle you want to wash?
       </Text>
-      {servicesItem.map((item, index) => (
-        <TouchableOpacity
-          onPress={() => setSelected(index)}
-          activeOpacity={0.7}
-          key={index}
-          style={tw`w-[30%] h-28 mb-4 rounded-2xl ${
-            selected === index ? "bg-[#0063E5]" : "bg-white "
-          } items-center text-center  justify-center`}
-        >
-          <View style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}>
-            <SvgXml xml={item.icon} />
-          </View>
-          <Text
-            style={tw`font-DegularDisplaySemibold text-base ${
-              selected === index ? "text-white" : "text-[#262626]"
-            } `}
+      {data?.data?.map((item, index) => {
+        useEffect(() => {
+          if (data?.data?.length > 0) {
+            setSelected(0);
+            setBookingInfo({
+              ...bookingInfo,
+              service_id: data?.data[0]?.id,
+            });
+          }
+        }, [data]);
+        return (
+          <TouchableOpacity
+            onPress={() => {
+              setSelected(index);
+              setBookingInfo({
+                ...bookingInfo,
+                service_id: item?.id,
+              });
+            }}
+            activeOpacity={0.7}
+            key={item?.id}
+            style={tw`w-[30%] h-28 mb-4 rounded-2xl ${
+              selected === index ? "bg-[#0063E5]" : "bg-white "
+            } items-center text-center  justify-center`}
           >
-            {item.title}
-          </Text>
-        </TouchableOpacity>
-      ))}
+            <View style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}>
+              <Image
+                width={32}
+                height={30}
+                resizeMode="contain"
+                source={{ uri: item?.icon }}
+              />
+            </View>
+            <Text
+              style={tw`font-DegularDisplaySemibold text-base ${
+                selected === index ? "text-white" : "text-[#262626]"
+              } `}
+            >
+              {item?.car_type}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
