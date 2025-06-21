@@ -4,6 +4,7 @@ import {
   IconCross,
   IconDelete,
   IconEditProfile,
+  IconPhone,
   IconSuccess,
   IconSwapImage,
   IconThreeDot,
@@ -31,14 +32,30 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { Modal } from "react-native-ui-lib";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const editProfile = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectModalVisible, setSelectModalVisible] = React.useState(false);
+  const [userName, setUserName] = useState("");
+  const [car_brand, setCarBrand] = useState("");
+  const [car_model, setCarModel] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isToken, setIsToken] = useState();
+
+  const userInfo = {
+    userName,
+    car_brand,
+    car_model,
+    phone,
+  };
+
+  console.log(userInfo, "aulsdfijlksdjfa;lskjdf;laskdjf;lsafja;lskdfj");
 
   const images = [
     {
@@ -66,19 +83,16 @@ const editProfile = () => {
       image: EditImage6,
     },
   ];
+  const { data, isLoading, isError } = useGetProfileQuery(isToken);
+  console.log(data, "asldfjalskdjfsajf");
+  const handleUserInfo = async () => {
+    const token = await AsyncStorage.getItem("token");
+    setIsToken(token);
+  };
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      user_name: "",
-    },
-  });
-  const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
+  useEffect(() => {
+    handleUserInfo();
+  }, []);
 
   return (
     <View style={tw`flex-1`}>
@@ -122,30 +136,30 @@ const editProfile = () => {
           >
             Basic information
           </Text>
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: "Email is required",
-              },
+
+          <InputText
+            label="Username"
+            onChangeText={(test) => {
+              setUserName(test);
             }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputText
-                label="Username"
-                value={value}
-                onChangeText={(test) => onChange(test)}
-                onBlur={onBlur}
-                touched
-                errorText={errors?.user_name?.message}
-                textInputProps={{
-                  placeholder: "Enter Your User Name",
-                }}
-                svgFirstIcon={IconEditProfile}
-                containerStyle={tw``}
-              />
-            )}
-            name="user_name"
+            touched
+            textInputProps={{
+              placeholder: "Enter Your User Name",
+            }}
+            svgFirstIcon={IconEditProfile}
+            containerStyle={tw``}
+          />
+          <InputText
+            label="Phone"
+            onChangeText={(test) => {
+              setPhone(test);
+            }}
+            touched
+            textInputProps={{
+              placeholder: "Enter Your Phone number",
+            }}
+            svgFirstIcon={IconPhone}
+            containerStyle={tw``}
           />
         </View>
 
@@ -158,58 +172,32 @@ const editProfile = () => {
 
           <View style={tw`flex-row gap-2 w-full  `}>
             <View style={tw` w-1/2`}>
-              <Controller
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "Email is required",
-                  },
+              <InputText
+                label="Brand name"
+                onChangeText={(test) => {
+                  setCarBrand(test);
                 }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <InputText
-                    label="Brand name"
-                    value={value}
-                    onChangeText={(test) => onChange(test)}
-                    onBlur={onBlur}
-                    touched
-                    errorText={errors?.user_name?.message}
-                    textInputProps={{
-                      placeholder: "Your Car brand",
-                      numberOfLines: 1,
-                    }}
-                    containerStyle={tw`w-full flex-1`}
-                  />
-                )}
-                name="user_name"
+                touched
+                textInputProps={{
+                  placeholder: "Your Car brand",
+                  numberOfLines: 1,
+                }}
+                containerStyle={tw`w-full flex-1`}
               />
             </View>
 
             <View style={tw` w-1/2`}>
-              <Controller
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "Email is required",
-                  },
+              <InputText
+                label="Model name"
+                onChangeText={(test) => {
+                  setCarModel(test);
                 }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <InputText
-                    label="Model name"
-                    value={value}
-                    onChangeText={(test) => onChange(test)}
-                    onBlur={onBlur}
-                    touched
-                    errorText={errors?.user_name?.message}
-                    textInputProps={{
-                      placeholder: "Car model Name",
-                      numberOfLines: 1,
-                    }}
-                    containerStyle={tw`w-full flex-1`}
-                  />
-                )}
-                name="user_name"
+                touched
+                textInputProps={{
+                  placeholder: "Car model Name",
+                  numberOfLines: 1,
+                }}
+                containerStyle={tw`w-full flex-1`}
               />
             </View>
           </View>

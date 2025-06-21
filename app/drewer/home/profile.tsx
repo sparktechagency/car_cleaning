@@ -4,7 +4,6 @@ import {
   IconCar,
   IconEdit,
 } from "@/assets/icon/icon";
-import { Car1, Car2, Car3, Car4, Car5, Car6 } from "@/assets/images/images";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
@@ -98,6 +97,7 @@ const profile = () => {
               resizeMode="contain"
             />
             <TouchableOpacity
+              onPress={() => router.push("/editProfile")}
               style={tw`absolute p-2 rounded-full bg-primary bottom-0 right-0`}
             >
               <SvgXml xml={IconCameraProfile} />
