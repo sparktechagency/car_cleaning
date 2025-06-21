@@ -8,7 +8,6 @@ import { useNavigation, useRouter } from "expo-router";
 import {
   FlatList,
   Image,
-  Modal,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -23,7 +22,7 @@ import ThreeStep from "@/components/ThreeStep";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 
 import {
@@ -31,18 +30,35 @@ import {
   useGetServicesQuery,
 } from "@/redux/apiSlices/homeApiSlices";
 import { IBookingData } from "@/interface/interfaces";
+import Fifth from "@/components/Fifth";
+import {
+  useGetProfileQuery,
+  useGetTokenCheckQuery,
+} from "@/redux/apiSlices/authSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [step, setStep] = React.useState(0);
+  const [isToken, setIsToken] = useState();
 
   // ============================ services data =-======================================================================
   const [bookingInfo, setBookingInfo] = useState<IBookingData | null>(null);
 
   const { data, isLoading, isError, isSuccess } = useGetServicesQuery({});
   const { data: photoData } = useGetPhotosQuery({});
+  const { data: userInfo } = useGetProfileQuery(isToken);
+
+  const handleUserInfo = async () => {
+    const token = await AsyncStorage.getItem("token");
+    setIsToken(token);
+  };
+
+  useEffect(() => {
+    handleUserInfo();
+  }, []);
 
   const renderItem = ({ item }: { item: any }): JSX.Element => {
     return (
@@ -51,7 +67,12 @@ const Home = () => {
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
           <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
-            <Image width={32} height={30} source={{ uri: item?.icon }} />
+            <Image
+              width={32}
+              height={30}
+              resizeMode="contain"
+              source={{ uri: item?.icon }}
+            />
           </View>
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
@@ -83,18 +104,21 @@ const Home = () => {
     });
   };
 
-  console.log(bookingInfo);
+  console.log(
+    bookingInfo,
+    "this is home index booking index --------- line number 92"
+  );
 
   return (
     <View style={tw`flex-1 px-6 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
-        <View style={tw`flex-row items-center gap-4`}>
+        <View style={tw`flex-row justify-start items-center  gap-4`}>
           <TouchableOpacity
             onPress={() => {
               (navigation as any)?.openDrawer();
             }}
-            style={tw`pb-4 items-center justify-center `}
+            style={tw` items-center justify-center `}
           >
             <SvgXml xml={IconMenu} />
           </TouchableOpacity>
@@ -103,15 +127,9 @@ const Home = () => {
               <Text
                 style={tw`font-DegularDisplayBold flex-row items-center text-black text-2xl`}
               >
-                Hi Richard,
+                Hi {userInfo?.data?.name},
               </Text>
               <SvgXml xml={IconHi} />
-            </View>
-            <View
-              style={tw`font-DegularDisplayBold flex-row items-center gap-1 text-black text-base`}
-            >
-              <SvgXml xml={IconLocation} />
-              <Text>31/2 Los Angles, USA</Text>
             </View>
           </View>
         </View>
@@ -268,7 +286,19 @@ const Home = () => {
                   circleColor={PrimaryColor}
                   circleSize={20}
                   state={
-                    step === 3 ? Wizard.States.ENABLED : Wizard.States.DISABLED
+                    step > 3
+                      ? Wizard.States.COMPLETED
+                      : step === 3
+                      ? Wizard.States.ENABLED
+                      : Wizard.States.DISABLED
+                  }
+                  icon={require("@/assets/images/check_circle.png")}
+                />
+                <Wizard.Step
+                  circleColor={PrimaryColor}
+                  circleSize={20}
+                  state={
+                    step === 4 ? Wizard.States.ENABLED : Wizard.States.DISABLED
                   }
                   icon={require("@/assets/images/check_circle.png")}
                 />
@@ -293,13 +323,19 @@ const Home = () => {
           {step === 2 && (
             <ThreeStep
               setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo}
+              bookingInfo={bookingInfo as any}
             />
           )}
           {step === 3 && (
             <FourthStep
               setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo}
+              bookingInfo={bookingInfo as any}
+            />
+          )}
+          {step === 4 && (
+            <Fifth
+              setBookingInfo={setBookingInfo}
+              bookingInfo={bookingInfo as any}
             />
           )}
         </ScrollView>
@@ -318,19 +354,23 @@ const Home = () => {
           />
           <TButton
             disabled={
-              step == 1 && (!bookingInfo?.car_brand || !bookingInfo.car_model)
+              (step == 1 &&
+                (!bookingInfo?.car_brand || !bookingInfo?.car_model)) ||
+              (step == 3 &&
+                (!bookingInfo?.booking_time || !bookingInfo?.booking_time)) ||
+              (step == 4 && !bookingInfo?.booking_note)
                 ? true
                 : false
             }
             onPress={() => {
-              if (step < 3) {
+              if (step < 4) {
                 setStep(step + 1);
               } else {
-                router?.push("/cmodal");
+                router?.push("/paymentSystem");
                 setModalVisible(false);
               }
             }}
-            title={step < 3 ? "Next" : "Checkout"}
+            title={step < 4 ? "Next" : "Checkout"}
             containerStyle={tw`flex-1 rounded-lg`}
           />
         </View>

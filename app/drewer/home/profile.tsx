@@ -1,41 +1,24 @@
-import { IconCameraProfile, IconCar, IconEdit } from "@/assets/icon/icon";
+import {
+  IconAdd,
+  IconCameraProfile,
+  IconCar,
+  IconEdit,
+} from "@/assets/icon/icon";
 import { Car1, Car2, Car3, Car4, Car5, Car6 } from "@/assets/images/images";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const profile = () => {
   const router = useRouter();
-  const carImage = [
-    {
-      id: 1,
-      image: Car1,
-    },
-    {
-      id: 2,
-      image: Car2,
-    },
-    {
-      id: 3,
-      image: Car3,
-    },
-    {
-      id: 4,
-      image: Car4,
-    },
-    {
-      id: 5,
-      image: Car5,
-    },
-    {
-      id: 6,
-      image: Car6,
-    },
-  ];
+  const [isToken, setIsToken] = useState("");
 
+  const { data, isLoading, isError } = useGetProfileQuery(isToken);
   //  = service history data =======================
   const serviceHistoryData = [
     {
@@ -76,6 +59,15 @@ const profile = () => {
     },
   ];
 
+  const handleUserInfo = async () => {
+    const token = await AsyncStorage.getItem("token");
+    setIsToken(token);
+  };
+
+  useEffect(() => {
+    handleUserInfo();
+  }, []);
+
   return (
     <View style={tw`flex-1 `}>
       <View style={tw`flex-row px-6 justify-between items-center my-6`}>
@@ -100,9 +92,10 @@ const profile = () => {
           <View style={tw`relative`}>
             <Image
               source={{
-                uri: "https://s3-alpha-sig.figma.com/img/fbb8/532e/d272017fa267924482614c10a5ce37ab?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=MoRpVAEIp7K7XrD7zI19RIrRR3e95w5cqz1wOo1rwIxN2g1NXX6tCFG30bMo0yky6gnbdKkIW2b3wOYyxsR8QKlRMLiYbNls47p-Yz8JeqcKSJa1Z1z~RPUloELQK0fPYnIxFAILmQgOWH7JHsmeLojjwWhg6E7ieOu44RnWC0wma2pdwe9YLz0x9LGqpWixZiQuP6qAsrSmU6icAYiMFp-pVQ4bUQ6wPTP~NfeYahPbBJGGVRW54JagtRbD1lLtmkqZkC~XXogyb6wjHFhiKqMaukUN9esjMZq0Nxpoqyv7k1WzAs0hcwqaWcYFHSrCbrMFAyuzHNetCIacyxe3OA__",
+                uri: data?.data?.photo,
               }}
               style={{ width: 124, height: 124, borderRadius: 100 }}
+              resizeMode="contain"
             />
             <TouchableOpacity
               style={tw`absolute p-2 rounded-full bg-primary bottom-0 right-0`}
@@ -113,10 +106,10 @@ const profile = () => {
           <Text
             style={tw`font-DegularDisplayBold text-base text-[#262626] my-2`}
           >
-            Richard Williams
+            {data?.data?.name}
           </Text>
           <Text style={tw`font-DegularDisplayMedium text-xs text-[#6D6D6D]`}>
-            richard235@gmail.com
+            {data?.data?.email}
           </Text>
         </View>
 
@@ -128,28 +121,44 @@ const profile = () => {
           >
             Car Details
           </Text>
-          <View style={tw`flex-row gap-2 mb-2`}>
-            <SvgXml xml={IconCar} />
-            <Text
-              style={tw`font-DegularDisplayMedium text-base text-regularText`}
-            >
-              BMW X2 Coupe Suv
-            </Text>
-          </View>
+          {data?.data?.car_model ? (
+            <View style={tw`flex-row gap-2 mb-2`}>
+              <SvgXml xml={IconCar} />
+              <Text
+                style={tw`font-DegularDisplayMedium text-base text-regularText`}
+              >
+                {data?.data?.car_model}
+              </Text>
+            </View>
+          ) : null}
+
           <View style={tw`flex-row flex-wrap justify-between`}>
-            {carImage.map((item) => {
-              return (
+            {data?.data?.car_photos?.length === 0 ? (
+              <View>
+                <Text style={tw`font-bold text-xl text-center`}>
+                  No Car Available..!
+                </Text>
                 <TouchableOpacity
-                  key={item.id}
-                  style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
+                  style={tw`border border-black rounded-xl flex justify-center items-center w-[30%] h-16 `}
                 >
-                  <Image
-                    style={tw`w-full h-full rounded-lg`}
-                    source={item.image}
-                  />
+                  <SvgXml xml={IconAdd} />
                 </TouchableOpacity>
-              );
-            })}
+              </View>
+            ) : (
+              data?.data?.car_photos.map((item) => {
+                return (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
+                  >
+                    <Image
+                      style={tw`w-full h-full rounded-lg`}
+                      source={item?.photo}
+                    />
+                  </TouchableOpacity>
+                );
+              })
+            )}
           </View>
         </View>
 

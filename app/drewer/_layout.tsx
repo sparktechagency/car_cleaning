@@ -1,4 +1,4 @@
-import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 import { IconLogOut } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
@@ -11,10 +11,24 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
 import { Avatar } from "react-native-ui-lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const CustomDrawerContent = (props) => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [isToken, setIsToken] = useState();
+
+  const { data, isLoading, isError } = useGetProfileQuery(isToken);
+
+  const handleUserInfo = async () => {
+    const token = await AsyncStorage.getItem("token");
+    setIsToken(token);
+  };
+
+  useEffect(() => {
+    handleUserInfo();
+  }, []);
 
   return (
     <DrawerContentScrollView
@@ -22,23 +36,19 @@ const CustomDrawerContent = (props) => {
       contentContainerStyle={tw`flex-1 pb-[${insets.bottom}px]`}
     >
       {/* User Profile Section */}
-      <View style={tw`flex-row pt-4 items-center px-4  gap-3`}>
-        {/* <View
-              style={tw`w-15 h-15 rounded-full bg-gray-300 justify-center items-center mb-2.5`}
-            >
-              <Text style={tw`text-xl font-bold text-white`}>LY</Text>
-            </View> */}
-        <View style={tw`mb-2.5`}>
-          <Avatar
-            containerStyle={tw` bg-gray-300 justify-center items-center `}
+      <View style={tw`flex-row pt-4 justify-start items-center px-4  gap-3`}>
+        <View style={tw`mb-2.5 flex justify-center items-center`}>
+          <Image
             source={{
-              uri: "https://s3-alpha-sig.figma.com/img/fbb8/532e/d272017fa267924482614c10a5ce37ab?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=MoRpVAEIp7K7XrD7zI19RIrRR3e95w5cqz1wOo1rwIxN2g1NXX6tCFG30bMo0yky6gnbdKkIW2b3wOYyxsR8QKlRMLiYbNls47p-Yz8JeqcKSJa1Z1z~RPUloELQK0fPYnIxFAILmQgOWH7JHsmeLojjwWhg6E7ieOu44RnWC0wma2pdwe9YLz0x9LGqpWixZiQuP6qAsrSmU6icAYiMFp-pVQ4bUQ6wPTP~NfeYahPbBJGGVRW54JagtRbD1lLtmkqZkC~XXogyb6wjHFhiKqMaukUN9esjMZq0Nxpoqyv7k1WzAs0hcwqaWcYFHSrCbrMFAyuzHNetCIacyxe3OA__",
+              uri: data?.data?.photo,
             }}
+            style={{ width: 45, height: 45 }}
+            resizeMode="contain"
           />
         </View>
         <View>
-          <Text style={tw`text-lg font-bold `}>Richard Mark</Text>
-          <Text style={tw`text-sm text-gray-600`}>richard125@gmail.com</Text>
+          <Text style={tw`text-lg font-bold `}>{data?.data?.name}</Text>
+          <Text style={tw`text-sm text-gray-600`}>{data?.data?.email}</Text>
         </View>
       </View>
 

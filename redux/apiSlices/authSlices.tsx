@@ -1,13 +1,18 @@
 import { api } from "../api/baseApi";
-import { IUsers } from "../interface/interface";
 
 const authSlice = api.injectEndpoints({
   endpoints: (builder) => ({
-    userList: builder.query<IUsers, any>({
+    userList: builder.query<any, any>({
       query: ({ page, limit = 100 }) => ({
         url: `/admin/user?per_page=${limit}&page=${page}`,
       }),
       providesTags: ["user"],
+    }),
+
+    getProfile: builder.query<any, any>({
+      query: (date) => ({
+        url: `/auth/profile`,
+      }),
     }),
 
     addUser: builder.mutation<any, any>({
@@ -74,6 +79,7 @@ const authSlice = api.injectEndpoints({
 
 export const {
   useAddUserMutation,
+  useGetProfileQuery,
   useDeleteUserMutation,
   useLazyUserListQuery,
   useLoginMutation,

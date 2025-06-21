@@ -307,9 +307,7 @@ const calendersDate = () => {
                   >
                     <Text
                       style={tw`font-DegularDisplaySemibold text-base ${
-                        selectTime?.label === time
-                          ? "text-white"
-                          : "text-regularText"
+                        selectTime === time ? "text-white" : "text-regularText"
                       }   rounded-2xl text-center px-6 py-3`}
                     >
                       {time}

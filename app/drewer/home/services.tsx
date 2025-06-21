@@ -30,7 +30,12 @@ const services = (): JSX.Element => {
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
           <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
-            <Image width={32} height={30} source={{ uri: item?.icon }} />
+            <Image
+              width={32}
+              height={30}
+              source={{ uri: item?.icon }}
+              resizeMode="contain"
+            />
           </View>
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}

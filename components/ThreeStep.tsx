@@ -4,7 +4,7 @@ import tw from "@/lib/tailwind";
 import React from "react";
 import { Checkbox } from "react-native-ui-lib";
 import { IBookingData } from "@/interface/interfaces";
-import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 interface Props {
   setBookingInfo: React.Dispatch<React.SetStateAction<IBookingData | null>>;
   bookingInfo: IBookingData;
@@ -14,7 +14,29 @@ const ThreeStep = ({ bookingInfo, setBookingInfo }: Props) => {
     "interior" | "exterior" | "both"
   >("interior");
 
-  const { data, isError, isLoading } = useGetServicesQuery({});
+  const { data, isError, isLoading } = useGetServicesByIdQuery(
+    bookingInfo?.service_id
+  );
+
+  const interiorPrice = data?.data?.interior ?? 0;
+  const exteriorPrice = data?.data?.exterior ?? 0;
+  const bothPrice = data?.data?.both ?? 0;
+
+  React.useEffect(() => {
+    if (data) {
+      const price =
+        typeValue === "interior"
+          ? data?.data?.interior
+          : typeValue === "exterior"
+          ? data?.data?.exterior
+          : data?.data?.both;
+
+      setBookingInfo({
+        ...bookingInfo,
+        price: price,
+      });
+    }
+  }, [data, typeValue]);
 
   return (
     <View style={tw`w-full mt-4`}>
@@ -35,14 +57,14 @@ const ThreeStep = ({ bookingInfo, setBookingInfo }: Props) => {
               setTypeValue("interior");
               setBookingInfo({
                 ...bookingInfo,
-                price: 55,
+                price: interiorPrice,
               });
             }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}
           >
-            $7542.00
+            {isLoading ? "Loading..." : `$ ${interiorPrice}`}
           </Text>
         </View>
         <View style={tw`flex-row justify-between gap-2`}>
@@ -57,14 +79,14 @@ const ThreeStep = ({ bookingInfo, setBookingInfo }: Props) => {
               setTypeValue("exterior");
               setBookingInfo({
                 ...bookingInfo,
-                price: 60,
+                price: exteriorPrice,
               });
             }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}
           >
-            $7542.00
+            {isLoading ? "Loading..." : `$ ${exteriorPrice}`}
           </Text>
         </View>
         <View style={tw`flex-row justify-between gap-2`}>
@@ -79,14 +101,14 @@ const ThreeStep = ({ bookingInfo, setBookingInfo }: Props) => {
               setTypeValue("both");
               setBookingInfo({
                 ...bookingInfo,
-                price: 65,
+                price: bothPrice,
               });
             }}
           />
           <Text
             style={tw`font-DegularDisplaySemibold text-base text-[#0063E5]`}
           >
-            $7542.00
+            {isLoading ? "Loading..." : `$ ${bothPrice}`}
           </Text>
         </View>
       </View>

@@ -3,6 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { Calendar } from "react-native-calendars";
+import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 
 const Times = [
   {
@@ -39,7 +40,7 @@ const Times = [
   },
 ];
 
-const FourthStep = () => {
+const FourthStep = ({ bookingInfo, setBookingInfo }) => {
   const [selectedDate, setSelectedDate] = React.useState("");
   const [markedDates, setMarkedDates] = React.useState({});
   const [selectTime, setSelectTime] = React.useState<{
@@ -47,14 +48,13 @@ const FourthStep = () => {
     isOpen: boolean;
   } | null>(null);
 
-  const today = new Date().toISOString().split("T")[0]; // Current date in YYYY-MM-DD format
+  const { data, isError, isLoading } = useGetServicesByIdQuery(
+    bookingInfo?.service_id
+  );
+
+  const today = new Date().toISOString().split("T")[0];
   // Custom rendering for each day
   const handleDayPress = (day) => {
-    // Prevent selecting a day before today
-    // if (day.dateString < today) {
-    //   return;
-    // }
-
     setSelectedDate(day.dateString);
     setMarkedDates({
       [day.dateString]: {
@@ -63,9 +63,11 @@ const FourthStep = () => {
         selectedColor: "#00BFFF",
       },
     });
+    setBookingInfo({
+      ...bookingInfo,
+      booking_date: day.dateString,
+    });
   };
-
-  console.log("Selected date:", selectedDate);
 
   const renderDay = (day) => {
     const isPastDate = day.dateString < today;
@@ -78,7 +80,7 @@ const FourthStep = () => {
             ? "rgba(0, 0, 0, 0.1)" // Gray out past dates
             : selectedDate === day.dateString
             ? tw.color("bg-primary")
-            : "transparent", // Gray out previous dates
+            : "transparent",
           borderRadius: 20,
           width: 35,
           height: 35,
@@ -121,30 +123,36 @@ const FourthStep = () => {
           <View
             style={tw`flex-row flex-wrap justify-start items-center w-full`}
           >
-            {Times.map((time, index) => (
-              <TouchableOpacity
-                disabled={!time.isOpen}
-                style={tw`${
-                  selectTime?.label === time.label
-                    ? "bg-primary"
-                    : !time.isOpen
-                    ? "bg-gray-200"
-                    : "bg-transparent"
-                } rounded-lg border w-1/3 border-gray-50`}
-                key={index}
-                onPress={() => setSelectTime(time)}
-              >
-                <Text
-                  style={tw`font-DegularDisplaySemibold text-base ${
-                    selectTime?.label === time.label
-                      ? "text-white"
-                      : "text-regularText"
-                  }   rounded-2xl text-center px-6 py-3`}
+            {data?.data?.time ? (
+              data?.data?.time?.map((time, index) => (
+                <TouchableOpacity
+                  // disabled={!time}
+                  style={tw`${
+                    selectTime === time ? "bg-primary " : "bg-transparent"
+                  } rounded-lg border w-[32%] border-gray-50`}
+                  key={index}
+                  onPress={() => {
+                    setSelectTime(time);
+                    setBookingInfo({
+                      ...bookingInfo,
+                      booking_time: time,
+                    });
+                  }}
                 >
-                  {time?.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={tw`font-DegularDisplaySemibold text-base ${
+                      selectTime === time ? "text-white" : "text-regularText"
+                    }   rounded-2xl text-center px-6 py-3`}
+                  >
+                    {time}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={tw`font-bold text-xl text-center`}>
+                No Date Available..!
+              </Text>
+            )}
           </View>
         </View>
       </View>

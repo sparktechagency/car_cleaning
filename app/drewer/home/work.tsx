@@ -2,19 +2,19 @@ import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import React from "react";
-
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
 
 const work = (): JSX.Element => {
   const { data: photoData } = useGetPhotosQuery({});
 
-  const renderItem = (item: any) => {
+  const renderItem = ({ item }: { item: any }) => {
     return (
       <TouchableOpacity>
         <View style={tw`mb-4 mr-4`}>
           <Image
             style={tw`w-44 h-44 rounded-3xl`}
             source={{ uri: item?.photo }}
+            resizeMode="contain"
           />
         </View>
       </TouchableOpacity>
