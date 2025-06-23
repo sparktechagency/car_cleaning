@@ -37,14 +37,6 @@ const login = () => {
   });
   const handleLogin = async (loginUserData: any) => {
     try {
-      // if (!isSelected) {
-      //   Toast.show({
-      //     type: ALERT_TYPE.WARNING,
-      //     title: "Warning!",
-      //     textBody: "Please check 'Remember me' to continue.",
-      //   });
-      //   return;
-      // }
       if (isSelected === true) {
         await AsyncStorage.setItem("loginInfo", JSON.stringify(loginUserData));
       }

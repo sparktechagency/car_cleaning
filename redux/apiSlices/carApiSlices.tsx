@@ -7,6 +7,9 @@ const carApiSlices = api.injectEndpoints({
         url: `/car-photo`,
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }),
     }),
     updateCarPhoto: builder.mutation({

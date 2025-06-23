@@ -5,6 +5,7 @@ import {
   IconEdit,
 } from "@/assets/icon/icon";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
@@ -12,12 +13,15 @@ import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useCarPhotoMutation } from "@/redux/apiSlices/carApiSlices";
 
 const profile = () => {
   const router = useRouter();
-  const [isToken, setIsToken] = useState("");
+  const [imageUri, setImageUri] = useState<string | null>(null);
 
-  const { data, isLoading, isError } = useGetProfileQuery(isToken);
+  const { data, isLoading, isError } = useGetProfileQuery({});
+  const [carPhotoMutation, { error }] = useCarPhotoMutation();
+
   //  = service history data =======================
   const serviceHistoryData = [
     {
@@ -58,14 +62,44 @@ const profile = () => {
     },
   ];
 
-  const handleUserInfo = async () => {
-    const token = await AsyncStorage.getItem("token");
-    setIsToken(token);
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        // mediaTypes: "image" as any,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        console.log("Selected image---------------:", uri);
+        setImageUri(uri);
+
+        // Now call upload API
+        uploadImage(uri);
+      }
+    } catch (error) {
+      console.log(error, "Pick==================");
+    }
   };
 
-  useEffect(() => {
-    handleUserInfo();
-  }, []);
+  const uploadImage = async (uri: string) => {
+    const fileName = uri.split("/").pop();
+    try {
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: uri,
+        name: fileName,
+        type: "image/jpeg",
+      } as any);
+
+      await carPhotoMutation(formData).unwrap();
+    } catch (error) {
+      console.log(error, "Upload Image Error------------");
+    }
+  };
 
   return (
     <View style={tw`flex-1 `}>
@@ -138,11 +172,6 @@ const profile = () => {
                 <Text style={tw`font-bold text-xl text-center`}>
                   No Car Available..!
                 </Text>
-                <TouchableOpacity
-                  style={tw`border border-black rounded-xl flex justify-center items-center w-[30%] h-16 `}
-                >
-                  <SvgXml xml={IconAdd} />
-                </TouchableOpacity>
               </View>
             ) : (
               data?.data?.car_photos.map((item) => {
@@ -152,14 +181,21 @@ const profile = () => {
                     style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
                   >
                     <Image
-                      style={tw`w-full h-full rounded-lg`}
-                      source={item?.photo}
+                      style={tw`w-28 h-16 rounded-lg`}
+                      source={{ uri: item?.photo }}
                     />
                   </TouchableOpacity>
                 );
               })
             )}
           </View>
+
+          <TouchableOpacity
+            onPress={pickImage}
+            style={tw`w-full border border-primary rounded-xl py-3 flex justify-center items-center mt-2`}
+          >
+            <SvgXml xml={IconAdd} />
+          </TouchableOpacity>
         </View>
 
         {/* ========== service history ============== */}

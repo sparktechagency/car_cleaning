@@ -18,7 +18,6 @@ import {
   EditImage6,
   ProfileImage,
 } from "@/assets/images/images";
-import { Controller, useForm } from "react-hook-form";
 import {
   Image,
   Pressable,
@@ -37,6 +36,7 @@ import { SvgXml } from "react-native-svg";
 import { Modal } from "react-native-ui-lib";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useCarPhotoMutation } from "@/redux/apiSlices/carApiSlices";
 
 const editProfile = () => {
   const navigation = useNavigation();
@@ -46,53 +46,8 @@ const editProfile = () => {
   const [car_brand, setCarBrand] = useState("");
   const [car_model, setCarModel] = useState("");
   const [phone, setPhone] = useState("");
-  const [isToken, setIsToken] = useState();
 
-  const userInfo = {
-    userName,
-    car_brand,
-    car_model,
-    phone,
-  };
-
-  console.log(userInfo, "aulsdfijlksdjfa;lskjdf;laskdjf;lsafja;lskdfj");
-
-  const images = [
-    {
-      id: 1,
-      image: EditImage1,
-    },
-    {
-      id: 2,
-      image: EditImage2,
-    },
-    {
-      id: 3,
-      image: EditImage3,
-    },
-    {
-      id: 4,
-      image: EditImage4,
-    },
-    {
-      id: 5,
-      image: EditImage5,
-    },
-    {
-      id: 6,
-      image: EditImage6,
-    },
-  ];
-  const { data, isLoading, isError } = useGetProfileQuery(isToken);
-  console.log(data, "asldfjalskdjfsajf");
-  const handleUserInfo = async () => {
-    const token = await AsyncStorage.getItem("token");
-    setIsToken(token);
-  };
-
-  useEffect(() => {
-    handleUserInfo();
-  }, []);
+  const { data, isLoading, isError } = useGetProfileQuery({});
 
   return (
     <View style={tw`flex-1`}>
@@ -115,8 +70,11 @@ const editProfile = () => {
       >
         <View style={tw`w-full mx-auto mb-4 items-center`}>
           <Image
-            source={ProfileImage}
+            source={{
+              uri: data?.data?.photo,
+            }}
             style={{ width: 124, height: 124, borderRadius: 100 }}
+            resizeMode="contain"
           />
           <TouchableOpacity
             style={tw`flex-row gap-2 items-center border border-primary px-2 py-1 rounded-lg mt-4`}
@@ -203,7 +161,7 @@ const editProfile = () => {
           </View>
 
           <View style={tw`flex-row flex-wrap justify-between mt-2`}>
-            {images.map((item) => (
+            {data?.data?.car_photos.map((item) => (
               <TouchableOpacity
                 disabled
                 style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
@@ -211,9 +169,9 @@ const editProfile = () => {
               >
                 <View style={tw`relative`}>
                   <Image
-                    // style={tw`w-120 h-64 rounded-lg`}
-                    style={{ width: 120, height: 64, borderRadius: 8 }}
-                    source={item.image}
+                    style={{ width: 112, height: 64, borderRadius: 8 }}
+                    source={{ uri: item?.photo }}
+                    resizeMode="cover"
                   />
                   <TouchableOpacity
                     onPress={() => setSelectModalVisible(true)}

@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-} from "react-native";
+import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
@@ -15,14 +9,19 @@ import { PrimaryColor } from "@/utils/utils";
 import { OtpInput } from "react-native-otp-entry";
 import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OTPScreen = () => {
   const route = useRouter();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState();
 
   const [otpVerify] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
 
+  console.log(
+    email,
+    "55555555555555555555555555555555555555555555555555555555555555555555555555555555"
+  );
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
@@ -32,7 +31,7 @@ const OTPScreen = () => {
         </View>
 
         <View style={tw`w-full`}>
-          <Text style={tw`mb-1`}>Password</Text>
+          <Text style={tw`mb-1`}>OTP</Text>
           <View style={tw`flex-row gap-5`}>
             <OtpInput
               numberOfDigits={6}
@@ -45,24 +44,22 @@ const OTPScreen = () => {
               type="numeric"
               secureTextEntry={false}
               focusStickBlinkingDuration={500}
-              // onFocus={() => console.log("Focused")}
-              // onBlur={() => console.log("Blurred")}
               onTextChange={(text) => {
                 setValue(text);
               }}
               onFilled={async (text) => {
-                console.log(`OTP is ${text}`);
                 try {
                   const res = await otpVerify({
                     email: email,
                     otp: text,
                   }).unwrap();
                   if (res.status) {
-                    // console.log(res);
-
-                    router?.push("/drewer/home");
+                    await AsyncStorage.setItem(
+                      "token",
+                      res?.data?.access_token
+                    );
+                    router?.replace("/drewer/home");
                   } else {
-                    // console.log(res);
                     Toast.show({
                       type: ALERT_TYPE.DANGER,
                       title: "Error!",
@@ -90,14 +87,6 @@ const OTPScreen = () => {
               </Pressable>
             </TouchableOpacity>
           </View>
-        </View>
-
-        <View style={tw`rounded-full h-12 w-full mt-10`}>
-          <TButton
-            onPress={() => route.navigate("/reset")}
-            title="Verify"
-            containerStyle={tw``}
-          />
         </View>
       </View>
     </>

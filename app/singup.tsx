@@ -44,7 +44,10 @@ const singup = () => {
     try {
       const res = await register(registerValue).unwrap();
       if (res.status) {
-        router.replace("/OTPScreen");
+        router.replace({
+          pathname: "/OTPScreen",
+          params: { email: res?.data?.email },
+        });
       } else {
         Toast.show({
           type: ALERT_TYPE.WARNING,
