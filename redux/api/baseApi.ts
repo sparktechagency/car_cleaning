@@ -20,7 +20,7 @@ const baseQueryWithRath: BaseQueryFn<BaseQueryArgs, unknown, unknown> = async (
   try {
     const token = await AsyncStorage.getItem("token");
 
-    console.log(token, "token from base url............");
+    // console.log(token, "token from base url............");
 
     const result: AxiosResponse = await axios({
       baseURL: "http://182.252.68.227:8004/api",

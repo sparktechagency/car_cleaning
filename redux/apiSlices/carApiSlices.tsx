@@ -2,7 +2,7 @@ import { api } from "../api/baseApi";
 
 const carApiSlices = api.injectEndpoints({
   endpoints: (builder) => ({
-    carPhoto: builder.mutation({
+    carPhoto: builder.mutation<any, any>({
       query: (data) => ({
         url: `/car-photo`,
         method: "POST",
@@ -12,7 +12,7 @@ const carApiSlices = api.injectEndpoints({
         },
       }),
     }),
-    updateCarPhoto: builder.mutation({
+    updateCarPhoto: builder.mutation<any, any>({
       query: (id) => ({
         url: `/car-photo/${id}`,
         method: "PUT",
@@ -20,11 +20,17 @@ const carApiSlices = api.injectEndpoints({
       }),
     }),
 
-    deleteCarPhoto: builder.mutation({
+    deleteCarPhoto: builder.mutation<any, any>({
       query: (id) => ({
         url: `/car-photo/${id}`,
         method: "DELETE",
         body: id,
+      }),
+    }),
+
+    getServiceHistory: builder.query<any, any>({
+      query: () => ({
+        url: `/bookings?per_page=1`,
       }),
     }),
   }),
@@ -34,4 +40,5 @@ export const {
   useCarPhotoMutation,
   useUpdateCarPhotoMutation,
   useDeleteCarPhotoMutation,
+  useGetServiceHistoryQuery,
 } = carApiSlices;

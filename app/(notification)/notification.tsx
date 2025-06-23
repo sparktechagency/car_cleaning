@@ -60,8 +60,6 @@ const notification = () => {
     },
   ];
 
-  const date = new Date(Date.now());
-  console.log(date.toLocaleDateString(), "time now");
   return (
     <View style={tw`px-6`}>
       <Pressable

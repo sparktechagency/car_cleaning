@@ -13,7 +13,6 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 const support = () => {
   const navigation = useNavigation();
   const [supportData, { isLoading, isError, isSuccess }] = useSupportMutation();
-  console.log(isSuccess, "if sucess 5555555555555555555");
 
   const {
     control,

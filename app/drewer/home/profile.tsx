@@ -11,9 +11,11 @@ import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { useCarPhotoMutation } from "@/redux/apiSlices/carApiSlices";
+import {
+  useCarPhotoMutation,
+  useGetServiceHistoryQuery,
+} from "@/redux/apiSlices/carApiSlices";
 
 const profile = () => {
   const router = useRouter();
@@ -21,51 +23,11 @@ const profile = () => {
 
   const { data, isLoading, isError } = useGetProfileQuery({});
   const [carPhotoMutation, { error }] = useCarPhotoMutation();
-
-  //  = service history data =======================
-  const serviceHistoryData = [
-    {
-      id: 1,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-    {
-      id: 2,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-    {
-      id: 3,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-    {
-      id: 4,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-    {
-      id: 5,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-    {
-      id: 6,
-      car_name: "BMW X1 SUV",
-      price: 4523.0,
-      date: new Date(Date.now()),
-    },
-  ];
+  const { data: serviceHistory } = useGetServiceHistoryQuery({});
 
   const pickImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        // mediaTypes: "image" as any,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
@@ -207,45 +169,54 @@ const profile = () => {
             Service history
           </Text>
           <View>
-            {serviceHistoryData.map((item) => (
-              <TouchableOpacity key={item?.id}>
-                <View
-                  style={tw`flex-row justify-between px-4 py-2 my-2 rounded-lg bg-[#FFFFFF]`}
+            {serviceHistory?.data?.data.length === 0 ? (
+              <View>
+                <Text
+                  style={tw`font-DegularDisplayMedium text-lg text-black my-4 text-center`}
                 >
-                  <View>
-                    <Text
-                      style={tw`font-DegularDisplayMedium text-base text-regularText`}
-                    >
-                      {item?.car_name}
-                    </Text>
-                    <Text style={tw` text-xs mt-4 `}>
-                      Interior:{" "}
+                  NO service History !
+                </Text>
+              </View>
+            ) : (
+              serviceHistory?.data?.data.map((item) => (
+                <TouchableOpacity key={item?.id}>
+                  <View
+                    style={tw`flex-row justify-between px-4 py-1.5 my-2 rounded-lg bg-[#FFFFFF]`}
+                  >
+                    <View>
                       <Text
-                        style={tw`text-[#0063E5] font-DegularDisplaySemibold`}
+                        style={tw`font-DegularDisplaySemibold text-base text-regularText`}
                       >
-                        ${item?.price}
+                        {item?.service_name}
                       </Text>
-                    </Text>
-                  </View>
-                  <View>
-                    <View
-                      style={tw`flex-row justify-center items-center gap-2`}
-                    >
+                      <Text style={tw`  text-sm mt-2 `}>
+                        {item?.service_type.toUpperCase()}:{" "}
+                        <Text
+                          style={tw`text-[#0063E5] font-DegularDisplaySemibold`}
+                        >
+                          ${item?.price}
+                        </Text>
+                      </Text>
+                    </View>
+                    <View style={tw`flex justify-end`}>
+                      <View style={tw`flex-row justify-end gap-2`}>
+                        <Text
+                          style={tw`font-DegularDisplayMedium text-xs text-[#262626] text-end`}
+                        >
+                          {item?.booking_time}
+                        </Text>
+                      </View>
+
                       <Text
                         style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
                       >
-                        {item?.date.toLocaleTimeString()}
+                        {item?.booking_date}
                       </Text>
                     </View>
-                    <Text
-                      style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
-                    >
-                      {item?.date.toDateString()}
-                    </Text>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))
+            )}
           </View>
         </View>
       </ScrollView>

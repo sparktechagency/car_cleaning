@@ -10,7 +10,7 @@ const authSlice = api.injectEndpoints({
     }),
 
     getProfile: builder.query<any, any>({
-      query: (date) => ({
+      query: () => ({
         url: `/auth/profile`,
       }),
     }),
@@ -24,10 +24,13 @@ const authSlice = api.injectEndpoints({
       invalidatesTags: ["user"],
     }),
     updateUser: builder.mutation<any, any>({
-      query: ({ id, data }) => ({
-        url: `/admin/user/${id}`,
+      query: (data) => ({
+        url: `/auth/change-profile`,
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
       invalidatesTags: ["user"],
     }),

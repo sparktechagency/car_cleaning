@@ -1,5 +1,5 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
@@ -14,7 +14,7 @@ const work = (): JSX.Element => {
           <Image
             style={tw`w-44 h-44 rounded-3xl`}
             source={{ uri: item?.photo }}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
       </TouchableOpacity>

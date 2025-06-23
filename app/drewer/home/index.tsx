@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { Dialog, PanningProvider, Wizard } from "react-native-ui-lib";
 
 import CarType from "@/components/CarType";
@@ -89,6 +90,7 @@ const Home = () => {
       <TouchableOpacity>
         <View style={tw`mb-4 mr-2`}>
           <Image
+            key={item?.id}
             style={tw`w-44 h-32 rounded-2xl`}
             source={{ uri: item?.photo }}
           />

@@ -9,15 +9,7 @@ import {
   IconSwapImage,
   IconThreeDot,
 } from "@/assets/icon/icon";
-import {
-  EditImage1,
-  EditImage2,
-  EditImage3,
-  EditImage4,
-  EditImage5,
-  EditImage6,
-  ProfileImage,
-} from "@/assets/images/images";
+
 import {
   Image,
   Pressable,
@@ -34,20 +26,92 @@ import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { Modal } from "react-native-ui-lib";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { useCarPhotoMutation } from "@/redux/apiSlices/carApiSlices";
+import {
+  useGetProfileQuery,
+  useUpdateUserMutation,
+} from "@/redux/apiSlices/authSlices";
+import {
+  useDeleteCarPhotoMutation,
+  useUpdateCarPhotoMutation,
+} from "@/redux/apiSlices/carApiSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const editProfile = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectModalVisible, setSelectModalVisible] = React.useState(false);
-  const [userName, setUserName] = useState("");
+  const [photoId, setPhotoId] = useState(null);
+  const [name, setUserName] = useState("");
   const [car_brand, setCarBrand] = useState("");
   const [car_model, setCarModel] = useState("");
   const [phone, setPhone] = useState("");
 
   const { data, isLoading, isError } = useGetProfileQuery({});
+  const [changeUserData] = useUpdateUserMutation();
+  const [deletePhot] = useDeleteCarPhotoMutation();
+  const [swapPhoto] = useUpdateCarPhotoMutation();
+
+  useEffect(() => {
+    if (data?.data) {
+      setUserName(data?.data?.name || "");
+      setPhone(data?.data?.phone || "");
+      setCarBrand(data?.data?.car_brand || "");
+      setCarModel(data?.data?.car_model || "");
+    }
+  }, [data]);
+  // ========================== update profile  ------------------
+
+  const handleUpdateProfile = async () => {
+    const updateData = {
+      name: name ?? "",
+      phone: phone ?? "",
+      car_brand: car_brand ?? "",
+      car_model: car_model ?? "",
+    };
+    try {
+      const res = await changeUserData(updateData).unwrap();
+      if (res?.status) {
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.log("Update user error --->", error);
+    }
+  };
+
+  // ================== swap image / update image =======================
+  const handleSwapPhoto = async () => {
+    try {
+      const res = await swapPhoto(photoId).unwrap();
+      if (res?.status) {
+        setSelectModalVisible(false);
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Your Update success this Photo",
+        });
+      }
+    } catch (error) {
+      console.log("Image Update something Is Wrong ----->", error);
+    }
+  };
+
+  // =========================== delete image ------------------
+  const handlePhotoDelete = async () => {
+    try {
+      const res = await deletePhot(photoId).unwrap();
+      setSelectModalVisible(false);
+      if (res?.status) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "You have successful this Photo",
+        });
+      }
+      console.log("Photo deleted successfully --->", res);
+    } catch (error) {
+      console.log("some thing is Wrong ---------->", error);
+    }
+  };
 
   return (
     <View style={tw`flex-1`}>
@@ -97,6 +161,7 @@ const editProfile = () => {
 
           <InputText
             label="Username"
+            value={name}
             onChangeText={(test) => {
               setUserName(test);
             }}
@@ -109,6 +174,7 @@ const editProfile = () => {
           />
           <InputText
             label="Phone"
+            value={phone}
             onChangeText={(test) => {
               setPhone(test);
             }}
@@ -131,6 +197,7 @@ const editProfile = () => {
           <View style={tw`flex-row gap-2 w-full  `}>
             <View style={tw` w-1/2`}>
               <InputText
+                value={car_brand}
                 label="Brand name"
                 onChangeText={(test) => {
                   setCarBrand(test);
@@ -147,6 +214,7 @@ const editProfile = () => {
             <View style={tw` w-1/2`}>
               <InputText
                 label="Model name"
+                value={car_model}
                 onChangeText={(test) => {
                   setCarModel(test);
                 }}
@@ -174,7 +242,10 @@ const editProfile = () => {
                     resizeMode="cover"
                   />
                   <TouchableOpacity
-                    onPress={() => setSelectModalVisible(true)}
+                    onPress={() => {
+                      setSelectModalVisible(true);
+                      setPhotoId(item?.id);
+                    }}
                     style={tw`absolute p-1.5 top-1 justify-center items-center right-1 w-6 h-6 rounded-full bg-primary`}
                   >
                     <SvgXml height={16} width={16} xml={IconThreeDot} />
@@ -186,7 +257,9 @@ const editProfile = () => {
 
           <View style={tw`rounded-full w-full h-12 mt-3 `}>
             <TButton
-              onPress={() => setModalVisible(true)}
+              onPress={() => {
+                handleUpdateProfile();
+              }}
               title="Save & Change"
               containerStyle={tw``}
             />
@@ -194,7 +267,7 @@ const editProfile = () => {
         </View>
       </ScrollView>
 
-      {/*  ========== successful modal open ============ */}
+      {/*  ==========------------------------------- successful modal open ============ */}
 
       <Modal
         animationType="fade"
@@ -245,24 +318,29 @@ const editProfile = () => {
           >
             <View style={tw`w-full flex-row justify-between items-center`}>
               <Text style={tw`text-2xl font-bold mt-3`}>Select one</Text>
-              <Pressable onPress={() => setSelectModalVisible(false)}>
+              <Pressable
+                style={tw`p-3`}
+                onPress={() => setSelectModalVisible(false)}
+              >
                 <SvgXml xml={IconCross} />
               </Pressable>
             </View>
 
             <View style={tw`w-full m-4`}>
-              <View
+              <TouchableOpacity
+                // onPress={handleSwapPhoto}
                 style={tw`flex-row justify-center items-center border border-[#0063E580] w-full p-1 rounded-lg gap-2 mb-2`}
               >
                 <SvgXml xml={IconSwapImage} />
                 <Text>Swap image</Text>
-              </View>
-              <View
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handlePhotoDelete}
                 style={tw`flex-row justify-center items-center border border-[#C47575] w-full p-1 rounded-lg gap-2`}
               >
                 <SvgXml xml={IconDelete} />
                 <Text>Delete image</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
 import tw from "@/lib/tailwind";
-import TButton from "@/lib/buttons/TButton";
-import { Link, router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import { PrimaryColor } from "@/utils/utils";
 import { OtpInput } from "react-native-otp-entry";
 import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
@@ -18,10 +17,6 @@ const OTPScreen = () => {
   const [otpVerify] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
 
-  console.log(
-    email,
-    "55555555555555555555555555555555555555555555555555555555555555555555555555555555"
-  );
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
