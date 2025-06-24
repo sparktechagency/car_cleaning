@@ -7,14 +7,24 @@ const notificationApiSlices = api.injectEndpoints({
         url: `/notifications`,
       }),
     }),
-    markNotificationMutation: builder.query({
+    feedBackSend: builder.mutation({
+      query: (data) => ({
+        url: `/feedbacks`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    markNotification: builder.mutation<any, any>({
       query: (id) => ({
         url: `/mark-notification/${id}`,
-        body: id,
+        method: "POST",
       }),
     }),
   }),
 });
 
-export const { useGetNotificationQuery, useMarkNotificationMutationQuery } =
-  notificationApiSlices;
+export const {
+  useGetNotificationQuery,
+  useFeedBackSendMutation,
+  useMarkNotificationMutation,
+} = notificationApiSlices;

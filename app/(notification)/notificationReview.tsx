@@ -1,29 +1,56 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
-import { useNavigation, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "expo-router";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
-import { IconBackArrow, IconStart, IconStartColor } from "@/assets/icon/icon";
+import { IconBackArrow } from "@/assets/icon/icon";
 import InputText from "@/lib/inputs/InputText";
-import { Controller, useForm } from "react-hook-form";
 import TButton from "@/lib/buttons/TButton";
+import StarRating from "react-native-star-rating-widget";
+import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const notificationReview = () => {
   const navigation = useNavigation();
-  const route = useRouter();
+  const { service_id } = useLocalSearchParams();
+  const [feedBack, setFeedBack] = useState("");
+  const [rating, setRating] = useState(0);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      review: "",
-    },
-  });
-  const onSubmit = (data) => console.log(data);
+  const [data] = useFeedBackSendMutation();
 
-  console.log(errors);
+  const handleFeedBack = async () => {
+    const feedBackData = {
+      comment: feedBack,
+      service_id: service_id,
+      rating: rating,
+    };
+    console.log(
+      feedBackData,
+      "this is feed back data ------------------------>"
+    );
+    try {
+      const res = await data(feedBackData).unwrap();
+      if (res?.status) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Congrats! Your Feedback successfully Delivered",
+        });
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log(error, "Feed back not send Please try again --------");
+      setFeedBack("");
+      setRating(0);
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Field",
+        textBody: "Something is Wrong. Please Try again",
+      });
+    }
+  };
+
   return (
     <View style={tw`px-6`}>
       <Pressable
@@ -47,52 +74,28 @@ const notificationReview = () => {
         </Text>
 
         <View style={tw`flex-row items-center my-3`}>
-          <SvgXml xml={IconStartColor} />
-          <SvgXml xml={IconStartColor} />
-          <SvgXml xml={IconStartColor} />
-          <SvgXml xml={IconStartColor} />
-          <SvgXml xml={IconStart} />
+          <StarRating rating={rating} onChange={setRating} />
         </View>
-
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: "Email is required",
-            },
-            //   pattern: {
-            //     value:
-            //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            //     message: "Please input valid email",
-            //   },
+        <InputText
+          label="Any sentence?"
+          onChangeText={(test) => {
+            setFeedBack(test);
           }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <InputText
-              label="Any sentence?"
-              value={value}
-              onChangeText={(test) => onChange(test)}
-              onBlur={onBlur}
-              touched
-              errorText={errors?.review?.message}
-              textInputProps={{
-                placeholder: "Write your review here",
-                verticalAlign: "top",
-                textAlignVertical: "top",
-
-                multiline: true,
-              }}
-              inputStyle={tw`h-28`}
-              containerStyle={tw`h-36`}
-              placeholderStyle={tw` items-start font-medium text-base  text-[#262626]`}
-            />
-          )}
-          name="review"
+          touched
+          textInputProps={{
+            placeholder: "Write your review here",
+            verticalAlign: "top",
+            textAlignVertical: "top",
+            multiline: true,
+          }}
+          inputStyle={tw`h-28`}
+          containerStyle={tw`h-36`}
+          placeholderStyle={tw` items-start font-medium text-base  text-[#262626]`}
         />
       </View>
       <View style={tw`rounded-full  w-full h-12 mt-6 `}>
         <TButton
-          // onPress={handleSubmit(onSubmit)}
+          onPress={() => handleFeedBack()}
           title="Submit"
           containerStyle={tw``}
         />

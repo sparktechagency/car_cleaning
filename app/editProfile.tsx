@@ -35,6 +35,7 @@ import {
   useUpdateCarPhotoMutation,
 } from "@/redux/apiSlices/carApiSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import * as ImagePicker from "expo-image-picker";
 
 const editProfile = () => {
   const navigation = useNavigation();
@@ -45,6 +46,7 @@ const editProfile = () => {
   const [car_brand, setCarBrand] = useState("");
   const [car_model, setCarModel] = useState("");
   const [phone, setPhone] = useState("");
+  const [profileUpdateUri, setProfileUpdateUri] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useGetProfileQuery({});
   const [changeUserData] = useUpdateUserMutation();
@@ -113,6 +115,56 @@ const editProfile = () => {
     }
   };
 
+  // ========================== image picker with profile image =================
+
+  const imagePickWithProfile = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        console.log("Selected image---------------:", uri);
+        setProfileUpdateUri(uri);
+
+        // Now call upload API
+        profileUploadImage(uri);
+      }
+    } catch (error) {
+      console.log("Profile Image not updated -------------------->", error);
+    }
+  };
+
+  const profileUploadImage = async (uri: string) => {
+    const fileName = uri.split("/").pop();
+    try {
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: uri,
+        name: fileName,
+        type: "image/jpeg",
+      } as any);
+      const photo = {
+        photo: formData,
+      };
+
+      // ================ here is call api ===========
+      const res = await changeUserData(photo).unwrap();
+      if (res?.status) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Congrats! Your Profile Image Update success",
+        });
+      }
+    } catch (error) {
+      console.log("Profile image something is wrong ==============", error);
+    }
+  };
+
   return (
     <View style={tw`flex-1`}>
       <Pressable
@@ -141,6 +193,7 @@ const editProfile = () => {
             resizeMode="contain"
           />
           <TouchableOpacity
+            onPress={imagePickWithProfile}
             style={tw`flex-row gap-2 items-center border border-primary px-2 py-1 rounded-lg mt-4`}
           >
             <SvgXml xml={IconChange} />

@@ -10,58 +10,28 @@ import tw from "@/lib/tailwind";
 import { useNavigation, useRouter } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import { IconBackArrow } from "@/assets/icon/icon";
+import {
+  useGetNotificationQuery,
+  useMarkNotificationMutation,
+} from "@/redux/apiSlices/notificatinApiSlices";
 
 const notification = () => {
   const navigation = useNavigation();
   const router = useRouter();
 
-  const notification = [
-    {
-      id: 1,
-      n_name: "Your car is ready for drive.",
-      status: "Order completed",
-      date: new Date(Date.now()),
-      in_view: "clicked",
-    },
-    {
-      id: 1,
-      n_name: "Your car is ready for drive.",
-      status: "Order completed",
-      date: new Date(Date.now()),
-      in_view: "clicked",
-    },
-    {
-      id: 1,
-      n_name: "LWR accept your order.",
-      status: "Booking successful",
-      date: new Date(Date.now()),
-      in_view: "",
-    },
-    {
-      id: 1,
-      n_name: "Your car is ready for drive.",
-      status: "Order completed",
-      date: new Date(Date.now()),
-      in_view: "clicked",
-    },
-    {
-      id: 1,
-      n_name: "LWR accept your order.",
-      status: "Booking successful",
-      date: new Date(Date.now()),
-      in_view: "",
-    },
-    {
-      id: 1,
-      n_name: "Your car is ready for drive.",
-      status: "Order completed",
-      date: new Date(Date.now()),
-      in_view: "",
-    },
-  ];
+  const { data, isLoading, refetch } = useGetNotificationQuery({});
+  const [readNotification] = useMarkNotificationMutation();
 
+  const handleMark = async (id) => {
+    try {
+      await readNotification(id).unwrap();
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <View style={tw`px-6`}>
+    <View style={tw`flex-1 px-6`}>
       <Pressable
         onPress={() => {
           navigation.goBack();
@@ -74,65 +44,89 @@ const notification = () => {
         </Text>
       </Pressable>
 
-      {/*  */}
-
-      <ScrollView>
-        {notification.map((item, index) => (
-          <TouchableOpacity
-            onPress={() => {
-              if (item.status === "Order completed") {
-                router.push("/(notification)/notificationReview");
-              } else if (item.status === "Booking successful") {
-                router.push("/(notification)/notificationDetails");
-              }
-            }}
-            key={index}
-          >
-            <View
-              style={[
-                tw`flex-row justify-between px-4 py-2 my-2 mt-4 rounded-lg`,
-                item?.in_view === "clicked"
-                  ? tw`bg-[#FFFFFF]`
-                  : tw`bg-[#E7E7E7]`,
-              ]}
-            >
-              <View>
-                <Text
-                  style={tw`font-DegularDisplayMedium text-base text-[#262626]`}
-                >
-                  {item?.n_name}
-                </Text>
-                <Text
+      {isLoading ? (
+        <View style={tw`my-4 flex justify-center items-center`}>
+          <Text style={tw`font-semibold text-black text-lg`}>
+            Loading .........!
+          </Text>
+        </View>
+      ) : (
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          {data?.data.map((item) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  handleMark(item?.id);
+                  if (item?.data?.type === "Order Completed") {
+                    router.push({
+                      pathname: "/(notification)/notificationReview",
+                      params: {
+                        service_id: item?.data?.service_id,
+                      },
+                    });
+                  } else if (item?.data?.type === "Booking successful") {
+                    router.push("/(notification)/notificationDetails");
+                  }
+                }}
+                key={item?.id}
+              >
+                <View
                   style={[
-                    tw`font-DegularDisplaySemibold text-xs mt-4`,
-                    item?.status === "Order completed" && tw`text-[#319F43]`,
-                    item?.status === "Booking successful" && tw`text-[#0063E5]`,
+                    tw`flex-row justify-between px-4 py-2 my-2 mt-4 rounded-lg`,
+                    item?.read_at ? tw`bg-[#FFFFFF]` : tw`bg-[#E7E7E7]`,
                   ]}
                 >
-                  {item?.status}
-                </Text>
-              </View>
-              <View>
-                <View style={tw`flex-row justify-center items-center gap-2`}>
-                  <Text
-                    style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
-                  >
-                    {item?.date.toLocaleTimeString()}
-                  </Text>
-                  {item.in_view === "clicked" || (
-                    <Text style={tw`w-2 h-2 rounded-full bg-red-700`}></Text>
-                  )}
+                  <View>
+                    <Text
+                      style={tw`font-DegularDisplayMedium text-base text-[#262626]`}
+                    >
+                      {item?.data?.title}
+                      name
+                    </Text>
+                    <Text
+                      style={[
+                        tw`font-DegularDisplaySemibold text-xs mt-4`,
+                        item?.data?.type === "Order Completed" &&
+                          tw`text-[#319F43]`,
+                        item?.data?.type === "Booking successful" &&
+                          tw`text-[#0063E5]`,
+                      ]}
+                    >
+                      {item?.data?.type}
+                    </Text>
+                  </View>
+                  <View>
+                    <View
+                      style={tw`flex-row justify-center items-center gap-2`}
+                    >
+                      <Text
+                        style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
+                      >
+                        {new Date(item?.created_at).toLocaleTimeString()}
+                      </Text>
+                      {item?.read_at ? (
+                        false
+                      ) : (
+                        <Text
+                          style={tw`w-2 h-2 rounded-full bg-red-700`}
+                        ></Text>
+                      )}
+                    </View>
+                    <Text
+                      style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
+                    >
+                      {new Date(item?.created_at).toLocaleDateString()}
+                    </Text>
+                  </View>
                 </View>
-                <Text
-                  style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
-                >
-                  {item?.date.toDateString()}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      )}
     </View>
   );
 };
