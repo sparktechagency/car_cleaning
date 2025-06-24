@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import tw from "@/lib/tailwind";
 import Heading from "@/components/TitleHead";
 import SubHeading from "@/components/SubTileHead";
@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 
 const forgetPass = () => {
   const route = useRouter();
+  const [email, setEmail] = useState("");
   const {
     control,
     handleSubmit,
@@ -18,12 +19,15 @@ const forgetPass = () => {
   } = useForm({
     defaultValues: {
       email: "",
-      password: "",
     },
   });
-  const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
+  const onSubmit = (data) => {
+    setEmail(data.email);
+    route.navigate({
+      pathname: "/OTPForget",
+      params: { email: data.email },
+    });
+  };
 
   return (
     <>
@@ -70,7 +74,7 @@ const forgetPass = () => {
           <View style={tw`gap-3 mt-10`}>
             <View style={tw`rounded-full h-12`}>
               <TButton
-                onPress={() => route.navigate("/OTPScreen")}
+                onPress={handleSubmit(onSubmit)}
                 title="Verify"
                 containerStyle={tw``}
               />

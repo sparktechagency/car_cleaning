@@ -1,21 +1,20 @@
 import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import React, { useState } from "react";
-import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
+import SubHeading from "@/components/SubTileHead";
 import tw from "@/lib/tailwind";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
-import { PrimaryColor } from "@/utils/utils";
 import { OtpInput } from "react-native-otp-entry";
-import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { PrimaryColor } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, useLocalSearchParams } from "expo-router";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
 
-const OTPScreen = () => {
+const OTPForget = () => {
   const [value, setValue] = useState();
-
   const [otpVerify] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
-
+  console.log(email, "this forgate fassword mail -----------------");
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
@@ -52,7 +51,7 @@ const OTPScreen = () => {
                       "token",
                       res?.data?.access_token
                     );
-                    router?.replace("/drewer/home");
+                    router?.replace("/reset");
                   } else {
                     Toast.show({
                       type: ALERT_TYPE.DANGER,
@@ -87,4 +86,4 @@ const OTPScreen = () => {
   );
 };
 
-export default OTPScreen;
+export default OTPForget;

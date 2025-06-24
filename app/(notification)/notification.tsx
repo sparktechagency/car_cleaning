@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import tw from "@/lib/tailwind";
@@ -14,6 +15,7 @@ import {
   useGetNotificationQuery,
   useMarkNotificationMutation,
 } from "@/redux/apiSlices/notificatinApiSlices";
+import { PrimaryColor } from "@/utils/utils";
 
 const notification = () => {
   const navigation = useNavigation();
@@ -46,9 +48,11 @@ const notification = () => {
 
       {isLoading ? (
         <View style={tw`my-4 flex justify-center items-center`}>
-          <Text style={tw`font-semibold text-black text-lg`}>
-            Loading .........!
-          </Text>
+          <ActivityIndicator
+            size="large"
+            color={PrimaryColor}
+            style={tw`my-6 `}
+          />
         </View>
       ) : (
         <ScrollView
@@ -75,7 +79,7 @@ const notification = () => {
               >
                 <View
                   style={[
-                    tw`flex-row justify-between px-4 py-2 my-2 mt-4 rounded-lg`,
+                    tw`flex-row justify-between px-4 py-2 my-1 mt-3 rounded-lg`,
                     item?.read_at ? tw`bg-[#FFFFFF]` : tw`bg-[#E7E7E7]`,
                   ]}
                 >

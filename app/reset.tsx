@@ -10,7 +10,6 @@ import TButton from "@/lib/buttons/TButton";
 
 const Reset = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  console.log(modalVisible, "modal showing");
 
   const {
     control,
@@ -18,8 +17,6 @@ const Reset = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      user_name: "",
-      email: "",
       password: "",
       confirm_password: "",
     },
