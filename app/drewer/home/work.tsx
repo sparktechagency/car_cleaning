@@ -1,11 +1,18 @@
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Image } from "expo-image";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
+import { PrimaryColor } from "@/utils/utils";
 
 const work = (): JSX.Element => {
-  const { data: photoData } = useGetPhotosQuery({});
+  const { data: photoData, isLoading } = useGetPhotosQuery({});
 
   const renderItem = ({ item }: { item: any }) => {
     return (
@@ -30,13 +37,21 @@ const work = (): JSX.Element => {
           Quick access for get service
         </Text>
 
-        <FlatList
-          data={photoData?.data?.data}
-          renderItem={renderItem}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={tw`mt-4 pb-30`}
-        />
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            color={PrimaryColor}
+            style={tw`py-6`}
+          />
+        ) : (
+          <FlatList
+            data={photoData?.data?.data}
+            renderItem={renderItem}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={tw`mt-4 pb-30`}
+          />
+        )}
       </View>
     </View>
   );

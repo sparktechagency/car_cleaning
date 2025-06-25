@@ -76,6 +76,7 @@ const Home = () => {
             />
           </View>
           <Text
+            numberOfLines={1}
             style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
           >
             {item?.car_type}
@@ -247,10 +248,50 @@ const Home = () => {
         }}
       >
         <ScrollView keyboardShouldPersistTaps="always" style={tw`px-4`}>
-          <CarType
-            setBookingInfo={setBookingInfo}
-            bookingInfo={bookingInfo as any}
-          />
+          <View
+            style={tw`flex-row flex-wrap justify-start items-center gap-4 `}
+          >
+            <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
+              Which type of vehicle you want to wash?
+            </Text>
+            {data?.data?.length === 0 ? (
+              <Text style={tw`font-bold text-xl text-center`}>
+                No Date Available..!
+              </Text>
+            ) : (
+              data?.data?.map((item) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(false);
+                      handleServiceDetails(item);
+                    }}
+                    activeOpacity={0.7}
+                    key={item?.id}
+                    style={tw`w-[30%] h-32  rounded-2xl 
+            bg-white
+             items-center text-center  justify-center shadow-sm `}
+                  >
+                    <View style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}>
+                      <Image
+                        width={32}
+                        height={30}
+                        resizeMode="contain"
+                        source={{ uri: item?.icon }}
+                      />
+                    </View>
+                    <Text
+                      numberOfLines={1}
+                      style={tw`font-DegularDisplaySemibold text-base  text-[#262626]
+               `}
+                    >
+                      {item?.car_type}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })
+            )}
+          </View>
         </ScrollView>
       </Dialog>
     </View>

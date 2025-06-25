@@ -21,6 +21,7 @@ import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 
 const calendersDate = () => {
   const { id } = useLocalSearchParams();
+  const [isTime, setIsTime] = React.useState<any | null>(null);
   const {
     data: singleServiceData,
     isLoading: singleServiceLoading,
@@ -28,10 +29,13 @@ const calendersDate = () => {
     refetch: singleServiceRefetch,
   } = useGetServicesByIdQuery(id);
 
-  console.log(
-    singleServiceData?.data?.service_times,
-    "single dates ------------>"
-  );
+  const handleTimeShow = async () => {
+    try {
+      await setIsTime(singleServiceData?.data?.service_times);
+    } catch (error) {
+      console.log(error, "this not render the time..........");
+    }
+  };
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -68,7 +72,9 @@ const calendersDate = () => {
 
     return (
       <TouchableOpacity
-        onPress={() => handleDayPress(day)}
+        onPress={() => {
+          handleDayPress(day), handleTimeShow();
+        }}
         disabled={isPastDate}
         style={{
           backgroundColor: isPastDate
@@ -299,24 +305,25 @@ const calendersDate = () => {
           </Text>
           <View style={tw`mt-4`}>
             <View
-              style={tw`flex-row flex-wrap justify-start items-center w-full`}
+              style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
             >
-              {singleServiceData?.data?.time ? (
-                singleServiceData?.data?.time?.map((time, index) => (
+              {isTime ? (
+                isTime.map((time) => (
                   <TouchableOpacity
-                    // disabled={!time}
                     style={tw`${
-                      selectTime === time ? "bg-primary" : "bg-transparent"
+                      selectTime === time?.time ? "bg-primary" : "bg-white"
                     } rounded-lg border w-[32%] border-gray-50`}
-                    key={index}
-                    onPress={() => setSelectTime(time)}
+                    key={time?.id}
+                    onPress={() => setSelectTime(time?.time)}
                   >
                     <Text
                       style={tw`font-DegularDisplaySemibold text-base ${
-                        selectTime === time ? "text-white" : "text-regularText"
+                        selectTime === time?.time
+                          ? "text-white"
+                          : "text-regularText"
                       }   rounded-2xl text-center px-6 py-3`}
                     >
-                      {time}
+                      {time?.time}
                     </Text>
                   </TouchableOpacity>
                 ))

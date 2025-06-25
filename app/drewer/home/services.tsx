@@ -1,17 +1,18 @@
 import {
-  IconCompact,
-  IconLargeCar,
-  IconSport,
-  IconSubCar,
-  IconTrack,
-} from "@/assets/icon/icon";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import { PrimaryColor } from "@/utils/utils";
 
 const services = (): JSX.Element => {
   const router = useRouter();
@@ -38,6 +39,7 @@ const services = (): JSX.Element => {
             />
           </View>
           <Text
+            numberOfLines={1}
             style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
           >
             {item?.car_type}
@@ -59,17 +61,20 @@ const services = (): JSX.Element => {
       <Text style={tw`font-DegularDisplayBold text-2xl`}>
         Quick access for get service
       </Text>
-      <View style={tw``}>
-        <FlatList
-          data={data?.data}
-          renderItem={renderItem}
-          numColumns={3}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.title}
-          showsHorizontalScrollIndicator={false}
-          // contentContainerStyle={tw`gap-5`}
-        />
-      </View>
+      {isLoading ? (
+        <ActivityIndicator size="large" color={PrimaryColor} style={tw`py-6`} />
+      ) : (
+        <View style={tw``}>
+          <FlatList
+            data={data?.data}
+            renderItem={renderItem}
+            numColumns={3}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.title}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+      )}
     </View>
   );
 };
