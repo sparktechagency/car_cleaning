@@ -81,6 +81,23 @@ const authSlice = api.injectEndpoints({
       query: (data) => ({
         url: `/auth/forgot-password`,
         method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    resetPassword: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/auth/reset-password`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    changeProfileImage: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/auth/change-profile-photo`,
+        method: "POST",
+        body: data,
       }),
       invalidatesTags: ["user"],
     }),
@@ -100,4 +117,6 @@ export const {
   useLogoutMutation,
   useGetTokenCheckQuery,
   useForgetPasswordMutation,
+  useResetPasswordMutation,
+  useChangeProfileImageMutation,
 } = authSlice;

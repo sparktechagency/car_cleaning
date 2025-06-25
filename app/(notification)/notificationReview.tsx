@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import tw from "@/lib/tailwind";

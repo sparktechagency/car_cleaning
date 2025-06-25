@@ -27,6 +27,7 @@ import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { Modal } from "react-native-ui-lib";
 import {
+  useChangeProfileImageMutation,
   useGetProfileQuery,
   useUpdateUserMutation,
 } from "@/redux/apiSlices/authSlices";
@@ -48,10 +49,11 @@ const editProfile = () => {
   const [phone, setPhone] = useState("");
   const [profileUpdateUri, setProfileUpdateUri] = useState<string | null>(null);
 
-  const { data, isLoading, isError } = useGetProfileQuery({});
+  const { data, isLoading, isError, refetch } = useGetProfileQuery({});
   const [changeUserData] = useUpdateUserMutation();
   const [deletePhot] = useDeleteCarPhotoMutation();
   const [swapPhoto] = useUpdateCarPhotoMutation();
+  const [changeProfileImage] = useChangeProfileImageMutation();
 
   useEffect(() => {
     if (data?.data) {
@@ -60,7 +62,7 @@ const editProfile = () => {
       setCarBrand(data?.data?.car_brand || "");
       setCarModel(data?.data?.car_model || "");
     }
-  }, [data]);
+  }, [data, refetch]);
   // ========================== update profile  ------------------
 
   const handleUpdateProfile = async () => {
@@ -81,11 +83,32 @@ const editProfile = () => {
   };
 
   // ================== swap image / update image =======================
-  const handleSwapPhoto = async () => {
+
+  const imagePickSwap = async () => {
+    try {
+      setSelectModalVisible(false);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.canceled) {
+        const swapUri = result.assets[0].uri;
+        console.log("Selected image---------------:", swapUri);
+        setProfileUpdateUri(swapUri);
+
+        // Now call upload API
+        handleSwapPhoto(swapUri);
+      }
+    } catch (error) {
+      console.log("Profile Image not updated -------------------->", error);
+    }
+  };
+  const handleSwapPhoto = async (swapUri) => {
     try {
       const res = await swapPhoto(photoId).unwrap();
       if (res?.status) {
-        setSelectModalVisible(false);
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Success",
@@ -152,7 +175,7 @@ const editProfile = () => {
       };
 
       // ================ here is call api ===========
-      const res = await changeUserData(photo).unwrap();
+      const res = await changeProfileImage(photo).unwrap();
       if (res?.status) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
@@ -381,7 +404,7 @@ const editProfile = () => {
 
             <View style={tw`w-full m-4`}>
               <TouchableOpacity
-                // onPress={handleSwapPhoto}
+                onPress={handleSwapPhoto}
                 style={tw`flex-row justify-center items-center border border-[#0063E580] w-full p-1 rounded-lg gap-2 mb-2`}
               >
                 <SvgXml xml={IconSwapImage} />

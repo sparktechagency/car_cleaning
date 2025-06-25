@@ -8,10 +8,11 @@ import InputText from "@/lib/inputs/InputText";
 import { IconEmail } from "@/assets/icon/icon";
 import TButton from "@/lib/buttons/TButton";
 import { useRouter } from "expo-router";
+import { useForgetPasswordMutation } from "@/redux/apiSlices/authSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const forgetPass = () => {
   const route = useRouter();
-  const [email, setEmail] = useState("");
   const {
     control,
     handleSubmit,
@@ -21,12 +22,31 @@ const forgetPass = () => {
       email: "",
     },
   });
-  const onSubmit = (data) => {
-    setEmail(data.email);
-    route.navigate({
-      pathname: "/OTPForget",
-      params: { email: data.email },
-    });
+
+  const [forgetPassResponse] = useForgetPasswordMutation();
+  const onSubmit = async (data) => {
+    const emailValue = {
+      email: data?.email,
+    };
+    console.log(emailValue, "this forget profile data ------------------->");
+    try {
+      const res = await forgetPassResponse(emailValue).unwrap();
+      console.log(res, "forget pass response ======================>");
+      if (res) {
+        route.navigate({
+          pathname: "/OTPForget",
+          params: { email: data?.email },
+        });
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Failed!",
+          textBody: "Can not read your email!",
+        });
+      }
+    } catch (error) {
+      console.log(error, "Otp don't send Please try.");
+    }
   };
 
   return (

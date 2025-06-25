@@ -19,10 +19,7 @@ interface Props {
 
 const CarType = ({ setBookingInfo, bookingInfo }: Props): JSX.Element => {
   const [selected, setSelected] = React.useState<number>(0);
-  // const [serviceId, setServiceId] = React.useState();
   const { data, isError, isLoading } = useGetServicesQuery({});
-
-  // console.log(serviceId, "service id ///////////////////");
 
   return (
     <View style={tw`flex-row flex-wrap justify-start items-center gap-4 `}>
@@ -50,9 +47,9 @@ const CarType = ({ setBookingInfo, bookingInfo }: Props): JSX.Element => {
             }}
             activeOpacity={0.7}
             key={item?.id}
-            style={tw`w-[30%] h-28 mb-4 rounded-2xl ${
-              selected === index ? "bg-[#0063E5]" : "bg-white "
-            } items-center text-center  justify-center`}
+            style={tw`w-[30%] h-32  rounded-2xl 
+            bg-white
+             items-center text-center  justify-center shadow-sm `}
           >
             <View style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}>
               <Image
@@ -63,9 +60,9 @@ const CarType = ({ setBookingInfo, bookingInfo }: Props): JSX.Element => {
               />
             </View>
             <Text
-              style={tw`font-DegularDisplaySemibold text-base ${
-                selected === index ? "text-white" : "text-[#262626]"
-              } `}
+              numberOfLines={1}
+              style={tw`font-DegularDisplaySemibold text-base  text-[#262626]
+               `}
             >
               {item?.car_type}
             </Text>

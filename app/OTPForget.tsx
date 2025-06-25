@@ -14,7 +14,6 @@ const OTPForget = () => {
   const [value, setValue] = useState();
   const [otpVerify] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
-  console.log(email, "this forgate fassword mail -----------------");
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
@@ -51,7 +50,10 @@ const OTPForget = () => {
                       "token",
                       res?.data?.access_token
                     );
-                    router?.replace("/reset");
+                    router?.replace({
+                      pathname: "/reset",
+                      params: { email: email },
+                    });
                   } else {
                     Toast.show({
                       type: ALERT_TYPE.DANGER,

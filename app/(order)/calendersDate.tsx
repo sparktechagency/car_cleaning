@@ -28,6 +28,11 @@ const calendersDate = () => {
     refetch: singleServiceRefetch,
   } = useGetServicesByIdQuery(id);
 
+  console.log(
+    singleServiceData?.data?.service_times,
+    "single dates ------------>"
+  );
+
   const navigation = useNavigation();
   const router = useRouter();
 
@@ -45,8 +50,8 @@ const calendersDate = () => {
   const [markedDates, setMarkedDates] = React.useState({});
   const [selectTime, setSelectTime] = React.useState<any | null>(null);
 
-  const today = new Date().toISOString().split("T")[0]; // Current date in YYYY-MM-DD format
-  // Custom rendering for each day
+  const today = new Date().toISOString().split("T")[0];
+
   const handleDayPress = (day) => {
     setSelectedDate(day.dateString);
     setMarkedDates({
@@ -60,16 +65,17 @@ const calendersDate = () => {
 
   const renderDay = (day) => {
     const isPastDate = day.dateString < today;
+
     return (
       <TouchableOpacity
         onPress={() => handleDayPress(day)}
-        disabled={isPastDate} // Disable past dates
+        disabled={isPastDate}
         style={{
           backgroundColor: isPastDate
-            ? "rgba(0, 0, 0, 0.1)" // Gray out past dates
+            ? "rgba(0, 0, 0, 0.1)"
             : selectedDate === day.dateString
             ? tw.color("bg-primary")
-            : "transparent", // Gray out previous dates
+            : "transparent",
           borderRadius: 20,
           width: 35,
           height: 35,

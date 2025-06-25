@@ -72,7 +72,10 @@ const notification = () => {
                       },
                     });
                   } else if (item?.data?.type === "Booking successful") {
-                    router.push("/(notification)/notificationDetails");
+                    router.push({
+                      pathname: "/(notification)/notificationDetails",
+                      params: { booking_id: item?.data?.booking_id },
+                    });
                   }
                 }}
                 key={item?.id}

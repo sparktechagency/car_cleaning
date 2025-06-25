@@ -41,10 +41,20 @@ const singup = () => {
     },
   });
   const onRegisterInfoSubmit = async (registerValue) => {
+    const registerData = {
+      name: registerValue?.name,
+      email: registerValue?.email,
+      password: registerValue?.password,
+      c_password: registerValue?.c_password,
+    };
+    console.log(
+      registerData,
+      "register data ---------------------------->723009"
+    );
     try {
-      const res = await register(registerValue).unwrap();
+      const res = await register(registerData).unwrap();
       if (res.status) {
-        router.replace({
+        router?.replace({
           pathname: "/OTPScreen",
           params: { email: res?.data?.email },
         });

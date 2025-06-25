@@ -231,7 +231,7 @@ const Home = () => {
       <Dialog
         width={"100%"}
         height={"70%"}
-        containerStyle={tw`flex-1 bg-white rounded-t-3xl `}
+        containerStyle={tw`flex-1 bg-gray-50 rounded-t-3xl `}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
         panDirection={PanningProvider.Directions.DOWN}
@@ -239,143 +239,19 @@ const Home = () => {
         renderPannableHeader={() => {
           return (
             <View
-              style={tw`bg-[#F6F6F6] z-50 flex-1 items-center p-6  py-10  rounded-l-3xl rounded-r-3xl rounded-b-none`}
+              style={tw`bg-[#F6F6F6] z-50 flex-1 items-center  py-4  rounded-l-3xl rounded-r-3xl rounded-b-none`}
             >
-              <Wizard
-                containerStyle={tw`bg-transparent pb-4 border-0 border-b-0 shadow-none`}
-                activeIndex={step}
-                onActiveIndexChanged={(index) => setStep(index)}
-                activeConfig={{
-                  circleColor: PrimaryColor,
-                  state: "enabled",
-                  color: PrimaryColor,
-                  icon: require("@/assets/images/check_circle.png"),
-                }}
-              >
-                <Wizard.Step
-                  circleColor={PrimaryColor}
-                  circleSize={20}
-                  state={
-                    step > 0 ? Wizard.States.COMPLETED : Wizard.States.ENABLED
-                  }
-                  icon={require("@/assets/images/check_circle.png")}
-                />
-                <Wizard.Step
-                  circleColor={PrimaryColor}
-                  circleSize={20}
-                  state={
-                    step > 1
-                      ? Wizard.States.COMPLETED
-                      : step === 1
-                      ? Wizard.States.ENABLED
-                      : Wizard.States.DISABLED
-                  }
-                  icon={require("@/assets/images/check_circle.png")}
-                />
-                <Wizard.Step
-                  circleColor={PrimaryColor}
-                  circleSize={20}
-                  state={
-                    step > 2
-                      ? Wizard.States.COMPLETED
-                      : step === 2
-                      ? Wizard.States.ENABLED
-                      : Wizard.States.DISABLED
-                  }
-                  icon={require("@/assets/images/check_circle.png")}
-                />
-                <Wizard.Step
-                  circleColor={PrimaryColor}
-                  circleSize={20}
-                  state={
-                    step > 3
-                      ? Wizard.States.COMPLETED
-                      : step === 3
-                      ? Wizard.States.ENABLED
-                      : Wizard.States.DISABLED
-                  }
-                  icon={require("@/assets/images/check_circle.png")}
-                />
-                <Wizard.Step
-                  circleColor={PrimaryColor}
-                  circleSize={20}
-                  state={
-                    step === 4 ? Wizard.States.ENABLED : Wizard.States.DISABLED
-                  }
-                  icon={require("@/assets/images/check_circle.png")}
-                />
-              </Wizard>
+              <View style={tw`w-12 h-0.5 rounded-full bg-gray-800`} />
             </View>
           );
         }}
       >
         <ScrollView keyboardShouldPersistTaps="always" style={tw`px-4`}>
-          {step === 0 && (
-            <CarType
-              setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo as any}
-            />
-          )}
-          {step === 1 && (
-            <SecondStep
-              setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo as any}
-            />
-          )}
-          {step === 2 && (
-            <ThreeStep
-              setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo as any}
-            />
-          )}
-          {step === 3 && (
-            <FourthStep
-              setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo as any}
-            />
-          )}
-          {step === 4 && (
-            <Fifth
-              setBookingInfo={setBookingInfo}
-              bookingInfo={bookingInfo as any}
-            />
-          )}
+          <CarType
+            setBookingInfo={setBookingInfo}
+            bookingInfo={bookingInfo as any}
+          />
         </ScrollView>
-        <View style={tw`flex-row flex-1 py-6 px-4 items-end gap-2 mt-10`}>
-          <TButton
-            onPress={() => {
-              if (step > 0) {
-                setStep(step - 1);
-              } else {
-                setModalVisible(false);
-              }
-            }}
-            title={step > 0 ? "Previous" : "Cancel"}
-            containerStyle={tw`bg-transparent border rounded-lg border-primary flex-1`}
-            titleStyle={tw`text-primary`}
-          />
-          <TButton
-            disabled={
-              (step == 1 &&
-                (!bookingInfo?.car_brand || !bookingInfo?.car_model)) ||
-              (step == 3 &&
-                (!bookingInfo?.booking_time || !bookingInfo?.booking_time)) ||
-              (step == 4 && !bookingInfo?.booking_note)
-                ? true
-                : false
-            }
-            onPress={() => {
-              if (step < 4) {
-                setStep(step + 1);
-              } else {
-                router?.push("/paymentSystem");
-                setModalVisible(false);
-              }
-            }}
-            title={step < 4 ? "Next" : "Checkout"}
-            containerStyle={tw`flex-1 rounded-lg`}
-          />
-        </View>
       </Dialog>
     </View>
   );

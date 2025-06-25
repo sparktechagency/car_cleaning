@@ -3,13 +3,20 @@ import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
 import tw from "@/lib/tailwind";
-import { IconEyaClose, IconPassword } from "@/assets/icon/icon";
+import { IconEyaClose, IconEyeShow, IconPassword } from "@/assets/icon/icon";
 import InputText from "@/lib/inputs/InputText";
 import { Controller, useForm } from "react-hook-form";
 import TButton from "@/lib/buttons/TButton";
+import { router, useLocalSearchParams } from "expo-router";
+import { useResetPasswordMutation } from "@/redux/apiSlices/authSlices";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const Reset = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const { email } = useLocalSearchParams();
+
+  const [resetPass] = useResetPasswordMutation();
 
   const {
     control,
@@ -21,7 +28,30 @@ const Reset = () => {
       confirm_password: "",
     },
   });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const newPassword = {
+      email: email,
+      password: data?.password,
+      c_password: data?.confirm_password,
+    };
+    try {
+      const res = await resetPass(newPassword).unwrap();
+      if (res?.status) {
+        setModalVisible(true);
+        setTimeout(() => {
+          setModalVisible(false);
+          router.push("/login");
+        }, 500);
+      }
+    } catch (error) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Failed !",
+        textBody: "Something is wrong Please try again",
+      });
+    }
+    console.log(newPassword, "this reset pass user");
+  };
 
   console.log(errors);
 
@@ -41,7 +71,7 @@ const Reset = () => {
             control={control}
             rules={{
               pattern: {
-                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                value: /^[0-9]+$/,
                 message: "Please special char password",
               },
               required: {
@@ -59,9 +89,11 @@ const Reset = () => {
                 errorText={errors?.password?.message}
                 textInputProps={{
                   placeholder: "Enter a new password",
+                  secureTextEntry: isShow ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={IconEyaClose}
+                svgSecondIcon={isShow ? IconEyeShow : IconEyaClose}
+                svgSecondOnPress={() => setIsShow(!isShow)}
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
@@ -73,7 +105,7 @@ const Reset = () => {
             control={control}
             rules={{
               pattern: {
-                value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                value: /^[0-9]+$/,
                 message: "Please speacial char password",
               },
               required: {
@@ -91,9 +123,10 @@ const Reset = () => {
                 errorText={errors?.confirm_password?.message}
                 textInputProps={{
                   placeholder: "Retype new password",
+                  secureTextEntry: isShow ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={IconEyaClose}
+                svgSecondIcon={isShow ? IconEyeShow : IconEyaClose}
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
@@ -102,7 +135,7 @@ const Reset = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
-              onPress={() => setModalVisible(true)}
+              onPress={handleSubmit(onSubmit)}
               title="Reset"
               containerStyle={tw``}
             />
