@@ -12,19 +12,16 @@ const drawerApiSlices = api.injectEndpoints({
       query: () => ({
         url: `/pages?type=Terms %26 Conditions`,
       }),
-      providesTags: ["category"],
     }),
     getPrivacyAndPolicy: builder.query<IPrivacyPolicy, any>({
       query: () => ({
         url: `/pages?type=Privacy Policy`,
       }),
-      providesTags: ["category"],
     }),
     getAboutUs: builder.query<IAboutUs, any>({
       query: () => ({
         url: `/pages?type=About Us`,
       }),
-      providesTags: ["category"],
     }),
     support: builder.mutation<any, any>({
       query: (data) => ({

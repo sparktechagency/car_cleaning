@@ -10,6 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": ["fr"]
+      },
       "bundleIdentifier": "com.anonymous.car-clealing"
     },
     "android": {
@@ -17,6 +22,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.anonymous.car_clealing"
     },
     "web": {
@@ -26,6 +32,16 @@
     },
     "plugins": [
       "expo-router",
+
+      "@react-native-google-signin/google-signin",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "",
+          "enableGooglePay": true
+        }
+      ],
+
       [
         "expo-splash-screen",
         {

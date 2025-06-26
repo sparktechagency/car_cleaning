@@ -9,19 +9,28 @@ import { Image } from "expo-image";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
-import { PrimaryColor } from "@/utils/utils";
+import { _HEIGHT, _WIDTH, PrimaryColor } from "@/utils/utils";
 
 const work = (): JSX.Element => {
   const { data: photoData, isLoading } = useGetPhotosQuery({});
 
+  console.log(photoData?.data?.data);
+
   const renderItem = ({ item }: { item: any }) => {
     return (
-      <TouchableOpacity>
-        <View style={tw`mb-4 mr-4`}>
+      <TouchableOpacity disabled style={tw`shadow-sm `}>
+        <View style={tw` `}>
           <Image
-            style={tw`w-44 h-44 rounded-3xl`}
+            key={item?.id}
+            style={[
+              tw` rounded-lg`,
+              {
+                width: _WIDTH / 2 - _WIDTH * 0.04,
+                height: _HEIGHT * 0.124,
+              },
+            ]}
             source={{ uri: item?.photo }}
-            contentFit="contain"
+            contentFit="fill"
           />
         </View>
       </TouchableOpacity>
@@ -32,27 +41,20 @@ const work = (): JSX.Element => {
 
   return (
     <View style={tw`flex-1`}>
-      <View style={tw`p-4 bg-[#F6F6F6]`}>
+      <View style={tw`px-4 py-2`}>
         <Text style={tw`font-DegularDisplayBold text-2xl`}>
           Quick access for get service
         </Text>
-
-        {isLoading ? (
-          <ActivityIndicator
-            size="large"
-            color={PrimaryColor}
-            style={tw`py-6`}
-          />
-        ) : (
-          <FlatList
-            data={photoData?.data?.data}
-            renderItem={renderItem}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={tw`mt-4 pb-30`}
-          />
-        )}
       </View>
+
+      <FlatList
+        data={photoData?.data?.data}
+        renderItem={renderItem}
+        numColumns={2}
+        columnWrapperStyle={tw`gap-3 justify-center`}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={tw`mt-4 gap-3 pb-30`}
+      />
     </View>
   );
 };

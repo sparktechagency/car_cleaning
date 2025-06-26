@@ -13,6 +13,7 @@ const authSlice = api.injectEndpoints({
       query: () => ({
         url: `/auth/profile`,
       }),
+      providesTags: ["user"],
     }),
 
     addUser: builder.mutation<any, any>({
@@ -101,6 +102,14 @@ const authSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    googleLogin: builder.mutation<any, any>({
+      query: (data) => ({
+        url: `/auth/social-login`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -119,4 +128,5 @@ export const {
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useChangeProfileImageMutation,
+  useGoogleLoginMutation,
 } = authSlice;

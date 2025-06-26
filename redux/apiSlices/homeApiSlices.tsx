@@ -6,13 +6,13 @@ const homeApiSlices = api.injectEndpoints({
       query: () => ({
         url: `/services`,
       }),
-      providesTags: ["category"],
+      providesTags: ["user", "service"],
     }),
     getPhotos: builder.query({
       query: () => ({
         url: `/photo-gallery`,
       }),
-      providesTags: ["category"],
+      providesTags: ["user"],
     }),
   }),
 });

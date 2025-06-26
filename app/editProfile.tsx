@@ -78,7 +78,7 @@ const editProfile = () => {
         setModalVisible(true);
       }
     } catch (error) {
-      console.log("Update user error --->", error);
+      console.warn("Update user error --->", error);
     }
   };
 

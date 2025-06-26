@@ -1,6 +1,7 @@
 import { useNavigation, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
+  Alert,
   Pressable,
   ScrollView,
   Text,
@@ -18,8 +19,15 @@ import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
+import {
+  useBookingIntentMutation,
+  useBookingSuccessMutation,
+} from "@/redux/apiSlices/bookingSlices";
+import { useStripe } from "@stripe/stripe-react-native";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const calendersDate = () => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { id } = useLocalSearchParams();
   const [isTime, setIsTime] = React.useState<any | null>(null);
   const {
@@ -139,21 +147,69 @@ const calendersDate = () => {
     const service_id = singleServiceData?.data?.id;
     const booking_date = Object.keys(markedDates)[0];
     const booking_time = selectTime;
+    const bookingInfo = {
+      car_brand,
+      car_model,
+      service_name,
+      service_id,
+      service_type,
+      booking_date,
+      booking_time,
+      booking_note,
+      price,
+    };
+    handleSetupInitialPayment(bookingInfo);
+  };
 
-    router.push({
-      pathname: "/(order)/paymentSystem",
-      params: {
-        car_brand,
-        car_model,
-        service_name,
-        service_id,
-        service_type,
-        booking_date,
-        booking_time,
-        booking_note,
-        price,
-      },
-    });
+  // Payment login for booking start
+
+  const [createIntent, intentResult] = useBookingIntentMutation();
+  const [bookingSuccess, bookingResult] = useBookingSuccessMutation();
+
+  const handleSetupInitialPayment = async (item: any) => {
+    try {
+      const res = await createIntent({
+        payment_method: "pm_card_visa",
+        amount: item?.price,
+        service_name: item?.service_name,
+      }).unwrap();
+      item.stripe_payment_intent_id = res?.data?.id;
+
+      const client_secret = res?.data?.client_secret;
+      // console.log(client_secret);
+
+      const { error } = await initPaymentSheet({
+        merchantDisplayName: "Example, Inc.",
+        paymentIntentClientSecret: client_secret, // retrieve this from your server
+      });
+      if (error) {
+        // handle error
+        Alert.alert("Warning", error?.message);
+      } else {
+        checkout(item);
+      }
+    } catch (error) {
+      Alert.alert("Warning", "Something is wrong");
+      console.log("payment", error);
+    }
+  };
+
+  const checkout = async (item: any) => {
+    const { error } = await presentPaymentSheet();
+
+    if (error) {
+      // handle error
+      Alert.alert("Warning", error?.message);
+    } else {
+      // success
+      try {
+        console.log(item);
+        const res = await bookingSuccess(item).unwrap();
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -171,6 +227,7 @@ const calendersDate = () => {
       </Pressable>
 
       <ScrollView
+        keyboardShouldPersistTaps="always"
         contentContainerStyle={tw`pb-20 `}
         showsVerticalScrollIndicator={false}
       >
@@ -251,32 +308,30 @@ const calendersDate = () => {
                 labelField="label"
                 valueField="value"
                 placeholder="Select service"
-                onChange={(item) =>
-                  console.log(
-                    item,
-                    "this onchange dropdown value------- line 240"
-                  )
-                }
-                onBlur={onBlur}
-                value={value}
-                renderItem={(item) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setDropValue(item);
-                      onChange(item.value);
-                    }}
+                onChange={(item) => {
+                  // console.log(item);
+                  onChange(item.value);
+                  setDropValue(item);
+                }}
+                value={dropDownValue?.value}
+                renderItem={(item, selected) => (
+                  <View
+                    style={[
+                      tw`p-4 my-1 w-full bg-[#E7E7E7] rounded-xl flex-row justify-between items-center gap-2`,
+                      {
+                        backgroundColor: selected
+                          ? tw.color("gray-50")
+                          : "white",
+                      },
+                    ]}
                   >
-                    <View
-                      style={tw`p-4 my-1 w-full bg-[#E7E7E7] rounded-xl flex-row justify-between items-center gap-2`}
+                    <Text style={tw`text-base`}>{item.label}</Text>
+                    <Text
+                      style={tw` font-DegularDisplaySemibold text-base text-[#0063E5]`}
                     >
-                      <Text style={tw`text-base`}>{item.label}</Text>
-                      <Text
-                        style={tw` font-DegularDisplaySemibold text-base text-[#0063E5]`}
-                      >
-                        $ {item.price}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                      $ {item.price}
+                    </Text>
+                  </View>
                 )}
               />
             )}
@@ -379,6 +434,7 @@ const calendersDate = () => {
             titleStyle={tw`text-primary`}
           />
           <TButton
+            isLoading={intentResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
             // onPress={() => router.push("/(order)/paymentSystem")}
             title="checkout"

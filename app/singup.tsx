@@ -21,13 +21,40 @@ import tw from "@/lib/tailwind";
 import { Checkbox } from "react-native-ui-lib";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRegisterMutation } from "@/redux/apiSlices/authSlices";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import {
+  useGoogleLoginMutation,
+  useRegisterMutation,
+} from "@/redux/apiSlices/authSlices";
+
+GoogleSignin.configure({
+  webClientId:
+    "841070320562-hs5hc7at9gu3kcu71efp6tm2jkipsg6d.apps.googleusercontent.com", // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
+  offlineAccess: true,
+  forceCodeForRefreshToken: true,
+});
 
 const singup = () => {
   const [isSelected, setSelection] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+
   const [register, { isLoading }] = useRegisterMutation();
+  const [googleLogin] = useGoogleLoginMutation();
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Ensure Google Play services are available
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      console.log("125", response);
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+
+      // Handle specific Google Sign-In errors
+    }
+  };
+
   const {
     control,
     handleSubmit,
@@ -249,20 +276,20 @@ const singup = () => {
           <View style={tw`rounded-full h-12`}>
             <IwtButton
               svg={IconGoogle}
-              // onPress={handleSubmit(onSubmit)}
+              onPress={() => handleGoogleLogin()}
               title="Continue with google"
               containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
               titleStyle={tw`text-black`}
             />
           </View>
-          <View style={tw`rounded-full mt-2 h-12`}>
+          {/* <View style={tw`rounded-full mt-2 h-12`}>
             <IwtButton
               svg={IconFacebook}
               // onPress={handleSubmit(onSubmit)}
               title="Continue with facebook"
               containerStyle={tw` rounded-lg text-black`}
             />
-          </View>
+          </View> */}
         </View>
         <Text
           style={tw`font-normal mt-12 mb-2 text-sm font-DegularDisplayMedium`}

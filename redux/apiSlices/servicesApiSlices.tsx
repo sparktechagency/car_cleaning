@@ -7,7 +7,7 @@ const servicesApiSlices = api.injectEndpoints({
       query: (id) => ({
         url: `/services/${id}`,
       }),
-      providesTags: ["category"],
+      providesTags: ["service"],
     }),
   }),
 });

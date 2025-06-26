@@ -1,9 +1,4 @@
-import {
-  IconHi,
-  IconLocation,
-  IconMenu,
-  IconNotification,
-} from "@/assets/icon/icon";
+import { IconHi, IconMenu, IconNotification } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
   FlatList,
@@ -14,52 +9,28 @@ import {
   View,
 } from "react-native";
 
-import { Dialog, PanningProvider, Wizard } from "react-native-ui-lib";
+import { Dialog, PanningProvider } from "react-native-ui-lib";
 
-import CarType from "@/components/CarType";
-import FourthStep from "@/components/FourthStep";
-import SecondStep from "@/components/SecondStep";
-import ThreeStep from "@/components/ThreeStep";
-import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
-import { PrimaryColor } from "@/utils/utils";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SvgXml } from "react-native-svg";
 
 import {
   useGetPhotosQuery,
   useGetServicesQuery,
 } from "@/redux/apiSlices/homeApiSlices";
-import { IBookingData } from "@/interface/interfaces";
-import Fifth from "@/components/Fifth";
-import {
-  useGetProfileQuery,
-  useGetTokenCheckQuery,
-} from "@/redux/apiSlices/authSlices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [step, setStep] = React.useState(0);
-  const [isToken, setIsToken] = useState();
 
   // ============================ services data =-======================================================================
-  const [bookingInfo, setBookingInfo] = useState<IBookingData | null>(null);
 
   const { data, isLoading, isError, isSuccess } = useGetServicesQuery({});
   const { data: photoData } = useGetPhotosQuery({});
-  const { data: userInfo } = useGetProfileQuery(isToken);
-
-  const handleUserInfo = async () => {
-    const token = await AsyncStorage.getItem("token");
-    setIsToken(token);
-  };
-
-  useEffect(() => {
-    handleUserInfo();
-  }, []);
+  const { data: userInfo } = useGetProfileQuery({});
 
   const renderItem = ({ item }: { item: any }): JSX.Element => {
     return (
@@ -92,7 +63,7 @@ const Home = () => {
         <View style={tw`mb-4 mr-2`}>
           <Image
             key={item?.id}
-            style={tw`w-44 h-32 rounded-2xl`}
+            style={tw`w-[45%] h-32 rounded-2xl`}
             source={{ uri: item?.photo }}
           />
         </View>
@@ -106,11 +77,6 @@ const Home = () => {
       params: { id: item?.id },
     });
   };
-
-  console.log(
-    bookingInfo,
-    "this is home index booking index --------- line number 92"
-  );
 
   return (
     <View style={tw`flex-1 px-6 `}>
@@ -231,7 +197,7 @@ const Home = () => {
       {/* ============= booking modal ====================== */}
       <Dialog
         width={"100%"}
-        height={"70%"}
+        height={"60%"}
         containerStyle={tw`flex-1 bg-gray-50 rounded-t-3xl `}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
