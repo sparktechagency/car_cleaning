@@ -276,7 +276,7 @@ const singup = () => {
           <View style={tw`rounded-full h-12`}>
             <IwtButton
               svg={IconGoogle}
-              onPress={() => handleGoogleLogin()}
+              // onPress={() => handleGoogleLogin()}
               title="Continue with google"
               containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
               titleStyle={tw`text-black`}

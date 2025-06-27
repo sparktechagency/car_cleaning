@@ -13,17 +13,9 @@ const authSlice = api.injectEndpoints({
       query: () => ({
         url: `/auth/profile`,
       }),
-      providesTags: ["user"],
+      providesTags: ["user", "photo", "service"],
     }),
 
-    addUser: builder.mutation<any, any>({
-      query: (data) => ({
-        url: `/admin/user`,
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["user"],
-    }),
     updateUser: builder.mutation<any, any>({
       query: (data) => ({
         url: `/auth/change-profile`,
@@ -33,7 +25,7 @@ const authSlice = api.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["user"],
+      invalidatesTags: ["user", "photo"],
     }),
     getTokenCheck: builder.query<any, any>({
       query: () => ({
@@ -95,10 +87,13 @@ const authSlice = api.injectEndpoints({
       invalidatesTags: ["user"],
     }),
     changeProfileImage: builder.mutation<any, any>({
-      query: (data) => ({
+      query: (photo) => ({
         url: `/auth/change-profile-photo`,
         method: "POST",
-        body: data,
+        body: photo,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }),
       invalidatesTags: ["user"],
     }),
@@ -114,7 +109,6 @@ const authSlice = api.injectEndpoints({
 });
 
 export const {
-  useAddUserMutation,
   useGetProfileQuery,
   useDeleteUserMutation,
   useLazyUserListQuery,

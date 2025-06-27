@@ -24,7 +24,7 @@ import {
   useBookingSuccessMutation,
 } from "@/redux/apiSlices/bookingSlices";
 import { useStripe } from "@stripe/stripe-react-native";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
 const calendersDate = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -147,18 +147,28 @@ const calendersDate = () => {
     const service_id = singleServiceData?.data?.id;
     const booking_date = Object.keys(markedDates)[0];
     const booking_time = selectTime;
-    const bookingInfo = {
-      car_brand,
-      car_model,
-      service_name,
-      service_id,
-      service_type,
-      booking_date,
-      booking_time,
-      booking_note,
-      price,
-    };
-    handleSetupInitialPayment(bookingInfo);
+
+    try {
+      if (!booking_time || !booking_date || !price) {
+        Alert.alert("warring", "please fil up all data!");
+        return;
+      } else {
+        const bookingInfo = {
+          car_brand,
+          car_model,
+          service_name,
+          service_id,
+          service_type,
+          booking_date,
+          booking_time,
+          booking_note,
+          price,
+        };
+        handleSetupInitialPayment(bookingInfo);
+      }
+    } catch (error) {
+      console.log(error, "please enter the payment info ____");
+    }
   };
 
   // Payment login for booking start

@@ -47,7 +47,6 @@ const editProfile = () => {
   const [car_brand, setCarBrand] = useState("");
   const [car_model, setCarModel] = useState("");
   const [phone, setPhone] = useState("");
-  const [profileUpdateUri, setProfileUpdateUri] = useState<string | null>(null);
 
   const { data, isLoading, isError, refetch } = useGetProfileQuery({});
   const [changeUserData] = useUpdateUserMutation();
@@ -95,8 +94,6 @@ const editProfile = () => {
       });
       if (!result.canceled) {
         const swapUri = result.assets[0].uri;
-        console.log("Selected image---------------:", swapUri);
-        setProfileUpdateUri(swapUri);
 
         // Now call upload API
         handleSwapPhoto(swapUri);
@@ -107,7 +104,18 @@ const editProfile = () => {
   };
   const handleSwapPhoto = async (swapUri) => {
     try {
-      const res = await swapPhoto(photoId).unwrap();
+      const fileName = swapUri.split("/").pop();
+      const formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("photo", {
+        uri: swapUri,
+        name: fileName,
+        type: "image/jpeg",
+      } as any);
+
+      console.log(photoId);
+      const res = await swapPhoto({ data: formData, id: photoId }).unwrap();
+      console.log("image Res", res);
       if (res?.status) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
@@ -132,9 +140,8 @@ const editProfile = () => {
           textBody: "You have successful this Photo",
         });
       }
-      console.log("Photo deleted successfully --->", res);
     } catch (error) {
-      console.log("some thing is Wrong ---------->", error);
+      console.log("some thing is Wrong no delete image---------->", error);
     }
   };
 
@@ -151,7 +158,6 @@ const editProfile = () => {
       if (!result.canceled) {
         const uri = result.assets[0].uri;
         console.log("Selected image---------------:", uri);
-        setProfileUpdateUri(uri);
 
         // Now call upload API
         profileUploadImage(uri);
@@ -163,19 +169,17 @@ const editProfile = () => {
 
   const profileUploadImage = async (uri: string) => {
     const fileName = uri.split("/").pop();
+    const fileType = fileName?.split(".").pop();
     try {
       const formData = new FormData();
       formData.append("photo", {
-        uri: uri,
-        name: fileName,
-        type: "image/jpeg",
+        uri,
+        name: fileName || `profile.${fileType}`,
+        type: `image/${fileType}`,
       } as any);
-      const photo = {
-        photo: formData,
-      };
 
       // ================ here is call api ===========
-      const res = await changeProfileImage(photo).unwrap();
+      const res = await changeProfileImage(formData).unwrap();
       if (res?.status) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
@@ -187,6 +191,8 @@ const editProfile = () => {
       console.log("Profile image something is wrong ==============", error);
     }
   };
+
+  // console.log(data?.data?.car_photos);
 
   return (
     <View style={tw`flex-1`}>
@@ -212,8 +218,8 @@ const editProfile = () => {
             source={{
               uri: data?.data?.photo,
             }}
-            style={{ width: 124, height: 124, borderRadius: 100 }}
-            resizeMode="contain"
+            style={tw`w-24 h-24  rounded-full `}
+            resizeMode="cover"
           />
           <TouchableOpacity
             onPress={imagePickWithProfile}
@@ -320,6 +326,7 @@ const editProfile = () => {
                   <TouchableOpacity
                     onPress={() => {
                       setSelectModalVisible(true);
+                      // console.log(item);
                       setPhotoId(item?.id);
                     }}
                     style={tw`absolute p-1.5 top-1 justify-center items-center right-1 w-6 h-6 rounded-full bg-primary`}
@@ -404,7 +411,7 @@ const editProfile = () => {
 
             <View style={tw`w-full m-4`}>
               <TouchableOpacity
-                onPress={handleSwapPhoto}
+                onPress={imagePickSwap}
                 style={tw`flex-row justify-center items-center border border-[#0063E580] w-full p-1 rounded-lg gap-2 mb-2`}
               >
                 <SvgXml xml={IconSwapImage} />

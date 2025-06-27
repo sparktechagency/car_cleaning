@@ -2,7 +2,6 @@ import { IconHi, IconMenu, IconNotification } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
   FlatList,
-  Image,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -20,6 +19,8 @@ import {
   useGetServicesQuery,
 } from "@/redux/apiSlices/homeApiSlices";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { _HEIGHT, _WIDTH } from "@/utils/utils";
+import { Image } from "expo-image";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -40,9 +41,9 @@ const Home = () => {
         >
           <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
             <Image
-              width={32}
-              height={30}
-              resizeMode="contain"
+              key={item?.id}
+              style={tw`w-10 h-10`}
+              contentFit="fill"
               source={{ uri: item?.icon }}
             />
           </View>
@@ -60,10 +61,17 @@ const Home = () => {
   const workRenderItem = ({ item }: { item: any }) => {
     return (
       <TouchableOpacity>
-        <View style={tw`mb-4 mr-2`}>
+        <View style={tw``}>
           <Image
+            contentFit="fill"
             key={item?.id}
-            style={tw`w-[45%] h-32 rounded-2xl`}
+            style={[
+              tw` rounded-lg`,
+              {
+                width: _WIDTH / 2 - _WIDTH * 0.05,
+                height: _HEIGHT * 0.124,
+              },
+            ]}
             source={{ uri: item?.photo }}
           />
         </View>
@@ -79,7 +87,7 @@ const Home = () => {
   };
 
   return (
-    <View style={tw`flex-1 px-6 `}>
+    <View style={tw`flex-1 px-4 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
         <View style={tw`flex-row justify-start items-center  gap-4`}>
@@ -113,7 +121,7 @@ const Home = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={tw`pb-20`}
+        contentContainerStyle={tw``}
       >
         {/* ========== Banner section =========== */}
         <View>
@@ -127,7 +135,8 @@ const Home = () => {
 
             <View style={tw`absolute z-50`}>
               <Image
-                style={tw` h-40 mx-auto mb-1`}
+                style={tw` h-40 w-full mx-auto mb-1`}
+                contentFit="contain"
                 source={require("../../../assets/images/car-white.png")}
               />
               <View style={tw`mx-auto w-full text-center items-center`}>
@@ -185,11 +194,13 @@ const Home = () => {
           </Text>
 
           <FlatList
-            scrollEnabled={false}
             data={photoData?.data?.data}
             renderItem={workRenderItem}
             numColumns={2}
-            contentContainerStyle={tw`mt-4`}
+            columnWrapperStyle={tw`gap-3 justify-center`}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={tw`mt-4 gap-3 pb-30`}
           />
         </View>
       </ScrollView>

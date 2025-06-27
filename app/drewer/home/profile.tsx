@@ -4,7 +4,14 @@ import {
   IconCar,
   IconEdit,
 } from "@/assets/icon/icon";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import tw from "@/lib/tailwind";
@@ -16,10 +23,10 @@ import {
   useCarPhotoMutation,
   useGetServiceHistoryQuery,
 } from "@/redux/apiSlices/carApiSlices";
+import { _HEIGHT, _WIDTH } from "@/utils/utils";
 
 const profile = () => {
   const router = useRouter();
-  const [imageUri, setImageUri] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useGetProfileQuery({});
   const [carPhotoMutation, { error }] = useCarPhotoMutation();
@@ -37,7 +44,6 @@ const profile = () => {
       if (!result.canceled) {
         const uri = result.assets[0].uri;
         console.log("Selected image---------------:", uri);
-        setImageUri(uri);
 
         // Now call upload API
         uploadImage(uri);
@@ -89,8 +95,8 @@ const profile = () => {
               source={{
                 uri: data?.data?.photo,
               }}
-              style={{ width: 124, height: 124, borderRadius: 100 }}
-              resizeMode="contain"
+              style={tw`w-24 h-24  rounded-full `}
+              resizeMode="cover"
             />
             <TouchableOpacity
               onPress={() => router.push("/editProfile")}
@@ -136,19 +142,31 @@ const profile = () => {
                 </Text>
               </View>
             ) : (
-              data?.data?.car_photos.map((item) => {
-                return (
-                  <TouchableOpacity
-                    key={item.id}
-                    style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
-                  >
-                    <Image
-                      style={tw`w-28 h-16 rounded-lg`}
-                      source={{ uri: item?.photo }}
-                    />
-                  </TouchableOpacity>
-                );
-              })
+              <FlatList
+                numColumns={3}
+                contentContainerStyle={tw` gap-3  self-center`}
+                columnWrapperStyle={tw` gap-3`}
+                scrollEnabled={false}
+                data={data?.data?.car_photos}
+                renderItem={({ item, index }) => {
+                  return (
+                    <TouchableOpacity
+                      key={item.id}
+                      style={[tw`  justify-center items-center text-center`]}
+                    >
+                      <Image
+                        style={[
+                          tw` rounded-lg aspect-video `,
+                          {
+                            height: _HEIGHT * 0.07,
+                          },
+                        ]}
+                        source={{ uri: item?.photo }}
+                      />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
             )}
           </View>
 
@@ -201,7 +219,7 @@ const profile = () => {
                     <View style={tw`flex justify-end`}>
                       <View style={tw`flex-row justify-end gap-2`}>
                         <Text
-                          style={tw`font-DegularDisplayMedium text-xs text-[#262626] text-end`}
+                          style={tw`font-DegularDisplayMedium text-xs text-[#262626] justify-end`}
                         >
                           {item?.booking_time}
                         </Text>

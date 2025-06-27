@@ -12,9 +12,7 @@ import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
 import { _HEIGHT, _WIDTH, PrimaryColor } from "@/utils/utils";
 
 const work = (): JSX.Element => {
-  const { data: photoData, isLoading } = useGetPhotosQuery({});
-
-  console.log(photoData?.data?.data);
+  const { data: photoData } = useGetPhotosQuery({});
 
   const renderItem = ({ item }: { item: any }) => {
     return (
@@ -37,14 +35,10 @@ const work = (): JSX.Element => {
     );
   };
 
-  // console.log(renderItem);
-
   return (
     <View style={tw`flex-1`}>
       <View style={tw`px-4 py-2`}>
-        <Text style={tw`font-DegularDisplayBold text-2xl`}>
-          Quick access for get service
-        </Text>
+        <Text style={tw`font-DegularDisplayBold text-2xl`}>Photo gallery</Text>
       </View>
 
       <FlatList

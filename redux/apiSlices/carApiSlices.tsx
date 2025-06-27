@@ -11,13 +11,18 @@ const carApiSlices = api.injectEndpoints({
           "Content-Type": "multipart/form-data",
         },
       }),
+      invalidatesTags: ["photo"],
     }),
     updateCarPhoto: builder.mutation<any, any>({
-      query: (id) => ({
+      query: ({ data, id }) => ({
         url: `/car-photo/${id}`,
-        method: "PUT",
-        body: id,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: data,
       }),
+      invalidatesTags: ["photo"],
     }),
 
     deleteCarPhoto: builder.mutation<any, any>({
@@ -26,12 +31,14 @@ const carApiSlices = api.injectEndpoints({
         method: "DELETE",
         body: id,
       }),
+      invalidatesTags: ["photo"],
     }),
 
     getServiceHistory: builder.query<any, any>({
       query: () => ({
         url: `/bookings?per_page=1`,
       }),
+      providesTags: ["photo"],
     }),
   }),
 });

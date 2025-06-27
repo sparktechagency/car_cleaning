@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Text,
   TouchableOpacity,
   View,
@@ -13,6 +12,7 @@ import React from "react";
 import { SvgXml } from "react-native-svg";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { PrimaryColor } from "@/utils/utils";
+import { Image } from "expo-image";
 
 const services = (): JSX.Element => {
   const router = useRouter();
@@ -32,10 +32,10 @@ const services = (): JSX.Element => {
         >
           <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
             <Image
-              width={32}
-              height={30}
+              key={item?.id}
+              style={tw`w-10 h-10 rounded-full `}
+              contentFit="fill"
               source={{ uri: item?.icon }}
-              resizeMode="contain"
             />
           </View>
           <Text
