@@ -67,7 +67,7 @@ const singup = () => {
       c_password: "",
     },
   });
-  const onRegisterInfoSubmit = async (registerValue) => {
+  const onRegisterInfoSubmit = async (registerValue: any) => {
     const registerData = {
       name: registerValue?.name,
       email: registerValue?.email,
