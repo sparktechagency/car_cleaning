@@ -63,9 +63,8 @@ const aboutUs = () => {
                   <Text
                     style={tw`font-DegularDisplaySemibold text-sm text-white`}
                   >
-                    Welcome to LWR! At LWR, we are passionate about providing
-                    top-quality car washing services that leave your vehicle
-                    looking pristine.
+                    Welcome to FULL CIRCLE Detailing. Our name comes from our
+                    mission to transform challenges into shining successes.
                   </Text>
                 </View>
               </View>

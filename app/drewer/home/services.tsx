@@ -1,6 +1,8 @@
 import {
   ActivityIndicator,
   FlatList,
+  Image,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
@@ -9,15 +11,13 @@ import {
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
 import React from "react";
-import { SvgXml } from "react-native-svg";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { PrimaryColor } from "@/utils/utils";
-import { Image } from "expo-image";
 
 const services = (): JSX.Element => {
   const router = useRouter();
 
-  const { data, isLoading, isError, isSuccess } = useGetServicesQuery({});
+  const { data, isLoading, refetch } = useGetServicesQuery({});
 
   const renderItem = ({ item }) => {
     return (
@@ -30,11 +30,11 @@ const services = (): JSX.Element => {
         <View
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
-          <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
+          <View style={tw`p-2  rounded-full items-center mb-1 bg-[#0063E51A]`}>
             <Image
               key={item?.id}
-              style={tw`w-10 h-10 rounded-full `}
-              contentFit="fill"
+              style={tw`w-12 h-12 rounded-full`}
+              resizeMode="stretch"
               source={{ uri: item?.icon }}
             />
           </View>
@@ -59,13 +59,20 @@ const services = (): JSX.Element => {
   return (
     <View style={tw`p-4 `}>
       <Text style={tw`font-DegularDisplayBold text-2xl`}>
-        Quick access for get service
+        Quick service access
       </Text>
       {isLoading ? (
         <ActivityIndicator size="large" color={PrimaryColor} style={tw`py-6`} />
       ) : (
         <View style={tw``}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                colors={["#0063E5"]}
+                refreshing={isLoading}
+                onRefresh={refetch}
+              />
+            }
             data={data?.data}
             renderItem={renderItem}
             numColumns={3}

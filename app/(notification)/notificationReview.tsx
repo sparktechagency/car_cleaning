@@ -67,7 +67,7 @@ const notificationReview = () => {
 
       <View>
         <Text style={tw`font-DegularDisplaySemibold text-xl mt-6`}>
-          Give review to share your experience
+          Share your experience
         </Text>
         <Text style={tw`font-DegularDisplayRegular text-base mt-6`}>
           How was the service?
@@ -77,7 +77,7 @@ const notificationReview = () => {
           <StarRating rating={rating} onChange={setRating} />
         </View>
         <InputText
-          label="Any sentence?"
+          label="Comments"
           onChangeText={(test) => {
             setFeedBack(test);
           }}

@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'car_clealing'
+rootProject.name = 'Full Circle'
 
 dependencyResolutionManagement {
   versionCatalogs {

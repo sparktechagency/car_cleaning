@@ -53,9 +53,9 @@ const forgetPass = () => {
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
-          <Heading title={"Forget password?"} />
+          <Heading title={"Forgot password?"} />
           <SubHeading
-            title={"You have to verify your email for reset your password."}
+            title={"You have to verify your email to reset your password."}
           />
         </View>
 

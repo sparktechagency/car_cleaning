@@ -1,18 +1,19 @@
 import {
   ActivityIndicator,
   FlatList,
+  Image,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Image } from "expo-image";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
 import { _HEIGHT, _WIDTH, PrimaryColor } from "@/utils/utils";
 
 const work = (): JSX.Element => {
-  const { data: photoData } = useGetPhotosQuery({});
+  const { data: photoData, isLoading, refetch } = useGetPhotosQuery({});
 
   const renderItem = ({ item }: { item: any }) => {
     return (
@@ -28,7 +29,7 @@ const work = (): JSX.Element => {
               },
             ]}
             source={{ uri: item?.photo }}
-            contentFit="fill"
+            resizeMode="stretch"
           />
         </View>
       </TouchableOpacity>
@@ -42,6 +43,13 @@ const work = (): JSX.Element => {
       </View>
 
       <FlatList
+        refreshControl={
+          <RefreshControl
+            colors={["#0063E5"]}
+            refreshing={isLoading}
+            onRefresh={refetch}
+          />
+        }
         data={photoData?.data?.data}
         renderItem={renderItem}
         numColumns={2}

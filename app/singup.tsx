@@ -253,7 +253,7 @@ const singup = () => {
               style={tw`w-4 h-4 border-black rounded-none`}
             />
             <Text style={tw`font-normal  text-xs`}>
-              By creating this account, you are agree to our{" "}
+              By creating this account you agree to our{" "}
               <Text style={tw`text-primary `}>terms of use</Text>
               {""} & {""}
               <Text style={tw`text-primary `}>privacy policy</Text>.
@@ -267,13 +267,13 @@ const singup = () => {
               containerStyle={tw``}
             />
           </View>
-          <View style={tw`flex-row items-center my-5`}>
+          {/* <View style={tw`flex-row items-center my-5`}>
             <View style={tw`flex-1 h-px bg-gray-300`} />
             <Text style={tw`text-gray-400 px-2`}>Or</Text>
             <View style={tw`flex-1 h-px bg-gray-300`} />
-          </View>
+          </View> */}
 
-          <View style={tw`rounded-full h-12`}>
+          {/* <View style={tw`rounded-full h-12`}>
             <IwtButton
               svg={IconGoogle}
               // onPress={() => handleGoogleLogin()}
@@ -281,7 +281,7 @@ const singup = () => {
               containerStyle={tw`border-secondary border bg-white rounded-lg text-black`}
               titleStyle={tw`text-black`}
             />
-          </View>
+          </View> */}
           {/* <View style={tw`rounded-full mt-2 h-12`}>
             <IwtButton
               svg={IconFacebook}
@@ -292,7 +292,7 @@ const singup = () => {
           </View> */}
         </View>
         <Text
-          style={tw`font-normal mt-12 mb-2 text-sm font-DegularDisplayMedium`}
+          style={tw`font-normal mt-10 mb-2 text-sm font-DegularDisplayMedium`}
         >
           Don’t have an account?{" "}
           <Link style={tw`text-primary font-bold`} href={"/login"}>

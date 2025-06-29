@@ -7,6 +7,7 @@ import {
 import {
   FlatList,
   Image,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -28,7 +29,7 @@ import { _HEIGHT, _WIDTH } from "@/utils/utils";
 const profile = () => {
   const router = useRouter();
 
-  const { data, isLoading, isError } = useGetProfileQuery({});
+  const { data, isLoading, refetch } = useGetProfileQuery({});
   const [carPhotoMutation, { error }] = useCarPhotoMutation();
   const { data: serviceHistory } = useGetServiceHistoryQuery({});
 
@@ -86,6 +87,13 @@ const profile = () => {
       </View>
 
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={["#0063E5"]}
+            refreshing={isLoading}
+            onRefresh={refetch}
+          />
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`pb-2 px-6`}
       >

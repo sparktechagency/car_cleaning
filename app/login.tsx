@@ -86,11 +86,7 @@ const login = () => {
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
           <Heading title={"Welcome Back"} />
-          <SubHeading
-            title={
-              "Please sign in with valid information for access your account."
-            }
-          />
+          <SubHeading title={"Please sign in to access your account."} />
         </View>
 
         <View style={tw`w-full gap-2`}>
@@ -173,7 +169,7 @@ const login = () => {
             <Text
               style={tw`text-primary text-[12px] font-DegularDisplayRegular`}
             >
-              <Link href={"/forgetPass"}>Forget password?</Link>
+              <Link href={"/forgetPass"}>Forgot password?</Link>
             </Text>
           </View>
 

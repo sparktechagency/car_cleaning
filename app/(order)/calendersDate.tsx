@@ -424,7 +424,7 @@ const calendersDate = () => {
                 touched
                 errorText={errors?.booking_name?.message}
                 textInputProps={{
-                  placeholder: "Enter the Appointment note",
+                  placeholder: "Add other details.",
                   verticalAlign: "top",
                   textAlignVertical: "top",
                 }}

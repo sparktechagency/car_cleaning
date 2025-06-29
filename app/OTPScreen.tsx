@@ -21,7 +21,7 @@ const OTPScreen = () => {
       <View style={tw`px-6 flex-1 justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
           <Heading title={"Verify OTP"} />
-          <SubHeading title={"We have sent  6 digits code in your email."} />
+          <SubHeading title={"We have sent a 6-digit code to your email."} />
         </View>
 
         <View style={tw`w-full`}>

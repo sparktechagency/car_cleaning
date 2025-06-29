@@ -1,7 +1,8 @@
 import { IconHi, IconMenu, IconNotification } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
-  FlatList,
+  Image,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -11,16 +12,14 @@ import {
 import { Dialog, PanningProvider } from "react-native-ui-lib";
 
 import tw from "@/lib/tailwind";
-import React, { useState } from "react";
+import React from "react";
 import { SvgXml } from "react-native-svg";
 
-import {
-  useGetPhotosQuery,
-  useGetServicesQuery,
-} from "@/redux/apiSlices/homeApiSlices";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { _HEIGHT, _WIDTH } from "@/utils/utils";
-import { Image } from "expo-image";
+import { FlashList } from "@shopify/flash-list";
+import PhotosComponents from "@/components/PhotosComponents";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -29,8 +28,8 @@ const Home = () => {
 
   // ============================ services data =-======================================================================
 
-  const { data, isLoading, isError, isSuccess } = useGetServicesQuery({});
-  const { data: photoData } = useGetPhotosQuery({});
+  const { data, isLoading, refetch } = useGetServicesQuery({});
+
   const { data: userInfo } = useGetProfileQuery({});
 
   const renderItem = ({ item }: { item: any }): JSX.Element => {
@@ -39,11 +38,11 @@ const Home = () => {
         <View
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
-          <View style={tw`p-4 rounded-full items-center mb-1 bg-[#0063E51A]`}>
+          <View style={tw`p-2 rounded-full items-center mb-1 bg-[#0063E51A]`}>
             <Image
               key={item?.id}
-              style={tw`w-10 h-10`}
-              contentFit="fill"
+              style={tw`w-12 h-12 rounded-full`}
+              resizeMode="stretch"
               source={{ uri: item?.icon }}
             />
           </View>
@@ -53,27 +52,6 @@ const Home = () => {
           >
             {item?.car_type}
           </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const workRenderItem = ({ item }: { item: any }) => {
-    return (
-      <TouchableOpacity>
-        <View style={tw``}>
-          <Image
-            contentFit="fill"
-            key={item?.id}
-            style={[
-              tw` rounded-lg`,
-              {
-                width: _WIDTH / 2 - _WIDTH * 0.05,
-                height: _HEIGHT * 0.124,
-              },
-            ]}
-            source={{ uri: item?.photo }}
-          />
         </View>
       </TouchableOpacity>
     );
@@ -95,7 +73,7 @@ const Home = () => {
             onPress={() => {
               (navigation as any)?.openDrawer();
             }}
-            style={tw` items-center justify-center `}
+            style={tw`p-3 items-center justify-center `}
           >
             <SvgXml xml={IconMenu} />
           </TouchableOpacity>
@@ -120,6 +98,13 @@ const Home = () => {
       </View>
 
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={["#0063E5"]}
+            refreshing={isLoading}
+            onRefresh={refetch}
+          />
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw``}
       >
@@ -136,13 +121,13 @@ const Home = () => {
             <View style={tw`absolute z-50`}>
               <Image
                 style={tw` h-40 w-full mx-auto mb-1`}
-                contentFit="contain"
+                resizeMode="contain"
                 source={require("../../../assets/images/car-white.png")}
               />
               <View style={tw`mx-auto w-full text-center items-center`}>
                 <Text style={tw`font-DegularDisplayBold text-2xl`}>
                   Keep your <Text style={tw`text-primary`}> car clean</Text>{" "}
-                  always
+                  anywhere
                 </Text>
                 <Text
                   style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
@@ -170,17 +155,18 @@ const Home = () => {
         <View>
           <View style={tw`mt-6 `}>
             <Text style={tw`font-DegularDisplayBold text-2xl`}>
-              Quick access for get service
+              Quick service access
             </Text>
             <View style={tw``}>
-              <FlatList
+              <FlashList
                 data={data?.data}
                 renderItem={renderItem}
+                estimatedItemSize={400}
                 numColumns={3}
                 scrollEnabled={false}
                 keyExtractor={(item) => item?.id.toLocaleString()}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={tw`flex  items-center bg-transparent `}
+                contentContainerStyle={tw` `}
               />
             </View>
           </View>
@@ -192,16 +178,7 @@ const Home = () => {
           <Text style={tw`font-DegularDisplayBold text-2xl`}>
             Photo gallery
           </Text>
-
-          <FlatList
-            data={photoData?.data?.data}
-            renderItem={workRenderItem}
-            numColumns={2}
-            columnWrapperStyle={tw`gap-3 justify-center`}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={tw`mt-4 gap-3 pb-30`}
-          />
+          <PhotosComponents />
         </View>
       </ScrollView>
 

@@ -48,7 +48,7 @@ const editProfile = () => {
   const [car_model, setCarModel] = useState("");
   const [phone, setPhone] = useState("");
 
-  const { data, isLoading, isError, refetch } = useGetProfileQuery({});
+  const { data, refetch } = useGetProfileQuery({});
   const [changeUserData] = useUpdateUserMutation();
   const [deletePhot] = useDeleteCarPhotoMutation();
   const [swapPhoto] = useUpdateCarPhotoMutation();

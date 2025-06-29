@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "car_clealing",
+    "name": "Full Circle",
     "slug": "car_clealing",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/appsIcon.png",
+        "foregroundImage": "./assets/images/adaptive-icon-android.png",
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",

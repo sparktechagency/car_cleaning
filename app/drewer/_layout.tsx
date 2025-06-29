@@ -57,22 +57,22 @@ const CustomDrawerContent = (props) => {
           onPress={() => router?.push("/drewer/tramsConditions")}
         >
           <View>
-            <Text>Terms & conditions</Text>
+            <Text style={tw`capitalize`}>Terms & conditions</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/privacyPolicy")}>
           <View>
-            <Text>Privacy policy</Text>
+            <Text style={tw`capitalize`}>Privacy policy</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/aboutUs")}>
           <View>
-            <Text>About us</Text>
+            <Text style={tw`capitalize`}>About us</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/support")}>
           <View>
-            <Text>Support</Text>
+            <Text style={tw`capitalize`}>Support</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -86,7 +86,7 @@ const CustomDrawerContent = (props) => {
           style={tw`py-5  flex-row items-center gap-2`}
         >
           <SvgXml xml={IconLogOut} />
-          <Text style={tw`text-base text-red-500`}>Log out</Text>
+          <Text style={tw`text-base capitalize text-red-500`}>Log out</Text>
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>
