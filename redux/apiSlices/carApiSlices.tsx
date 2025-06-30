@@ -36,7 +36,7 @@ const carApiSlices = api.injectEndpoints({
 
     getServiceHistory: builder.query<any, any>({
       query: () => ({
-        url: `/bookings?per_page=1`,
+        url: `/bookings?per_page=1000000`,
       }),
       providesTags: ["photo"],
     }),

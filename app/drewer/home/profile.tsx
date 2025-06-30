@@ -17,7 +17,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { SvgXml } from "react-native-svg";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import {
@@ -44,7 +44,6 @@ const profile = () => {
 
       if (!result.canceled) {
         const uri = result.assets[0].uri;
-        console.log("Selected image---------------:", uri);
 
         // Now call upload API
         uploadImage(uri);
@@ -204,44 +203,46 @@ const profile = () => {
                 </Text>
               </View>
             ) : (
-              serviceHistory?.data?.data.map((item) => (
-                <TouchableOpacity key={item?.id}>
-                  <View
-                    style={tw`flex-row justify-between px-4 py-1.5 my-2 rounded-lg bg-[#FFFFFF]`}
-                  >
-                    <View>
-                      <Text
-                        style={tw`font-DegularDisplaySemibold text-base text-regularText`}
-                      >
-                        {item?.service_name}
-                      </Text>
-                      <Text style={tw`  text-sm mt-2 `}>
-                        {item?.service_type.toUpperCase()}:{" "}
+              serviceHistory?.data?.data.map((item) => {
+                return (
+                  <TouchableOpacity key={item?.id}>
+                    <View
+                      style={tw`flex-row justify-between px-4 py-1.5 my-2 rounded-lg bg-[#FFFFFF]`}
+                    >
+                      <View>
                         <Text
-                          style={tw`text-[#0063E5] font-DegularDisplaySemibold`}
+                          style={tw`font-DegularDisplaySemibold text-base text-regularText`}
                         >
-                          ${item?.price}
+                          {item?.service_name}
                         </Text>
-                      </Text>
-                    </View>
-                    <View style={tw`flex justify-end`}>
-                      <View style={tw`flex-row justify-end gap-2`}>
-                        <Text
-                          style={tw`font-DegularDisplayMedium text-xs text-[#262626] justify-end`}
-                        >
-                          {item?.booking_time}
+                        <Text style={tw`  text-sm mt-2 `}>
+                          {item?.service_type.toUpperCase()}:{" "}
+                          <Text
+                            style={tw`text-[#0063E5] font-DegularDisplaySemibold`}
+                          >
+                            ${item?.price}
+                          </Text>
                         </Text>
                       </View>
+                      <View style={tw`flex justify-end`}>
+                        <View style={tw`flex-row justify-end gap-2`}>
+                          <Text
+                            style={tw`font-DegularDisplayMedium text-xs text-[#262626] justify-end`}
+                          >
+                            {item?.booking_time}
+                          </Text>
+                        </View>
 
-                      <Text
-                        style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
-                      >
-                        {item?.booking_date}
-                      </Text>
+                        <Text
+                          style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
+                        >
+                          {item?.booking_date}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
+                  </TouchableOpacity>
+                );
+              })
             )}
           </View>
         </View>

@@ -2,23 +2,19 @@ import {
   IconEmail,
   IconEyaClose,
   IconEyeShow,
-  IconFacebook,
-  IconGoogle,
   IconPassword,
   IconUser,
 } from "@/assets/icon/icon";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
-import IwtButton from "@/lib/buttons/IwtButton";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import { Checkbox } from "react-native-ui-lib";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -35,9 +31,18 @@ GoogleSignin.configure({
 });
 
 const singup = () => {
-  const [isSelected, setSelection] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckBox = async () => {
+    setIsChecked(!isChecked);
+    try {
+      await AsyncStorage.setItem("check", JSON.stringify(isChecked));
+    } catch (error) {
+      console.log(error, "User Info Storage not save ---->");
+    }
+  };
 
   const [register, { isLoading }] = useRegisterMutation();
   const [googleLogin] = useGoogleLoginMutation();
@@ -244,14 +249,15 @@ const singup = () => {
           <View
             style={tw`flex-row gap-1 justify-start items-center rounded-none mb-8`}
           >
-            <Checkbox
-              value={isSelected}
-              onValueChange={async (value) => {
-                await AsyncStorage.setItem("check", JSON.stringify(value));
-                setSelection(value);
-              }}
-              style={tw`w-4 h-4 border-black rounded-none`}
-            />
+            <TouchableOpacity
+              onPress={() => handleCheckBox()}
+              style={tw.style(
+                `border w-5 h-5  justify-center items-center rounded-sm`,
+                isChecked ? `bg-primary border-0` : `bg-transparent`
+              )}
+            >
+              {isChecked ? <Text style={tw`text-white text-sm`}>✔</Text> : null}
+            </TouchableOpacity>
             <Text style={tw`font-normal  text-xs`}>
               By creating this account you agree to our{" "}
               <Text style={tw`text-primary `}>terms of use</Text>

@@ -13,18 +13,21 @@ import { IconBackArrow } from "@/assets/icon/icon";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import React from "react";
+import React, { useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
+import {
+  useGetBlockedServiceDateQuery,
+  useGetServicesByIdQuery,
+  useLazyGetFreeTimesQuery,
+} from "@/redux/apiSlices/servicesApiSlices";
 import {
   useBookingIntentMutation,
   useBookingSuccessMutation,
 } from "@/redux/apiSlices/bookingSlices";
 import { useStripe } from "@stripe/stripe-react-native";
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 
 const calendersDate = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -37,13 +40,10 @@ const calendersDate = () => {
     refetch: singleServiceRefetch,
   } = useGetServicesByIdQuery(id);
 
-  const handleTimeShow = async () => {
-    try {
-      await setIsTime(singleServiceData?.data?.service_times);
-    } catch (error) {
-      console.log(error, "this not render the time..........");
-    }
-  };
+  const { data: blockedDate } = useGetBlockedServiceDateQuery({});
+  const [getFreeTimes, { data: freeTimes }] = useLazyGetFreeTimesQuery({});
+
+  const handleTimeShow = async () => {};
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -57,14 +57,15 @@ const calendersDate = () => {
 
   const service_type = dropDownValue?.label;
   const price = dropDownValue?.price;
-
+  const [bookingNote, setBookingNote] = useState("");
   const [selectedDate, setSelectedDate] = React.useState("");
   const [markedDates, setMarkedDates] = React.useState({});
   const [selectTime, setSelectTime] = React.useState<any | null>(null);
 
   const today = new Date().toISOString().split("T")[0];
 
-  const handleDayPress = (day) => {
+  const handleDayPress = async (day) => {
+    const date = day.dateString;
     setSelectedDate(day.dateString);
     setMarkedDates({
       [day.dateString]: {
@@ -73,11 +74,24 @@ const calendersDate = () => {
         selectedColor: "#00BFFF",
       },
     });
+
+    try {
+      // await setIsTime(singleServiceData?.data?.service_times);
+      const res = await getFreeTimes({
+        service_id: id,
+        date: date,
+      }).unwrap();
+      setIsTime(res?.data);
+    } catch (error) {
+      console.log(error, "❌ Failed to load time slots");
+    }
   };
 
   const renderDay = (day) => {
     const isPastDate = day.dateString < today;
-
+    let blocked = blockedDate?.data?.data.map((item) => item.date) || [];
+    const isDisabledDate = blocked.includes(day.dateString);
+    const isDisabled = isPastDate || isDisabledDate;
     return (
       <TouchableOpacity
         onPress={() => {
@@ -85,7 +99,7 @@ const calendersDate = () => {
         }}
         disabled={isPastDate}
         style={{
-          backgroundColor: isPastDate
+          backgroundColor: isDisabled
             ? "rgba(0, 0, 0, 0.1)"
             : selectedDate === day.dateString
             ? tw.color("bg-primary")
@@ -142,7 +156,7 @@ const calendersDate = () => {
   const handleServiceData = (item) => {
     const car_brand = item?.brand_name;
     const car_model = item?.model_name;
-    const booking_note = item?.booking_name;
+    const booking_note = bookingNote;
     const service_name = singleServiceData?.data?.car_type;
     const service_id = singleServiceData?.data?.id;
     const booking_date = Object.keys(markedDates)[0];
@@ -186,7 +200,6 @@ const calendersDate = () => {
       item.stripe_payment_intent_id = res?.data?.id;
 
       const client_secret = res?.data?.client_secret;
-      // console.log(client_secret);
 
       const { error } = await initPaymentSheet({
         merchantDisplayName: "Example, Inc.",
@@ -215,8 +228,12 @@ const calendersDate = () => {
       try {
         console.log(item);
         const res = await bookingSuccess(item).unwrap();
-        console.log(res);
+        // console.log(res);
+        if (res?.status) {
+          router.replace("/drewer/home");
+        }
       } catch (error) {
+        alert((error as any)?.message || "something happened wrong");
         console.log(error);
       }
     }
@@ -373,22 +390,20 @@ const calendersDate = () => {
               style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
             >
               {isTime ? (
-                isTime.map((time) => (
+                isTime.map((time, index) => (
                   <TouchableOpacity
                     style={tw`${
-                      selectTime === time?.time ? "bg-primary" : "bg-white"
+                      selectTime === time ? "bg-primary" : "bg-white"
                     } rounded-lg border w-[32%] border-gray-50`}
-                    key={time?.id}
-                    onPress={() => setSelectTime(time?.time)}
+                    key={index}
+                    onPress={() => setSelectTime(time)}
                   >
                     <Text
                       style={tw`font-DegularDisplaySemibold text-base ${
-                        selectTime === time?.time
-                          ? "text-white"
-                          : "text-regularText"
+                        selectTime === time ? "text-white" : "text-regularText"
                       }   rounded-2xl text-center px-6 py-3`}
                     >
-                      {time?.time}
+                      {time}
                     </Text>
                   </TouchableOpacity>
                 ))
@@ -407,32 +422,18 @@ const calendersDate = () => {
           >
             Appointment note
           </Text>
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: "Please booking Note name",
-              },
+
+          <InputText
+            onChangeText={(text) => setBookingNote(text)}
+            touched
+            errorText={errors?.booking_name?.message}
+            textInputProps={{
+              placeholder: "Add other details.",
+              verticalAlign: "top",
+              textAlignVertical: "top",
             }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <InputText
-                value={value}
-                onChangeText={(test) => onChange(test)}
-                // inputStyle={tw`justify-start items-start text-start`}
-                onBlur={onBlur}
-                touched
-                errorText={errors?.booking_name?.message}
-                textInputProps={{
-                  placeholder: "Add other details.",
-                  verticalAlign: "top",
-                  textAlignVertical: "top",
-                }}
-                inputStyle={tw`h-28`}
-                containerStyle={tw`h-36 justify-center`}
-              />
-            )}
-            name="booking_name"
+            inputStyle={tw`h-28`}
+            containerStyle={tw`h-36 justify-center`}
           />
         </View>
 

@@ -1,8 +1,7 @@
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import tw from "@/lib/tailwind";
 import { useForm, Controller } from "react-hook-form";
-import { Checkbox } from "react-native-ui-lib";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import {
@@ -11,7 +10,7 @@ import {
   IconEyeShow,
   IconPassword,
 } from "@/assets/icon/icon";
-import { Link, router, useRouter } from "expo-router";
+import { Link, router } from "expo-router";
 import Heading from "@/components/TitleHead";
 import SubHeading from "@/components/SubTileHead";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,10 +18,18 @@ import { useLoginMutation } from "@/redux/apiSlices/authSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const login = () => {
-  const [isSelected, setSelection] = useState<boolean>(false);
   const [isShow, setIsShow] = useState(false);
-  const [loginInfo, setLoginInfo] = useState<any>(null);
   const [login, { isLoading }] = useLoginMutation();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckBox = async () => {
+    setIsChecked(!isChecked);
+    try {
+      await AsyncStorage.setItem("check", JSON.stringify(isChecked));
+    } catch (error) {
+      console.log(error, "User Info Storage not save ---->");
+    }
+  };
 
   const {
     control,
@@ -37,10 +44,11 @@ const login = () => {
   });
   const handleLogin = async (loginUserData: any) => {
     try {
-      if (isSelected === true) {
+      if (isChecked === true) {
         await AsyncStorage.setItem("loginInfo", JSON.stringify(loginUserData));
       }
       const res = await login(loginUserData).unwrap();
+
       if (res.status) {
         await AsyncStorage.setItem("token", res?.data?.access_token);
         router.replace("/drewer/home");
@@ -67,9 +75,7 @@ const login = () => {
     const savedLoginInfo = loginInfoStr ? JSON.parse(loginInfoStr) : null;
     const checked = checkedStr ? JSON.parse(checkedStr) : false;
 
-    setSelection(checked);
-    setLoginInfo(savedLoginInfo);
-
+    setIsChecked(checked);
     // Reset form with saved login info
     reset({
       email: savedLoginInfo?.email || "",
@@ -156,14 +162,17 @@ const login = () => {
 
           <View style={tw`flex-row justify-between mb-10`}>
             <View style={tw`flex-row gap-2 items-center rounded-none`}>
-              <Checkbox
-                value={isSelected}
-                onValueChange={async (value) => {
-                  await AsyncStorage.setItem("check", JSON.stringify(value));
-                  setSelection(value);
-                }}
-                style={tw`w-4 h-4 border-black rounded-none`}
-              />
+              <TouchableOpacity
+                onPress={() => handleCheckBox()}
+                style={tw.style(
+                  `border w-5 h-5  justify-center items-center rounded-sm`,
+                  isChecked ? `bg-primary border-0` : `bg-transparent`
+                )}
+              >
+                {isChecked ? (
+                  <Text style={tw`text-white text-sm`}>✔</Text>
+                ) : null}
+              </TouchableOpacity>
               <Text>Remember me</Text>
             </View>
             <Text

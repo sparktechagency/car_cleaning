@@ -9,7 +9,24 @@ const servicesApiSlices = api.injectEndpoints({
       }),
       providesTags: ["service"],
     }),
+    getBlockedServiceDate: builder.query<any, any>({
+      query: () => ({
+        url: `/manage-dates`,
+      }),
+      providesTags: ["service"],
+    }),
+    getFreeTimes: builder.query<any, any>({
+      query: ({ service_id, date }) => ({
+        url: `/get_free_times?service_id=${service_id}&date=${date}`,
+      }),
+      providesTags: ["service"],
+    }),
   }),
 });
 
-export const { useGetServicesByIdQuery } = servicesApiSlices;
+export const {
+  useGetServicesByIdQuery,
+  useGetBlockedServiceDateQuery,
+  // useGetFreeTimesQuery,
+  useLazyGetFreeTimesQuery,
+} = servicesApiSlices;

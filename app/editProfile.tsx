@@ -12,6 +12,7 @@ import {
 
 import {
   Image,
+  Modal,
   Pressable,
   ScrollView,
   Text,
@@ -25,7 +26,6 @@ import tw from "@/lib/tailwind";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
-import { Modal } from "react-native-ui-lib";
 import {
   useChangeProfileImageMutation,
   useGetProfileQuery,
@@ -353,7 +353,7 @@ const editProfile = () => {
       {/*  ==========------------------------------- successful modal open ============ */}
 
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -388,7 +388,7 @@ const editProfile = () => {
 
       {/* ========= selected modal ============= */}
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={selectModalVisible}
         onRequestClose={() => setSelectModalVisible(false)}

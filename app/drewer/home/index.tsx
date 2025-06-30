@@ -1,15 +1,21 @@
-import { IconHi, IconMenu, IconNotification } from "@/assets/icon/icon";
+import {
+  IconCross,
+  IconHi,
+  IconMenu,
+  IconNotification,
+} from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
   Image,
+  Modal,
+  Pressable,
   RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
-
-import { Dialog, PanningProvider } from "react-native-ui-lib";
 
 import tw from "@/lib/tailwind";
 import React from "react";
@@ -183,71 +189,101 @@ const Home = () => {
       </ScrollView>
 
       {/* ============= booking modal ====================== */}
-      <Dialog
-        width={"100%"}
-        height={"60%"}
-        containerStyle={tw`flex-1 bg-gray-50 rounded-t-3xl `}
+      <Modal
+        animationType="slide"
+        transparent
+        onRequestClose={() => {
+          // Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
-        panDirection={PanningProvider.Directions.DOWN}
-        bottom={true}
-        renderPannableHeader={() => {
-          return (
-            <View
-              style={tw`bg-[#F6F6F6] z-50 flex-1 items-center  py-4  rounded-l-3xl rounded-r-3xl rounded-b-none`}
-            >
-              <View style={tw`w-12 h-0.5 rounded-full bg-gray-800`} />
-            </View>
-          );
-        }}
       >
-        <ScrollView keyboardShouldPersistTaps="always" style={tw`px-4`}>
-          <View
-            style={tw`flex-row flex-wrap justify-start items-center gap-4 `}
+        <Pressable
+          onPress={() => {
+            setModalVisible(false);
+          }}
+          style={[
+            {
+              height: _HEIGHT - _HEIGHT * 0.07,
+            },
+            tw`justify-end items-end bg-black bg-opacity-15 `,
+          ]}
+        >
+          <Pressable
+            style={[
+              {
+                height: _HEIGHT * 0.55,
+              },
+              tw`bg-gray-50`,
+            ]}
           >
-            <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
-              Which type of vehicle you want to wash?
-            </Text>
-            {data?.data?.length === 0 ? (
-              <Text style={tw`font-bold text-xl text-center`}>
-                No Date Available..!
-              </Text>
-            ) : (
-              data?.data?.map((item) => {
-                return (
+            <ScrollView
+              keyboardShouldPersistTaps="always"
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={tw`pb-10`}
+            >
+              <View style={tw` px-4`}>
+                <View style={tw`flex-row justify-between items-center my-2 `}>
+                  <Text> </Text>
                   <TouchableOpacity
-                    onPress={() => {
-                      setModalVisible(false);
-                      handleServiceDetails(item);
-                    }}
-                    activeOpacity={0.7}
-                    key={item?.id}
-                    style={tw`w-[30%] h-32  rounded-2xl 
+                    onPress={() => setModalVisible(false)}
+                    style={tw`w-8 h-8 rounded-full bg-slate-200 justify-center items-center`}
+                  >
+                    <SvgXml xml={IconCross} />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={tw`flex-row flex-wrap justify-start items-center gap-4 `}
+                >
+                  <Text style={tw`font-DegularDisplaySemibold text-xl mt-2`}>
+                    Which type of vehicle you want to wash?
+                  </Text>
+                  {data?.data?.length === 0 ? (
+                    <Text style={tw`font-bold text-xl text-center`}>
+                      No Date Available..!
+                    </Text>
+                  ) : (
+                    data?.data?.map((item) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setModalVisible(false);
+                            handleServiceDetails(item);
+                          }}
+                          activeOpacity={0.7}
+                          key={item?.id}
+                          style={tw`w-[30%] h-32  rounded-2xl 
             bg-white
              items-center text-center  justify-center shadow-sm `}
-                  >
-                    <View style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}>
-                      <Image
-                        width={32}
-                        height={30}
-                        resizeMode="contain"
-                        source={{ uri: item?.icon }}
-                      />
-                    </View>
-                    <Text
-                      numberOfLines={1}
-                      style={tw`font-DegularDisplaySemibold text-base  text-[#262626]
+                        >
+                          <View
+                            style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}
+                          >
+                            <Image
+                              width={32}
+                              height={30}
+                              resizeMode="contain"
+                              source={{ uri: item?.icon }}
+                            />
+                          </View>
+                          <Text
+                            numberOfLines={1}
+                            style={tw`font-DegularDisplaySemibold text-base  text-[#262626]
                `}
-                    >
-                      {item?.car_type}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })
-            )}
-          </View>
-        </ScrollView>
-      </Dialog>
+                          >
+                            {item?.car_type}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })
+                  )}
+                </View>
+              </View>
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 };

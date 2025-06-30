@@ -1,9 +1,8 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import { IconRightArray } from "@/assets/icon/Icon";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { View } from "react-native-ui-lib";
 import tw from "../tailwind";
 
 interface BackButtonProps {

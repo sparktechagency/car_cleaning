@@ -6,14 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Checkbox } from "react-native-ui-lib";
 
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
 
 const data = [
@@ -113,35 +111,7 @@ const paymentSystem = () => {
 
           <Text style={tw`text-lg font-semibold mt-5`}>Billing address</Text>
 
-          <View style={tw`mt-2`}>
-            {renderLabel()}
-
-            <Dropdown
-              style={[
-                styles.dropdown,
-                isFocus && { borderColor: "blue" },
-                tw` border border-gray-300 rounded-lg p-3 w-full`,
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={data}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? "Select Country" : "..."}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setValue(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View>
+          <View style={tw`mt-2`}></View>
           <View style={tw`border border-gray-300 rounded-lg p-3 mt-2`}>
             <TextInput
               placeholder="ZIP"

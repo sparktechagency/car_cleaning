@@ -43,6 +43,15 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="vehicle_type_modal"
+              options={{
+                presentation: "formSheet",
+                // sheetAllowedDetents: "fitToContents",
+                animation: "fade",
+                headerShown: false,
+              }}
+            />
           </Stack>
         </Provider>
       </AlertNotificationRoot>
