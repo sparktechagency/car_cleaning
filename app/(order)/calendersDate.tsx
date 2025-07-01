@@ -13,7 +13,7 @@ import { IconBackArrow } from "@/assets/icon/icon";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
@@ -28,11 +28,15 @@ import {
   useBookingSuccessMutation,
 } from "@/redux/apiSlices/bookingSlices";
 import { useStripe } from "@stripe/stripe-react-native";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const calendersDate = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { id } = useLocalSearchParams();
   const [isTime, setIsTime] = React.useState<any | null>(null);
+  const [car_brand, setCarBrand] = useState("");
+  const [car_model, setCarModel] = useState("");
+
   const {
     data: singleServiceData,
     isLoading: singleServiceLoading,
@@ -41,10 +45,10 @@ const calendersDate = () => {
   } = useGetServicesByIdQuery(id);
 
   const { data: blockedDate } = useGetBlockedServiceDateQuery({});
-  const [getFreeTimes, { data: freeTimes }] = useLazyGetFreeTimesQuery({});
+  const [getFreeTimes] = useLazyGetFreeTimesQuery({});
+  const { data: profileData, refetch } = useGetProfileQuery({});
 
   const handleTimeShow = async () => {};
-
   const navigation = useNavigation();
   const router = useRouter();
 
@@ -140,9 +144,27 @@ const calendersDate = () => {
     { label: "Both", value: "3", price: singleServiceData?.data?.both },
   ];
 
+  useEffect(() => {
+    if (profileData?.data?.car_brand || profileData?.data?.car_model) {
+      const brand = profileData?.data?.car_brand || "";
+      const model = profileData?.data?.car_model || "";
+
+      setCarBrand(brand);
+      setCarModel(model);
+
+      reset({
+        brand_name: brand,
+        model_name: model,
+        service_type: "",
+        booking_name: "",
+      });
+    }
+  }, [profileData]);
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -226,9 +248,7 @@ const calendersDate = () => {
     } else {
       // success
       try {
-        console.log(item);
         const res = await bookingSuccess(item).unwrap();
-        // console.log(res);
         if (res?.status) {
           router.replace("/drewer/home");
         }
@@ -258,7 +278,7 @@ const calendersDate = () => {
         contentContainerStyle={tw`pb-20 `}
         showsVerticalScrollIndicator={false}
       >
-        <View>
+        <View style={tw`gap-4`}>
           <Controller
             control={control}
             rules={{
@@ -310,8 +330,8 @@ const calendersDate = () => {
             name="model_name"
           />
 
-          <Text style={tw`font-DegularDisplaySemibold text-xl mt-4 mb-1`}>
-            select service
+          <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
+            Select service
           </Text>
 
           <Controller
@@ -408,7 +428,9 @@ const calendersDate = () => {
                   </TouchableOpacity>
                 ))
               ) : (
-                <Text style={tw`font-bold text-xl text-center`}>
+                <Text
+                  style={tw`font-bold text-xl justify-center items-center w-full text-gray-600 text-center`}
+                >
                   No Date Available..!
                 </Text>
               )}
@@ -448,7 +470,7 @@ const calendersDate = () => {
             isLoading={intentResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
             // onPress={() => router.push("/(order)/paymentSystem")}
-            title="checkout"
+            title="Checkout"
             containerStyle={tw`flex-1 rounded-lg`}
           />
         </View>

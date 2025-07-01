@@ -23,7 +23,7 @@ import {
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import {
@@ -243,6 +243,7 @@ const editProfile = () => {
 
           <InputText
             label="Username"
+            labelStyle={tw`font-bold`}
             value={name}
             onChangeText={(test) => {
               setUserName(test);
@@ -256,6 +257,7 @@ const editProfile = () => {
           />
           <InputText
             label="Phone"
+            labelStyle={tw`font-bold`}
             value={phone}
             onChangeText={(test) => {
               setPhone(test);
@@ -375,7 +377,10 @@ const editProfile = () => {
 
             {/* Close Button */}
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => {
+                router.replace("/drewer/home/profile");
+                setModalVisible(false);
+              }}
               style={tw`bg-primary w-full text-center rounded-full px-5 py-2  mt-8`}
             >
               <Text style={tw`text-white text-center text-lg font-bold`}>

@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
 import tw from "@/lib/tailwind";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { PrimaryColor } from "@/utils/utils";
 import { OtpInput } from "react-native-otp-entry";
-import { useVerifyOtpMutation } from "@/redux/apiSlices/authSlices";
+import {
+  useForgetPasswordMutation,
+  useVerifyOtpMutation,
+} from "@/redux/apiSlices/authSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -15,6 +18,29 @@ const OTPScreen = () => {
 
   const [otpVerify] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
+
+  const [forgetPassResponse] = useForgetPasswordMutation();
+
+  const handleAgainSentOTP = async () => {
+    try {
+      const res = await forgetPassResponse({ email }).unwrap();
+
+      if (res?.status) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Success",
+          textBody: "Send again OTP number.",
+        });
+      }
+    } catch (error) {
+      console.log(error, "Otp don't send Please try.");
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Filed!",
+        textBody: "Something is wrong please try again.",
+      });
+    }
+  };
 
   return (
     <>
@@ -75,7 +101,7 @@ const OTPScreen = () => {
           </View>
 
           <View style={tw`w-full items-end mt-1`}>
-            <TouchableOpacity style={tw``}>
+            <TouchableOpacity onPress={() => handleAgainSentOTP()} style={tw``}>
               <Text style={tw`text-primary font-semibold text-[12px]`}>
                 Send Again
               </Text>

@@ -148,7 +148,7 @@ const login = () => {
                 touched
                 errorText={errors?.password?.message}
                 textInputProps={{
-                  placeholder: "++++++++",
+                  placeholder: "********",
                   secureTextEntry: isShow ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
@@ -160,7 +160,7 @@ const login = () => {
             name="password"
           />
 
-          <View style={tw`flex-row justify-between mb-10`}>
+          <View style={tw`flex-row justify-between items-center mb-10`}>
             <View style={tw`flex-row gap-2 items-center rounded-none`}>
               <TouchableOpacity
                 onPress={() => handleCheckBox()}
@@ -194,7 +194,7 @@ const login = () => {
       <View style={tw`justify-end items-center mb-2`}>
         <Text style={tw`font-normal text-sm font-DegularDisplayMedium`}>
           Don’t have an account?{" "}
-          <Link style={tw`text-primary font-bold`} href={"/singup"}>
+          <Link style={tw`text-primary font-bold underline`} href={"/singup"}>
             Sign up
           </Link>
         </Text>

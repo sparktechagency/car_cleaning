@@ -107,14 +107,12 @@ const singup = () => {
   };
 
   return (
-    <ScrollView style={tw`px-6 flex-1`}>
-      <View style={tw`py-4 justify-center items-center`}>
-        <View style={tw`items-center mb-8`}>
-          <Heading title={"Welcome Back"} />
+    <ScrollView style={tw`px-6  flex-1`}>
+      <View style={tw`py-4 justify-center mt-6 items-center`}>
+        <View style={tw`items-center  mb-8`}>
+          <Heading title={"Get started now"} />
           <SubHeading
-            title={
-              "Please sign in with valid information for access your account."
-            }
+            title={"Create an account to explore the app & get car service."}
           />
         </View>
 
@@ -266,13 +264,24 @@ const singup = () => {
             </Text>
           </View>
 
-          <View style={tw`rounded-full h-12`}>
-            <TButton
-              onPress={handleSubmit(onRegisterInfoSubmit)}
-              title="Sign up"
-              containerStyle={tw``}
-            />
-          </View>
+          {isChecked ? (
+            <View style={tw`rounded-full h-12`}>
+              <TButton
+                onPress={handleSubmit(onRegisterInfoSubmit)}
+                title="Sign up"
+                containerStyle={[tw``]}
+              />
+            </View>
+          ) : (
+            <View style={tw`rounded-full h-12`}>
+              <TButton
+                disabled
+                onPress={handleSubmit(onRegisterInfoSubmit)}
+                title="Sign up"
+                containerStyle={[tw``]}
+              />
+            </View>
+          )}
           {/* <View style={tw`flex-row items-center my-5`}>
             <View style={tw`flex-1 h-px bg-gray-300`} />
             <Text style={tw`text-gray-400 px-2`}>Or</Text>
@@ -300,8 +309,8 @@ const singup = () => {
         <Text
           style={tw`font-normal mt-10 mb-2 text-sm font-DegularDisplayMedium`}
         >
-          Don’t have an account?{" "}
-          <Link style={tw`text-primary font-bold`} href={"/login"}>
+          Have an account?{" "}
+          <Link style={tw`text-primary font-bold underline`} href={"/login"}>
             Sign in
           </Link>
         </Text>

@@ -24,6 +24,7 @@ const forgetPass = () => {
   });
 
   const [forgetPassResponse] = useForgetPasswordMutation();
+
   const onSubmit = async (data) => {
     const emailValue = {
       email: data?.email,
@@ -102,7 +103,7 @@ const forgetPass = () => {
             <View style={tw`rounded-full h-12`}>
               <TButton
                 onPress={() => route.back()}
-                title="cancel"
+                title="Cancel"
                 containerStyle={tw`bg-white border-secondary  `}
                 titleStyle={tw`text-black font-DegularDisplaySemibold text-base`}
               />

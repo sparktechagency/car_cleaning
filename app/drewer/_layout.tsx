@@ -35,23 +35,21 @@ const CustomDrawerContent = (props) => {
       contentContainerStyle={tw`flex-1 pb-[${insets.bottom}px]`}
     >
       {/* User Profile Section */}
-      <View style={tw`flex-row pt-4 justify-start items-center px-4  gap-3`}>
-        <View style={tw`mb-2.5 flex justify-center items-center`}>
-          <Image
-            source={{
-              uri: data?.data?.photo,
-            }}
-            style={{ width: 45, height: 45 }}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={tw`flex-row p-4 justify-start items-center gap-3`}>
+        <Image
+          source={{
+            uri: data?.data?.photo,
+          }}
+          style={tw`w-12 h-12 rounded-full mt-4`}
+          resizeMode="contain"
+        />
         <View>
           <Text style={tw`text-lg font-bold `}>{data?.data?.name}</Text>
           <Text style={tw`text-sm text-gray-600`}>{data?.data?.email}</Text>
         </View>
       </View>
 
-      <View style={tw`gap-3 px-4 mt-10`}>
+      <View style={tw`gap-4 px-4 mt-10`}>
         <TouchableOpacity
           onPress={() => router?.push("/drewer/tramsConditions")}
         >
@@ -85,7 +83,11 @@ const CustomDrawerContent = (props) => {
           style={tw`py-5  flex-row items-center gap-2`}
         >
           <SvgXml xml={IconLogOut} />
-          <Text style={tw`text-base capitalize text-red-500`}>Log out</Text>
+          <Text
+            style={tw`text-base capitalize text-red-500 font-DegularDisplayBold`}
+          >
+            Log out
+          </Text>
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>

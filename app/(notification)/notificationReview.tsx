@@ -22,13 +22,10 @@ const notificationReview = () => {
   const handleFeedBack = async () => {
     const feedBackData = {
       comment: feedBack,
-      service_id: service_id,
+      service_id: Number(service_id),
       rating: rating,
     };
-    console.log(
-      feedBackData,
-      "this is feed back data ------------------------>"
-    );
+
     try {
       const res = await data(feedBackData).unwrap();
       if (res?.status) {

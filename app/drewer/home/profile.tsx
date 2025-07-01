@@ -136,18 +136,18 @@ const profile = () => {
               <Text
                 style={tw`font-DegularDisplayMedium text-base text-regularText`}
               >
-                {data?.data?.car_model}
+                {data?.data?.car_brand} {data?.data?.car_model}
               </Text>
             </View>
           ) : null}
 
           <View style={tw`flex-row flex-wrap justify-between`}>
             {data?.data?.car_photos?.length === 0 ? (
-              <View>
-                <Text style={tw`font-bold text-xl text-center`}>
-                  No Car Available..!
-                </Text>
-              </View>
+              <Text
+                style={tw`font-bold text-xl text-gray-600 w-full my-4 flex justify-center items-center text-center`}
+              >
+                No Car Available..!
+              </Text>
             ) : (
               <FlatList
                 numColumns={3}
@@ -155,7 +155,7 @@ const profile = () => {
                 columnWrapperStyle={tw` gap-3`}
                 scrollEnabled={false}
                 data={data?.data?.car_photos}
-                renderItem={({ item, index }) => {
+                renderItem={({ item }) => {
                   return (
                     <TouchableOpacity
                       key={item.id}
@@ -177,12 +177,14 @@ const profile = () => {
             )}
           </View>
 
-          <TouchableOpacity
-            onPress={pickImage}
-            style={tw`w-full border border-primary rounded-xl py-3 flex justify-center items-center mt-2`}
-          >
-            <SvgXml xml={IconAdd} />
-          </TouchableOpacity>
+          {data?.data?.car_photos?.length === 5 ? null : (
+            <TouchableOpacity
+              onPress={pickImage}
+              style={tw`w-full border border-primary rounded-xl py-3 flex justify-center items-center mt-2`}
+            >
+              <SvgXml xml={IconAdd} />
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* ========== service history ============== */}
@@ -197,9 +199,9 @@ const profile = () => {
             {serviceHistory?.data?.data.length === 0 ? (
               <View>
                 <Text
-                  style={tw`font-DegularDisplayMedium text-lg text-black my-4 text-center`}
+                  style={tw`font-DegularDisplayMedium text-lg  text-gray-600 my-4 text-center`}
                 >
-                  NO service History !
+                  No service history !
                 </Text>
               </View>
             ) : (

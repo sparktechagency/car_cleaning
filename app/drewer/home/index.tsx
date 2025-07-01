@@ -138,8 +138,8 @@ const Home = () => {
                 <Text
                   style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
                 >
-                  Car wash is a brand which is latterly going to change the
-                  people think about car cleaning.
+                  Go full circle is a brand which is latterly going to change
+                  the people think about car cleaning.
                 </Text>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <View

@@ -59,79 +59,87 @@ const notification = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          {data?.data.map((item) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  handleMark(item?.id);
-                  if (item?.data?.type === "Order Completed") {
-                    router.push({
-                      pathname: "/(notification)/notificationReview",
-                      params: {
-                        service_id: item?.data?.service_id,
-                      },
-                    });
-                  } else if (item?.data?.type === "Booking successful") {
-                    router.push({
-                      pathname: "/(notification)/notificationDetails",
-                      params: { booking_id: item?.data?.booking_id },
-                    });
-                  }
-                }}
-                key={item?.id}
-              >
-                <View
-                  style={[
-                    tw`flex-row justify-between px-4 py-2 my-1 mt-3 rounded-lg`,
-                    item?.read_at ? tw`bg-[#FFFFFF]` : tw`bg-[#E7E7E7]`,
-                  ]}
+          {data?.data?.length === 0 ? (
+            <Text
+              style={tw`font-semibold text-xl text-gray-700 flex-1 justify-center items-center text-center mt-6`}
+            >
+              No notifications.
+            </Text>
+          ) : (
+            data?.data.map((item) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    handleMark(item?.id);
+                    if (item?.data?.type === "Order Completed") {
+                      router.push({
+                        pathname: "/(notification)/notificationReview",
+                        params: {
+                          service_id: item?.data?.service_id,
+                        },
+                      });
+                    } else if (item?.data?.type === "Booking successful") {
+                      router.push({
+                        pathname: "/(notification)/notificationDetails",
+                        params: { booking_id: item?.data?.booking_id },
+                      });
+                    }
+                  }}
+                  key={item?.id}
                 >
-                  <View>
-                    <Text
-                      style={tw`font-DegularDisplayMedium text-base text-[#262626]`}
-                    >
-                      {item?.data?.title}
-                      name
-                    </Text>
-                    <Text
-                      style={[
-                        tw`font-DegularDisplaySemibold text-xs mt-4`,
-                        item?.data?.type === "Order Completed" &&
-                          tw`text-[#319F43]`,
-                        item?.data?.type === "Booking successful" &&
-                          tw`text-[#0063E5]`,
-                      ]}
-                    >
-                      {item?.data?.type}
-                    </Text>
-                  </View>
-                  <View>
-                    <View
-                      style={tw`flex-row justify-center items-center gap-2`}
-                    >
+                  <View
+                    style={[
+                      tw`flex-row justify-between px-4 py-2 my-1 mt-3 rounded-lg`,
+                      item?.read_at ? tw`bg-[#FFFFFF]` : tw`bg-[#E7E7E7]`,
+                    ]}
+                  >
+                    <View>
                       <Text
-                        style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
+                        style={tw`font-DegularDisplayMedium text-base text-[#262626]`}
                       >
-                        {new Date(item?.created_at).toLocaleTimeString()}
+                        {item?.data?.title}
+                        name
                       </Text>
-                      {item?.read_at ? (
-                        false
-                      ) : (
-                        <Text
-                          style={tw`w-2 h-2 rounded-full bg-red-700`}
-                        ></Text>
-                      )}
+                      <Text
+                        style={[
+                          tw`font-DegularDisplaySemibold text-xs mt-4`,
+                          item?.data?.type === "Order Completed" &&
+                            tw`text-[#319F43]`,
+                          item?.data?.type === "Booking successful" &&
+                            tw`text-[#0063E5]`,
+                        ]}
+                      >
+                        {item?.data?.type}
+                      </Text>
                     </View>
-                    <Text
-                      style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
-                    >
-                      {new Date(item?.created_at).toLocaleDateString()}
-                    </Text>
+                    <View>
+                      <View
+                        style={tw`flex-row justify-center items-center gap-2`}
+                      >
+                        <Text
+                          style={tw`font-DegularDisplayMedium text-base text-[#262626] `}
+                        >
+                          {new Date(item?.created_at).toLocaleTimeString()}
+                        </Text>
+                        {item?.read_at ? (
+                          false
+                        ) : (
+                          <Text
+                            style={tw`w-2 h-2 rounded-full bg-red-700`}
+                          ></Text>
+                        )}
+                      </View>
+                      <Text
+                        style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
+                      >
+                        {new Date(item?.created_at).toLocaleDateString()}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                </TouchableOpacity>
+              );
+            })
+          )}
         </ScrollView>
       )}
     </View>
