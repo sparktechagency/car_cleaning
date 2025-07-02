@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Heading from "@/components/TitleHead";
 import SubHeading from "@/components/SubTileHead";
 import tw from "@/lib/tailwind";
@@ -14,7 +14,7 @@ import {
 } from "@/redux/apiSlices/authSlices";
 
 const OTPForget = () => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(null);
   const [otpVerify, { reset }] = useVerifyOtpMutation();
   const { email } = useLocalSearchParams();
 
@@ -62,6 +62,7 @@ const OTPForget = () => {
               type="numeric"
               secureTextEntry={false}
               focusStickBlinkingDuration={500}
+              value={value}
               onTextChange={(text) => {
                 setValue(text);
               }}

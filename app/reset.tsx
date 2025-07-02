@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
+import { View, Text, Image, Modal } from "react-native";
 import React, { useState } from "react";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
@@ -14,9 +14,10 @@ import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 const Reset = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [isShowConfirmPass, setIsShowConfirmPass] = useState(false);
   const { email } = useLocalSearchParams();
 
-  const [resetPass] = useResetPasswordMutation();
+  const [resetPass, { reset }] = useResetPasswordMutation();
 
   const {
     control,
@@ -41,7 +42,7 @@ const Reset = () => {
         setTimeout(() => {
           setModalVisible(false);
           router.push("/login");
-        }, 500);
+        }, 3000);
       }
     } catch (error) {
       Toast.show({
@@ -52,8 +53,6 @@ const Reset = () => {
     }
     console.log(newPassword, "this reset pass user");
   };
-
-  console.log(errors);
 
   return (
     <>
@@ -70,13 +69,13 @@ const Reset = () => {
           <Controller
             control={control}
             rules={{
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please special char password",
+              minLength: {
+                value: 4,
+                message: "Password must be at least 6 characters",
               },
               required: {
                 value: true,
-                message: "password is required",
+                message: "Password is required",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -104,9 +103,9 @@ const Reset = () => {
           <Controller
             control={control}
             rules={{
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please speacial char password",
+              minLength: {
+                value: 4,
+                message: "Password must be at least 6 characters",
               },
               required: {
                 value: true,
@@ -123,10 +122,13 @@ const Reset = () => {
                 errorText={errors?.confirm_password?.message}
                 textInputProps={{
                   placeholder: "Retype new password",
-                  secureTextEntry: isShow ? false : true,
+                  secureTextEntry: isShowConfirmPass ? false : true,
                 }}
                 svgFirstIcon={IconPassword}
-                svgSecondIcon={isShow ? IconEyeShow : IconEyaClose}
+                svgSecondIcon={isShowConfirmPass ? IconEyeShow : IconEyaClose}
+                svgSecondOnPress={() =>
+                  setIsShowConfirmPass(!isShowConfirmPass)
+                }
                 containerLayoutStyle={tw`mb-3`}
               />
             )}
@@ -169,12 +171,12 @@ const Reset = () => {
               </Text>
 
               {/* Close Button */}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => setModalVisible(false)}
                 style={tw`bg-primary px-5 py-2 rounded-lg mt-5`}
               >
                 <Text style={tw`text-white text-lg font-bold`}>Done</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </Modal>

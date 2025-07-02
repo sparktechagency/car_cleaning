@@ -4,7 +4,7 @@
     "slug": "car_clealing",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/appsIcon.png",
+    "icon": "./assets/images/android-adaptive-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon-android.png",
+        "foregroundImage": "./assets/images/android-adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "googleServicesFile": "./google-services.json",
@@ -28,7 +28,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/appsIcon.png"
+      "favicon": "./assets/images/android-adaptive-icon.png"
     },
     "plugins": [
       "expo-router",
@@ -52,7 +52,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/brosLogo.png",
+          "image": "./assets/images/full-cricle-splash-logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

@@ -32,7 +32,6 @@ const forgetPass = () => {
     console.log(emailValue, "this forget profile data ------------------->");
     try {
       const res = await forgetPassResponse(emailValue).unwrap();
-      console.log(res, "forget pass response ======================>");
       if (res) {
         route.navigate({
           pathname: "/OTPForget",

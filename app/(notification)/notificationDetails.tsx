@@ -12,7 +12,6 @@ const notificationDetails = () => {
   const navigation = useNavigation();
   const { booking_id } = useLocalSearchParams();
 
-  console.log(details?.data, "----------------------------------------");
   const { data, isLoading, error } = useGetNotificationDetailsQuery(booking_id);
 
   useEffect(() => {

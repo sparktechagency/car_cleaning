@@ -79,10 +79,7 @@ const singup = () => {
       password: registerValue?.password,
       c_password: registerValue?.c_password,
     };
-    console.log(
-      registerData,
-      "register data ---------------------------->723009"
-    );
+
     try {
       const res = await register(registerData).unwrap();
       if (res.status) {
@@ -180,13 +177,13 @@ const singup = () => {
           <Controller
             control={control}
             rules={{
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please speacial char password",
+              minLength: {
+                value: 4,
+                message: "Password must be at least 6 characters",
               },
               required: {
                 value: true,
-                message: "Passowrd is required",
+                message: "Password is required",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -214,13 +211,13 @@ const singup = () => {
           <Controller
             control={control}
             rules={{
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please speacial char password",
+              minLength: {
+                value: 4,
+                message: "Password must be at least 6 characters",
               },
               required: {
                 value: true,
-                message: "Passowrd is required",
+                message: "Password is required",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -276,7 +273,7 @@ const singup = () => {
             <View style={tw`rounded-full h-12`}>
               <TButton
                 disabled
-                onPress={handleSubmit(onRegisterInfoSubmit)}
+                // onPress={handleSubmit(onRegisterInfoSubmit)}
                 title="Sign up"
                 containerStyle={[tw``]}
               />

@@ -16,6 +16,7 @@ import {
   useMarkNotificationMutation,
 } from "@/redux/apiSlices/notificatinApiSlices";
 import { PrimaryColor } from "@/utils/utils";
+import moment from "moment";
 
 const notification = () => {
   const navigation = useNavigation();
@@ -93,12 +94,11 @@ const notification = () => {
                       item?.read_at ? tw`bg-[#FFFFFF]` : tw`bg-[#E7E7E7]`,
                     ]}
                   >
-                    <View>
+                    <View style={tw`flex-1`}>
                       <Text
-                        style={tw`font-DegularDisplayMedium text-base text-[#262626]`}
+                        style={tw`font-DegularDisplayMedium text-base flex-1 text-[#262626]`}
                       >
                         {item?.data?.title}
-                        name
                       </Text>
                       <Text
                         style={[
@@ -132,7 +132,7 @@ const notification = () => {
                       <Text
                         style={tw`font-DegularDisplayRegular text-xs text-[#262626] mt-4`}
                       >
-                        {new Date(item?.created_at).toLocaleDateString()}
+                        {moment(item?.created_at).format("MMMM D, YYYY")}
                       </Text>
                     </View>
                   </View>

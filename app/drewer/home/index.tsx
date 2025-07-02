@@ -26,6 +26,7 @@ import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { _HEIGHT, _WIDTH } from "@/utils/utils";
 import { FlashList } from "@shopify/flash-list";
 import PhotosComponents from "@/components/PhotosComponents";
+import { ImgBanner } from "@/assets/images/images";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -115,7 +116,7 @@ const Home = () => {
         contentContainerStyle={tw``}
       >
         {/* ========== Banner section =========== */}
-        <View>
+        <View style={tw``}>
           <View style={tw`relative w-full items-center min-h-72 mt-8`}>
             <View style={tw`top-10`}>
               <Image

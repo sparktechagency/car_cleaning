@@ -130,13 +130,13 @@ const login = () => {
           <Controller
             control={control}
             rules={{
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Please spacial char password",
+              minLength: {
+                value: 4,
+                message: "Password must be at least 6 characters",
               },
               required: {
                 value: true,
-                message: "Passowrd is required",
+                message: "Password is required",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
