@@ -6,6 +6,7 @@ import {
 } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
+  Alert,
   Image,
   Modal,
   Pressable,
@@ -70,6 +71,7 @@ const Home = () => {
       params: { id: item?.id },
     });
   };
+
 
   return (
     <View style={tw`flex-1 px-4 `}>
@@ -197,6 +199,7 @@ const Home = () => {
           // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
+      
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
       >
@@ -206,9 +209,9 @@ const Home = () => {
           }}
           style={[
             {
-              height: _HEIGHT - _HEIGHT * 0.07,
+              height: _HEIGHT ,
             },
-            tw`justify-end items-end bg-black bg-opacity-15 `,
+            tw`justify-end items-end bg-black bg-opacity-15  `,
           ]}
         >
           <Pressable

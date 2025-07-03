@@ -1,18 +1,32 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "@/lib/tailwind";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { SvgXml } from "react-native-svg";
-import { IconBackArrow } from "@/assets/icon/icon";
+import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
 import { useGetNotificationDetailsQuery } from "@/redux/apiSlices/notificatinApiSlices";
 import { PrimaryColor } from "@/utils/utils";
 
 const notificationDetails = () => {
   const [details, setDetails] = useState<any>(null);
   const navigation = useNavigation();
-  const { booking_id } = useLocalSearchParams();
+  const { booking_id} = useLocalSearchParams();
+    const [modalVisible, setModalVisible] = useState(false);
 
   const { data, isLoading, error } = useGetNotificationDetailsQuery(booking_id);
+    useEffect(() => {
+      const checkIsService = async () => {
+        if (!data?.data) {
+         setModalVisible(true)
+         setTimeout(() => {
+           setModalVisible(false)
+           navigation.goBack()
+         } , 2000)
+        }
+      }
+      checkIsService()
+    }, [data])
+    
 
   useEffect(() => {
     if (data) {
@@ -108,6 +122,43 @@ const notificationDetails = () => {
           </View>
         </View>
       )}
+
+      
+                    {/*  ========================== successful modal ======================= */}
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <View
+                  style={tw` flex-1 bg-black bg-opacity-50 justify-center items-center`}
+                >
+                  <View
+                    style={tw`w-8/9 bg-white p-5 rounded-2xl items-center shadow-lg`}
+                  >
+                    {/* Check Icon */}
+       <SvgXml xml={IconWaring} />
+      
+      
+                    {/* Success Message */}
+                    <Text style={tw`text-4xl font-DegularDisplayBold mt-3`}>
+                      Warning!
+                    </Text>
+                    <Text style={tw`text-base text-gray-500 text-center mt-2`}>
+                      Your service currently not available.
+                    </Text>
+      
+                    {/* Close Button */}
+                    {/* <TouchableOpacity
+                      onPress={() => setModalVisible(false)}
+                      style={tw`bg-primary px-5 py-2 rounded-lg mt-5`}
+                    >
+                      <Text style={tw`text-white text-lg font-bold`}>Done</Text>
+                    </TouchableOpacity> */}
+                  </View>
+                </View>
+              </Modal>
     </View>
   );
 };

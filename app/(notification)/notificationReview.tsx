@@ -1,23 +1,41 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
-import { useNavigation } from "expo-router";
+import { View, Text, Pressable, Modal, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { router, useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
-import { IconBackArrow } from "@/assets/icon/icon";
+import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
 import InputText from "@/lib/inputs/InputText";
 import TButton from "@/lib/buttons/TButton";
 import StarRating from "react-native-star-rating-widget";
 import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 
 const notificationReview = () => {
   const navigation = useNavigation();
   const { service_id } = useLocalSearchParams();
   const [feedBack, setFeedBack] = useState("");
   const [rating, setRating] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [data] = useFeedBackSendMutation();
+
+  const { data: singleSeviceData } = useGetServicesByIdQuery(service_id)
+
+  useEffect(() => {
+    const checkIsService = async () => {
+      if (!singleSeviceData?.data?.id) {
+       setModalVisible(true)
+       setTimeout(() => {
+         setModalVisible(false)
+         navigation.goBack()
+       } , 3000)
+      }
+    }
+    checkIsService()
+
+  }, [singleSeviceData])
 
   const handleFeedBack = async () => {
     const feedBackData = {
@@ -97,6 +115,45 @@ const notificationReview = () => {
           containerStyle={tw``}
         />
       </View>
+
+
+
+
+              {/*  ========================== successful modal ======================= */}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View
+            style={tw` flex-1 bg-black bg-opacity-50 justify-center items-center`}
+          >
+            <View
+              style={tw`w-8/9 bg-white p-5 rounded-2xl items-center shadow-lg`}
+            >
+              {/* Check Icon */}
+ <SvgXml xml={IconWaring} />
+
+
+              {/* Success Message */}
+              <Text style={tw`text-4xl font-DegularDisplayBold mt-3`}>
+                Warning!
+              </Text>
+              <Text style={tw`text-base text-gray-500 text-center mt-2`}>
+                Your service currently not available.
+              </Text>
+
+              {/* Close Button */}
+              {/* <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={tw`bg-primary px-5 py-2 rounded-lg mt-5`}
+              >
+                <Text style={tw`text-white text-lg font-bold`}>Done</Text>
+              </TouchableOpacity> */}
+            </View>
+          </View>
+        </Modal>
     </View>
   );
 };
