@@ -75,11 +75,11 @@ const profile = () => {
         <Text style={tw`font-DegularDisplayBold text-2xl`}>My Profile</Text>
         <TouchableOpacity onPress={() => router.push("/editProfile")}>
           <View
-            style={tw`bg-primary w-28 h-8 rounded-full mx-auto flex-row justify-center items-center gap-2 `}
+            style={tw`bg-primary w-32 h-8 rounded-full mx-auto flex-row justify-center items-center gap-2 `}
           >
             <SvgXml xml={IconEdit} />
             <Text style={tw`text-sm font-DegularDisplayBold text-white`}>
-              Edit profile
+              Edit Your Profile
             </Text>
           </View>
         </TouchableOpacity>

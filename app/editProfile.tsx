@@ -282,7 +282,7 @@ const editProfile = () => {
             <View style={tw` w-1/2`}>
               <InputText
                 value={car_brand}
-                label="Brand name"
+                label="Car Make"
                 onChangeText={(test) => {
                   setCarBrand(test);
                 }}

@@ -297,7 +297,7 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputText
-                label="Vehicle brand name"
+                label="Car Make"
                 labelStyle={tw`font-DegularDisplaySemibold text-xl`}
                 value={value}
                 onChangeText={(test) => onChange(test)}
