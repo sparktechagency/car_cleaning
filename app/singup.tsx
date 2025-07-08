@@ -8,7 +8,7 @@ import {
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
@@ -22,6 +22,7 @@ import {
   useGoogleLoginMutation,
   useRegisterMutation,
 } from "@/redux/apiSlices/authSlices";
+import { ImgLogo } from "@/assets/images/images";
 
 GoogleSignin.configure({
   webClientId:
@@ -106,6 +107,9 @@ const singup = () => {
   return (
     <ScrollView style={tw`px-6  flex-1`}>
       <View style={tw`py-4 justify-center mt-6 items-center`}>
+        <View style={tw`justify-center items-center`}>
+          <Image resizeMode="contain" style={tw`w-56 h-40`} source={ImgLogo} />
+        </View>
         <View style={tw`items-center  mb-8`}>
           <Heading title={"Get started now"} />
           <SubHeading

@@ -15,3 +15,5 @@ export const EditImage5 = require("../images/editImg/bmw5.jpg");
 export const EditImage6 = require("../images/editImg/bmw6.jpg");
 
 export const ImgBanner = require("../images/background-banner.png");
+
+export const ImgLogo = require("../images/new_logo.png");

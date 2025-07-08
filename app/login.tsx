@@ -1,4 +1,11 @@
-import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React, { useState } from "react";
 import tw from "@/lib/tailwind";
 import { useForm, Controller } from "react-hook-form";
@@ -16,6 +23,7 @@ import SubHeading from "@/components/SubTileHead";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLoginMutation } from "@/redux/apiSlices/authSlices";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { ImgLogo } from "@/assets/images/images";
 
 const login = () => {
   const [isShow, setIsShow] = useState(false);
@@ -90,6 +98,9 @@ const login = () => {
   return (
     <>
       <View style={tw`px-6 flex-1 justify-center items-center`}>
+        <View style={tw`justify-center items-center`}>
+          <Image resizeMode="contain" style={tw`w-56 h-40`} source={ImgLogo} />
+        </View>
         <View style={tw`items-center mb-14`}>
           <Heading title={"Welcome Back"} />
           <SubHeading title={"Please sign in to access your account."} />

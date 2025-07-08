@@ -10,28 +10,32 @@ import { PrimaryColor } from "@/utils/utils";
 const notificationDetails = () => {
   const [details, setDetails] = useState<any>(null);
   const navigation = useNavigation();
-  const { booking_id} = useLocalSearchParams();
-    const [modalVisible, setModalVisible] = useState(false);
+  const { booking_id } = useLocalSearchParams();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { data, isLoading, error } = useGetNotificationDetailsQuery(booking_id);
-    useEffect(() => {
-      const checkIsService = async () => {
-        if (!data?.data) {
-         setModalVisible(true)
-         setTimeout(() => {
-           setModalVisible(false)
-           navigation.goBack()
-         } , 2000)
+
+  useEffect(() => {
+    const checkIsService = async () => {
+      if (data === undefined) return;
+      try {
+        if (!data) {
+          setModalVisible(true);
+          setTimeout(() => {
+            setModalVisible(false);
+            navigation.goBack();
+          }, 2000);
         }
+      } catch (error) {
+        console.log(error, "notification not match ---------->");
       }
-      checkIsService()
-    }, [data])
-    
+    };
+    checkIsService();
+  }, [data]);
 
   useEffect(() => {
     if (data) {
       setDetails(data);
-      console.log(data, "notification details loaded");
     }
 
     if (error) {
@@ -123,42 +127,40 @@ const notificationDetails = () => {
         </View>
       )}
 
-      
-                    {/*  ========================== successful modal ======================= */}
-              <Modal
-                animationType="fade"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-              >
-                <View
-                  style={tw` flex-1 bg-black bg-opacity-50 justify-center items-center`}
-                >
-                  <View
-                    style={tw`w-8/9 bg-white p-5 rounded-2xl items-center shadow-lg`}
-                  >
-                    {/* Check Icon */}
-       <SvgXml xml={IconWaring} />
-      
-      
-                    {/* Success Message */}
-                    <Text style={tw`text-4xl font-DegularDisplayBold mt-3`}>
-                      Warning!
-                    </Text>
-                    <Text style={tw`text-base text-gray-500 text-center mt-2`}>
-                      Your service currently not available.
-                    </Text>
-      
-                    {/* Close Button */}
-                    {/* <TouchableOpacity
+      {/*  ========================== successful modal ======================= */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={tw` flex-1 bg-black bg-opacity-50 justify-center items-center`}
+        >
+          <View
+            style={tw`w-8/9 bg-white p-5 rounded-2xl items-center shadow-lg`}
+          >
+            {/* Check Icon */}
+            <SvgXml xml={IconWaring} />
+
+            {/* Success Message */}
+            <Text style={tw`text-4xl font-DegularDisplayBold mt-3`}>
+              Warning!
+            </Text>
+            <Text style={tw`text-base text-gray-500 text-center mt-2`}>
+              Your service currently not available.
+            </Text>
+
+            {/* Close Button */}
+            {/* <TouchableOpacity
                       onPress={() => setModalVisible(false)}
                       style={tw`bg-primary px-5 py-2 rounded-lg mt-5`}
                     >
                       <Text style={tw`text-white text-lg font-bold`}>Done</Text>
                     </TouchableOpacity> */}
-                  </View>
-                </View>
-              </Modal>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

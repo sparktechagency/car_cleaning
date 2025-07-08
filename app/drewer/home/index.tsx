@@ -72,7 +72,6 @@ const Home = () => {
     });
   };
 
-
   return (
     <View style={tw`flex-1 px-4 `}>
       {/* header parts  */}
@@ -141,8 +140,7 @@ const Home = () => {
                 <Text
                   style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
                 >
-                  Go full circle is a brand which is latterly going to change
-                  the people think about car cleaning.
+                  Mobile car detailing services in Lakewood Ranch.
                 </Text>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <View
@@ -199,7 +197,6 @@ const Home = () => {
           // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}
-      
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
       >
@@ -209,7 +206,7 @@ const Home = () => {
           }}
           style={[
             {
-              height: _HEIGHT ,
+              height: _HEIGHT,
             },
             tw`justify-end items-end bg-black bg-opacity-15  `,
           ]}

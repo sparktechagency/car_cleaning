@@ -157,6 +157,7 @@ const calendersDate = () => {
         model_name: model,
         service_type: "",
         booking_name: "",
+        street_address: "",
       });
     }
   }, [profileData]);
@@ -170,6 +171,8 @@ const calendersDate = () => {
     defaultValues: {
       brand_name: "",
       model_name: "",
+      street_address: "",
+      zip_code: "",
       service_type: "",
       booking_name: "",
     },
@@ -178,6 +181,8 @@ const calendersDate = () => {
   const handleServiceData = (item) => {
     const car_brand = item?.brand_name;
     const car_model = item?.model_name;
+    const street_address = item?.street_address;
+    const zip_code = item?.zip_code;
     const booking_note = bookingNote;
     const service_name = singleServiceData?.data?.car_type;
     const service_id = singleServiceData?.data?.id;
@@ -192,6 +197,8 @@ const calendersDate = () => {
         const bookingInfo = {
           car_brand,
           car_model,
+          street_address,
+          zip_code,
           service_name,
           service_id,
           service_type,
@@ -200,6 +207,7 @@ const calendersDate = () => {
           booking_note,
           price,
         };
+
         handleSetupInitialPayment(bookingInfo);
       }
     } catch (error) {
@@ -328,6 +336,60 @@ const calendersDate = () => {
               />
             )}
             name="model_name"
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Please enter your street address",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                label="Street address"
+                labelStyle={tw`font-DegularDisplaySemibold text-xl`}
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.street_address?.message}
+                textInputProps={{
+                  placeholder: "Type your street address",
+                }}
+                containerStyle={tw`w-full`}
+              />
+            )}
+            name="street_address"
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Please fill up your zip code",
+              },
+              pattern: {
+                value: /^[0-9]+$/, // ensure only digits
+                message: "Zip code must contain only numbers",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                label="Zip code"
+                labelStyle={tw`font-DegularDisplaySemibold text-xl`}
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.zip_code?.message}
+                textInputProps={{
+                  placeholder: "Your zip code",
+                }}
+                containerStyle={tw`w-full`}
+              />
+            )}
+            name="zip_code"
           />
 
           <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
