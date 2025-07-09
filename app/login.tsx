@@ -5,6 +5,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import tw from "@/lib/tailwind";
@@ -96,8 +97,11 @@ const login = () => {
   }, []);
 
   return (
-    <>
-      <View style={tw`px-6 flex-1 justify-center items-center`}>
+    <ScrollView
+      style={tw`flex-1`}
+      contentContainerStyle={tw`px-6 flex-col justify-between flex-grow`}
+    >
+      <View style={tw`flex-1 items-center`}>
         <View style={tw`justify-center items-center`}>
           <Image resizeMode="contain" style={tw`w-56 h-40`} source={ImgLogo} />
         </View>
@@ -210,7 +214,7 @@ const login = () => {
           </Link>
         </Text>
       </View>
-    </>
+    </ScrollView>
   );
 };
 
