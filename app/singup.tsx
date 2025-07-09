@@ -3,6 +3,7 @@ import {
   IconEyaClose,
   IconEyeShow,
   IconPassword,
+  IconPhone,
   IconUser,
 } from "@/assets/icon/icon";
 import { Link, router } from "expo-router";
@@ -71,6 +72,7 @@ const singup = () => {
       email: "",
       password: "",
       c_password: "",
+      phone: "",
     },
   });
   const onRegisterInfoSubmit = async (registerValue: any) => {
@@ -79,10 +81,16 @@ const singup = () => {
       email: registerValue?.email,
       password: registerValue?.password,
       c_password: registerValue?.c_password,
+      phone: registerValue?.phone,
     };
+    console.log(registerData, " register data ------------------------> ");
 
     try {
       const res = await register(registerData).unwrap();
+      console.log(
+        res,
+        "this is response with user info ------------------------->"
+      );
       if (res.status) {
         router?.replace({
           pathname: "/OTPScreen",
@@ -96,6 +104,7 @@ const singup = () => {
         });
       }
     } catch (error) {
+      console.log(error, "dj dj djd djd jd jd djd ");
       Toast.show({
         type: ALERT_TYPE.DANGER,
         title: "Error!",
@@ -144,7 +153,6 @@ const singup = () => {
             )}
             name="name"
           />
-
           {/* Email */}
           <Controller
             control={control}
@@ -176,7 +184,36 @@ const singup = () => {
             )}
             name="email"
           />
-
+          {/* Phone */}
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Phone number is required",
+              },
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Please input valid Phone",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <InputText
+                label="Phone Number"
+                value={value}
+                onChangeText={(test) => onChange(test)}
+                onBlur={onBlur}
+                touched
+                errorText={errors?.phone?.message}
+                textInputProps={{
+                  placeholder: "Phone Number",
+                }}
+                svgFirstIcon={IconPhone}
+                containerStyle={tw``}
+              />
+            )}
+            name="phone"
+          />
           {/* password */}
           <Controller
             control={control}
@@ -210,7 +247,6 @@ const singup = () => {
             )}
             name="password"
           />
-
           {/* confirm password */}
           <Controller
             control={control}
@@ -244,7 +280,6 @@ const singup = () => {
             )}
             name="c_password"
           />
-
           <View
             style={tw`flex-row gap-1 justify-start items-center rounded-none mb-8`}
           >
@@ -264,7 +299,6 @@ const singup = () => {
               <Text style={tw`text-primary `}>privacy policy</Text>.
             </Text>
           </View>
-
           {isChecked ? (
             <View style={tw`rounded-full h-12`}>
               <TButton
@@ -288,7 +322,6 @@ const singup = () => {
             <Text style={tw`text-gray-400 px-2`}>Or</Text>
             <View style={tw`flex-1 h-px bg-gray-300`} />
           </View> */}
-
           {/* <View style={tw`rounded-full h-12`}>
             <IwtButton
               svg={IconGoogle}

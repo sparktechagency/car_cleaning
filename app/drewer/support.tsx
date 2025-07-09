@@ -3,7 +3,7 @@ import React from "react";
 import { router, useNavigation } from "expo-router";
 import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
-import { IconBackArrow } from "@/assets/icon/icon";
+import { IconBackArrow, IconEmail } from "@/assets/icon/icon";
 import { Controller, useForm } from "react-hook-form";
 import InputText from "@/lib/inputs/InputText";
 import TButton from "@/lib/buttons/TButton";
@@ -21,12 +21,14 @@ const support = () => {
   } = useForm({
     defaultValues: {
       full_name: "",
+      email: "",
       subject: "",
       message: "",
       created_at: new Date(),
       updated_at: new Date(),
     },
   });
+
   const onSubmit = async (data) => {
     try {
       const response = await supportData(data).unwrap();
@@ -38,7 +40,6 @@ const support = () => {
         });
         router.push("/drewer/home");
       }
-      console.log(response, "support server response +++++++++++++++++++++++");
     } catch (error) {
       Toast.show({
         type: ALERT_TYPE.WARNING,
@@ -68,7 +69,7 @@ const support = () => {
           rules={{
             required: {
               value: true,
-              message: "Email is required",
+              message: "Please Enter Your Name",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -87,6 +88,38 @@ const support = () => {
           )}
           name="full_name"
         />
+
+        {/* Email */}
+        <Controller
+          control={control}
+          rules={{
+            required: {
+              value: true,
+              message: "Email is required",
+            },
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              message: "Please input valid email",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <InputText
+              label="Email"
+              value={value}
+              onChangeText={(test) => onChange(test)}
+              onBlur={onBlur}
+              touched
+              errorText={errors?.email?.message}
+              textInputProps={{
+                placeholder: "Email",
+              }}
+              containerStyle={tw``}
+            />
+          )}
+          name="email"
+        />
+
         <Controller
           control={control}
           rules={{

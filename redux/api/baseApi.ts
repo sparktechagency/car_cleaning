@@ -23,7 +23,7 @@ const baseQueryWithRath: BaseQueryFn<BaseQueryArgs, unknown, unknown> = async (
     // console.log(token, "token from base url............");
 
     const result: AxiosResponse = await axios({
-      baseURL: "http://72.167.47.160/api",
+      baseURL: "https://fullcircledetailing.com/api/",
       // baseURL: "http://157.245.63.191/api",
       ...args,
       url: args.url,
@@ -86,4 +86,4 @@ export const api = createApi({
 });
 
 // export const imageUrl = 'http://192.168.12.160:7000/';
-export const imageUrl = "http://157.245.63.191/";
+export const imageUrl = "https://fullcircledetailing.com/";
