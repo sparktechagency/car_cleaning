@@ -29,7 +29,7 @@ const work = (): JSX.Element => {
               },
             ]}
             source={{ uri: item?.photo }}
-            resizeMode="stretch"
+            resizeMode="cover"
           />
         </View>
       </TouchableOpacity>
