@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import React from "react";
 import { router, useNavigation } from "expo-router";
 import tw from "@/lib/tailwind";
@@ -50,7 +50,11 @@ const support = () => {
   };
 
   return (
-    <View style={tw`px-6`}>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      style={tw`px-6 flex-1`}
+    >
       <Pressable
         onPress={() => {
           navigation.goBack();
@@ -69,7 +73,7 @@ const support = () => {
           rules={{
             required: {
               value: true,
-              message: "Please Enter Your Name",
+              message: "Please Enter Your Full Name",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -125,7 +129,7 @@ const support = () => {
           rules={{
             required: {
               value: true,
-              message: "Email is required",
+              message: "Please Fill_up this Filled",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -149,7 +153,7 @@ const support = () => {
           rules={{
             required: {
               value: true,
-              message: "Email is required",
+              message: "Please Fill_up this Filled",
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -182,7 +186,7 @@ const support = () => {
           containerStyle={tw``}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
