@@ -13,8 +13,10 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
-        "CFBundleLocalizations": ["fr"]
+        "CFBundleLocalizations": ["fr"],
+          "UIViewControllerBasedStatusBarAppearance": true,
       },
+      
       "bundleIdentifier": "com.anonymous.car-clealing"
     },
     "android": {

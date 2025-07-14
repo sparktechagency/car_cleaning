@@ -1,30 +1,23 @@
 import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from "react-native";
-import React, { useState } from "react";
-import tw from "@/lib/tailwind";
-import { useForm, Controller } from "react-hook-form";
-import TButton from "@/lib/buttons/TButton";
-import InputText from "@/lib/inputs/InputText";
-import {
   IconEmail,
   IconEyaClose,
   IconEyeShow,
   IconPassword,
 } from "@/assets/icon/icon";
 import { Link, router } from "expo-router";
-import Heading from "@/components/TitleHead";
-import SubHeading from "@/components/SubTileHead";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useLoginMutation } from "@/redux/apiSlices/authSlices";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
 import { ImgLogo } from "@/assets/images/images";
+import SubHeading from "@/components/SubTileHead";
+import Heading from "@/components/TitleHead";
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { useLoginMutation } from "@/redux/apiSlices/authSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
   const [isShow, setIsShow] = useState(false);
@@ -98,7 +91,7 @@ const login = () => {
 
   return (
     <ScrollView
-      style={tw`flex-1`}
+      style={tw`flex-1 bg-primaryBase`}
       contentContainerStyle={tw`px-6 flex-col justify-between flex-grow`}
     >
       <View style={tw`flex-1 items-center`}>

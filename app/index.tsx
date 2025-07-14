@@ -4,11 +4,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { ActivityIndicator, Image, LogBox, View } from "react-native";
 
 import tw from "@/lib/tailwind";
+import { useGetTokenCheckQuery } from "@/redux/apiSlices/authSlices";
 import { PrimaryColor } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { useGetTokenCheckQuery } from "@/redux/apiSlices/authSlices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -70,7 +70,9 @@ export default function App() {
   }, [tokenCheck, isFetching, isLoading]);
 
   return (
-    <View style={tw`flex-1 justify-center items-center bg-white pb-[25%]`}>
+    <View
+      style={tw`flex-1 justify-center items-center bg-primaryBase pb-[25%]`}
+    >
       <Image
         style={[tw`w-60 h-28`]}
         resizeMode="contain"
