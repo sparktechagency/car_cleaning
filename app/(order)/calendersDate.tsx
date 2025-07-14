@@ -2,6 +2,8 @@ import { useNavigation, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
+  Image,
+  Modal,
   Pressable,
   ScrollView,
   Text,
@@ -29,6 +31,7 @@ import {
 } from "@/redux/apiSlices/bookingSlices";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { ImgSuccess } from "@/assets/images/images";
 
 const calendersDate = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -36,6 +39,8 @@ const calendersDate = () => {
   const [isTime, setIsTime] = React.useState<any | null>(null);
   const [car_brand, setCarBrand] = useState("");
   const [car_model, setCarModel] = useState("");
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const {
     data: singleServiceData,
@@ -178,7 +183,10 @@ const calendersDate = () => {
     },
   });
 
-  const handleServiceData = (item) => {
+  const [createIntent, intentResult] = useBookingIntentMutation();
+  const [bookingSuccess, bookingResult] = useBookingSuccessMutation();
+
+  const handleServiceData = async (item) => {
     const car_brand = item?.brand_name;
     const car_model = item?.model_name;
     const street_address = item?.street_address;
@@ -207,18 +215,24 @@ const calendersDate = () => {
           booking_note,
           price,
         };
+        const res = await bookingSuccess(bookingInfo).unwrap();
 
-        handleSetupInitialPayment(bookingInfo);
+        if (res?.status) {
+          setModalVisible(true);
+          setTimeout(() => {
+            setModalVisible(false);
+            router.push("/drewer/home");
+          }, 3000);
+        }
+
+        // handleSetupInitialPayment(bookingInfo);
       }
     } catch (error) {
       console.log(error, "please enter the payment info ____");
     }
   };
 
-  // Payment login for booking start
-
-  const [createIntent, intentResult] = useBookingIntentMutation();
-  const [bookingSuccess, bookingResult] = useBookingSuccessMutation();
+  // Payment login for booking start ---------------------------------------------------
 
   const handleSetupInitialPayment = async (item: any) => {
     try {
@@ -537,6 +551,41 @@ const calendersDate = () => {
           />
         </View>
       </ScrollView>
+
+      {/*  ========================== successful modal ======================= */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={tw` flex-1 bg-black bg-opacity-50 justify-center items-center`}
+        >
+          <View
+            style={tw`w-8/9 bg-white p-5 rounded-2xl items-center shadow-lg`}
+          >
+            {/* Check Icon */}
+            <Image style={tw`mt-6 mb-2`} source={ImgSuccess} />
+
+            {/* Success Message */}
+            <Text style={tw`text-4xl font-DegularDisplayBold mt-3`}>
+              Success!
+            </Text>
+            <Text style={tw`text-base text-gray-500 text-center mt-2`}>
+              Your Booking Successful
+            </Text>
+
+            {/* Close Button */}
+            {/* <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={tw`bg-primary px-5 py-2 rounded-lg mt-5`}
+              >
+                <Text style={tw`text-white text-lg font-bold`}>Done</Text>
+              </TouchableOpacity> */}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
