@@ -399,6 +399,7 @@ const calendersDate = () => {
                 errorText={errors?.zip_code?.message}
                 textInputProps={{
                   placeholder: "Your zip code",
+                  keyboardType: "number-pad",
                 }}
                 containerStyle={tw`w-full`}
               />

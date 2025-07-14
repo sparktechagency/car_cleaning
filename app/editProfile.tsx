@@ -265,6 +265,7 @@ const editProfile = () => {
             touched
             textInputProps={{
               placeholder: "Enter Your Phone number",
+              keyboardType: "number-pad",
             }}
             svgFirstIcon={IconPhone}
             containerStyle={tw``}
