@@ -6,7 +6,6 @@ import {
 } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
-  Alert,
   Image,
   Modal,
   Pressable,
@@ -14,20 +13,17 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
+import PhotosComponents from "@/components/PhotosComponents";
 import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import { _HEIGHT } from "@/utils/utils";
+import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-
-import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { _HEIGHT, _WIDTH } from "@/utils/utils";
-import { FlashList } from "@shopify/flash-list";
-import PhotosComponents from "@/components/PhotosComponents";
-import { ImgBanner } from "@/assets/images/images";
 
 const Home = () => {
   const navigation = useNavigation();

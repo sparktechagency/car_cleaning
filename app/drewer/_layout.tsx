@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import {
   Image,
+  Platform,
   Pressable,
   StatusBar,
   Text,
@@ -9,16 +11,15 @@ import {
 
 import { IconLogOut } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { Base } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 
 const CustomDrawerContent = (props) => {
   const insets = useSafeAreaInsets();
@@ -39,7 +40,12 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={tw`flex-1 pb-[${insets.bottom}px]`}
+      contentContainerStyle={[
+        tw`flex-1 `,
+        {
+          paddingTop: Platform.OS === "android" ? 40 : insets.top,
+        },
+      ]}
     >
       {/* User Profile Section */}
       <Pressable
@@ -50,7 +56,7 @@ const CustomDrawerContent = (props) => {
           source={{
             uri: data?.data?.photo,
           }}
-          style={tw`w-12 h-12 rounded-full mt-4`}
+          style={tw`w-12 h-12 rounded-full `}
           resizeMode="contain"
         />
         <View>
