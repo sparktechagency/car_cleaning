@@ -1,4 +1,14 @@
+import {
+  useBookingIntentMutation,
+  useBookingSuccessMutation,
+} from "@/redux/apiSlices/bookingSlices";
+import {
+  useGetBlockedServiceDateQuery,
+  useGetServicesByIdQuery,
+  useLazyGetFreeTimesQuery,
+} from "@/redux/apiSlices/servicesApiSlices";
 import { useNavigation, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Alert,
@@ -12,26 +22,16 @@ import {
 } from "react-native";
 
 import { IconBackArrow } from "@/assets/icon/icon";
+import { ImgSuccess } from "@/assets/images/images";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import React, { useEffect, useState } from "react";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useStripe } from "@stripe/stripe-react-native";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
-import { useLocalSearchParams } from "expo-router/build/hooks";
-import {
-  useGetBlockedServiceDateQuery,
-  useGetServicesByIdQuery,
-  useLazyGetFreeTimesQuery,
-} from "@/redux/apiSlices/servicesApiSlices";
-import {
-  useBookingIntentMutation,
-  useBookingSuccessMutation,
-} from "@/redux/apiSlices/bookingSlices";
-import { useStripe } from "@stripe/stripe-react-native";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { ImgSuccess } from "@/assets/images/images";
 
 const calendersDate = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -528,11 +528,13 @@ const calendersDate = () => {
             errorText={errors?.booking_name?.message}
             textInputProps={{
               placeholder: "Add other details.",
+              multiline: true,
+              numberOfLines: 15,
               verticalAlign: "top",
               textAlignVertical: "top",
             }}
-            inputStyle={tw`h-28`}
-            containerStyle={tw`h-36 justify-center`}
+            inputStyle={tw`h-30 `}
+            containerStyle={tw`h-32`}
           />
         </View>
 

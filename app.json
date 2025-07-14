@@ -14,7 +14,7 @@
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleLocalizations": ["fr"],
-          "UIViewControllerBasedStatusBarAppearance": true,
+          "UIViewControllerBasedStatusBarAppearance": false
       },
       
       "bundleIdentifier": "com.anonymous.car-clealing"

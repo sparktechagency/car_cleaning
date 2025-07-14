@@ -1,11 +1,9 @@
-import { SafeAreaView, StatusBar } from "react-native";
-
 import tw from "@/lib/tailwind";
 import store from "@/redux/store";
-import { Base } from "@/utils/utils";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { Stack } from "expo-router";
 import React from "react";
+import { SafeAreaView } from "react-native";
 import { AlertNotificationRoot } from "react-native-alert-notification";
 import { Provider } from "react-redux";
 
@@ -59,11 +57,11 @@ export default function RootLayout() {
             </Stack>
           </Provider>
 
-          <StatusBar
+          {/* <StatusBar
             backgroundColor={Base}
             animated
             barStyle={"dark-content"}
-          />
+          /> */}
         </StripeProvider>
       </SafeAreaView>
     </AlertNotificationRoot>
