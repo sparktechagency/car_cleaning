@@ -12,14 +12,14 @@ const tramsConditions = () => {
   return (
     <>
       {isLoading ? (
-        <View style={tw`flex-1 justify-center items-center`}>
+        <View style={tw`flex-1 justify-center items-center bg-primaryBase`}>
           <ActivityIndicator size="large" />
         </View>
       ) : (
         data?.data.map((item) => {
           const htmlContent = item?.text;
           return (
-            <View key={item?.id} style={tw`px-6`}>
+            <View key={item?.id} style={tw`px-6 bg-primaryBase`}>
               <Pressable
                 onPress={() => {
                   router.goBack();

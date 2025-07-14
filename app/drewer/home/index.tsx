@@ -73,7 +73,7 @@ const Home = () => {
   };
 
   return (
-    <View style={tw`flex-1 px-4 `}>
+    <View style={tw`flex-1 bg-primaryBase px-4 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
         <View style={tw`flex-row justify-start items-center  gap-4`}>

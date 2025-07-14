@@ -37,7 +37,7 @@ const work = (): JSX.Element => {
   };
 
   return (
-    <View style={tw`flex-1`}>
+    <View style={tw`flex-1 bg-primaryBase`}>
       <View style={tw`px-4 py-2`}>
         <Text style={tw`font-DegularDisplayBold text-2xl`}>Photo gallery</Text>
       </View>

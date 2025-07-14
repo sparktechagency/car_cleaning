@@ -20,7 +20,7 @@ const aboutUs = () => {
   return (
     <>
       {isLoading ? (
-        <View style={tw`flex-1 justify-center items-center`}>
+        <View style={tw`flex-1 justify-center items-center bg-primaryBase`}>
           <ActivityIndicator size="large" />
         </View>
       ) : (
@@ -31,7 +31,7 @@ const aboutUs = () => {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               key={item?.id}
-              style={tw`flex-1 px-6`}
+              style={tw`flex-1 bg-primaryBase px-6`}
             >
               <Pressable
                 onPress={() => {

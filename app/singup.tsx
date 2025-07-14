@@ -114,7 +114,7 @@ const singup = () => {
   };
 
   return (
-    <ScrollView style={tw`px-6  flex-1`}>
+    <ScrollView style={tw`px-6 bg-primaryBase flex-1`}>
       <View style={tw`py-4 justify-center mt-6 items-center`}>
         <View style={tw`justify-center items-center`}>
           <Image resizeMode="contain" style={tw`w-56 h-40`} source={ImgLogo} />

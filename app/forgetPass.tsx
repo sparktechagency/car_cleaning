@@ -51,7 +51,7 @@ const forgetPass = () => {
 
   return (
     <>
-      <View style={tw`px-6 flex-1 justify-center items-center`}>
+      <View style={tw`px-6 flex-1 bg-primaryBase justify-center items-center`}>
         <View style={tw`items-center mb-14`}>
           <Heading title={"Forgot password?"} />
           <SubHeading

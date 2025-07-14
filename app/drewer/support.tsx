@@ -53,7 +53,7 @@ const support = () => {
     <ScrollView
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
-      style={tw`px-6 flex-1`}
+      style={tw`px-6 bg-primaryBase flex-1`}
     >
       <Pressable
         onPress={() => {

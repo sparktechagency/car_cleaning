@@ -59,7 +59,7 @@ const paymentSystem = () => {
   };
 
   return (
-    <View style={tw`px-6 pt-3 `}>
+    <View style={tw`px-6 pt-3 bg-primaryBase `}>
       <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
         Payment procedure
       </Text>

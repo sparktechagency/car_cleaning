@@ -71,7 +71,7 @@ const notificationReview = () => {
   };
 
   return (
-    <View style={tw`px-6`}>
+    <View style={tw`px-6 bg-primaryBase`}>
       <Pressable
         onPress={() => {
           navigation.goBack();

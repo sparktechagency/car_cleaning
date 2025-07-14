@@ -21,7 +21,7 @@ const privacyPolicy = () => {
   return (
     <>
       {isLoading ? (
-        <View style={tw`flex-1 justify-center items-center`}>
+        <View style={tw`flex-1 justify-center items-center bg-primaryBase`}>
           <ActivityIndicator size="large" />
         </View>
       ) : (
@@ -33,7 +33,7 @@ const privacyPolicy = () => {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
               key={item?.id}
-              style={tw`px-6 flex-1`}
+              style={tw`px-6 flex-1 bg-primaryBase`}
             >
               <Pressable
                 onPress={() => {

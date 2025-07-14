@@ -70,7 +70,7 @@ const profile = () => {
   };
 
   return (
-    <View style={tw`flex-1 `}>
+    <View style={tw`flex-1 bg-primaryBase`}>
       <View style={tw`flex-row px-6 justify-between items-center my-6`}>
         <Text style={tw`font-DegularDisplayBold text-2xl`}>My Profile</Text>
         <TouchableOpacity onPress={() => router.push("/editProfile")}>

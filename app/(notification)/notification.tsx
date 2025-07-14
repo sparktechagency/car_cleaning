@@ -34,7 +34,7 @@ const notification = () => {
     }
   };
   return (
-    <View style={tw`flex-1 px-6`}>
+    <View style={tw`flex-1 px-6 bg-primaryBase`}>
       <Pressable
         onPress={() => {
           navigation.goBack();

@@ -195,7 +195,7 @@ const editProfile = () => {
   // console.log(data?.data?.car_photos);
 
   return (
-    <View style={tw`flex-1`}>
+    <View style={tw`flex-1 bg-primaryBase`}>
       <Pressable
         onPress={() => {
           navigation.goBack();

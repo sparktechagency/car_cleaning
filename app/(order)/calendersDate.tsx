@@ -282,7 +282,7 @@ const calendersDate = () => {
   };
 
   return (
-    <View style={tw`px-6 flex-1`}>
+    <View style={tw`px-6 flex-1 bg-primaryBase`}>
       <Pressable
         onPress={() => {
           navigation.goBack();
