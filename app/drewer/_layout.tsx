@@ -1,4 +1,11 @@
-import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { IconLogOut } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
@@ -35,7 +42,10 @@ const CustomDrawerContent = (props) => {
       contentContainerStyle={tw`flex-1 pb-[${insets.bottom}px]`}
     >
       {/* User Profile Section */}
-      <View style={tw`flex-row p-4 justify-start items-center gap-3`}>
+      <Pressable
+        onPress={() => router.push("/drewer/home/profile")}
+        style={tw`flex-row p-4 justify-start items-center gap-3`}
+      >
         <Image
           source={{
             uri: data?.data?.photo,
@@ -47,7 +57,7 @@ const CustomDrawerContent = (props) => {
           <Text style={tw`text-lg font-bold `}>{data?.data?.name}</Text>
           <Text style={tw`text-sm text-gray-600`}>{data?.data?.email}</Text>
         </View>
-      </View>
+      </Pressable>
 
       <View style={tw`gap-4 px-4 mt-10`}>
         <TouchableOpacity
