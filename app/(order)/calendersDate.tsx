@@ -546,7 +546,7 @@ const calendersDate = () => {
             isLoading={intentResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
             // onPress={() => router.push("/(order)/paymentSystem")}
-            title="Checkout"
+            title="Booking"
             containerStyle={tw`flex-1 rounded-lg`}
           />
         </View>
