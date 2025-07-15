@@ -1,15 +1,16 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
-import tw from "@/lib/tailwind";
-import Heading from "@/components/TitleHead";
-import SubHeading from "@/components/SubTileHead";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import InputText from "@/lib/inputs/InputText";
-import { IconEmail } from "@/assets/icon/icon";
-import TButton from "@/lib/buttons/TButton";
-import { useRouter } from "expo-router";
-import { useForgetPasswordMutation } from "@/redux/apiSlices/authSlices";
+import { View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
+import { IconEmail } from "@/assets/icon/icon";
+import SubHeading from "@/components/SubTileHead";
+import Heading from "@/components/TitleHead";
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { useForgetPasswordMutation } from "@/redux/apiSlices/authSlices";
+import { useRouter } from "expo-router";
 
 const forgetPass = () => {
   const route = useRouter();
@@ -82,6 +83,7 @@ const forgetPass = () => {
                 touched
                 errorText={errors?.email?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Email",
                 }}
                 svgFirstIcon={IconEmail}

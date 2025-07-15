@@ -126,6 +126,7 @@ const login = () => {
                 touched
                 errorText={errors?.email?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Email",
                 }}
                 svgFirstIcon={IconEmail}
@@ -156,6 +157,7 @@ const login = () => {
                 touched
                 errorText={errors?.password?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "********",
                   secureTextEntry: isShow ? false : true,
                 }}

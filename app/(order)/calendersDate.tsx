@@ -319,6 +319,7 @@ const calendersDate = () => {
                 touched
                 errorText={errors?.brand_name?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Enter the brand name",
                 }}
                 containerStyle={tw`w-full `}
@@ -344,6 +345,7 @@ const calendersDate = () => {
                 touched
                 errorText={errors?.model_name?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Enter the model name",
                 }}
                 containerStyle={tw`w-full`}
@@ -369,6 +371,7 @@ const calendersDate = () => {
                 touched
                 errorText={errors?.street_address?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Type your street address",
                 }}
                 containerStyle={tw`w-full`}
@@ -398,6 +401,7 @@ const calendersDate = () => {
                 touched
                 errorText={errors?.zip_code?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Your zip code",
                   keyboardType: "number-pad",
                 }}
@@ -527,6 +531,7 @@ const calendersDate = () => {
             touched
             errorText={errors?.booking_name?.message}
             textInputProps={{
+              placeholderTextColor: tw.color("gray-400"),
               placeholder: "Add other details.",
               multiline: true,
               numberOfLines: 15,

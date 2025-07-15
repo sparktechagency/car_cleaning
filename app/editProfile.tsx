@@ -1,3 +1,5 @@
+import * as ImagePicker from "expo-image-picker";
+
 import {
   IconBackArrow,
   IconChange,
@@ -9,23 +11,6 @@ import {
   IconSwapImage,
   IconThreeDot,
 } from "@/assets/icon/icon";
-
-import {
-  Image,
-  Modal,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-import TButton from "@/lib/buttons/TButton";
-import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
-import { router, useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { SvgXml } from "react-native-svg";
 import {
   useChangeProfileImageMutation,
   useGetProfileQuery,
@@ -35,8 +20,23 @@ import {
   useDeleteCarPhotoMutation,
   useUpdateCarPhotoMutation,
 } from "@/redux/apiSlices/carApiSlices";
+import { router, useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
-import * as ImagePicker from "expo-image-picker";
+
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { SvgXml } from "react-native-svg";
 
 const editProfile = () => {
   const navigation = useNavigation();
@@ -250,6 +250,7 @@ const editProfile = () => {
             }}
             touched
             textInputProps={{
+              placeholderTextColor: tw.color("gray-400"),
               placeholder: "Enter Your User Name",
             }}
             svgFirstIcon={IconEditProfile}
@@ -264,6 +265,7 @@ const editProfile = () => {
             }}
             touched
             textInputProps={{
+              placeholderTextColor: tw.color("gray-400"),
               placeholder: "Enter Your Phone number",
               keyboardType: "number-pad",
             }}
@@ -289,6 +291,7 @@ const editProfile = () => {
                 }}
                 touched
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Your Car brand",
                   numberOfLines: 1,
                 }}
@@ -305,6 +308,7 @@ const editProfile = () => {
                 }}
                 touched
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Car model Name",
                   numberOfLines: 1,
                 }}

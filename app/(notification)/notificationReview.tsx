@@ -1,16 +1,17 @@
-import { View, Text, Pressable, Modal, Image } from "react-native";
-import React, { useEffect, useState } from "react";
-import { router, useNavigation } from "expo-router";
-import { useLocalSearchParams } from "expo-router/build/hooks";
-import tw from "@/lib/tailwind";
-import { SvgXml } from "react-native-svg";
 import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
-import InputText from "@/lib/inputs/InputText";
-import TButton from "@/lib/buttons/TButton";
-import StarRating from "react-native-star-rating-widget";
-import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
+import { useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Modal, Pressable, Text, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
 import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
+import { useLocalSearchParams } from "expo-router/build/hooks";
+import StarRating from "react-native-star-rating-widget";
+import { SvgXml } from "react-native-svg";
 
 const notificationReview = () => {
   const navigation = useNavigation();
@@ -102,6 +103,7 @@ const notificationReview = () => {
           }}
           touched
           textInputProps={{
+            placeholderTextColor: tw.color("gray-400"),
             placeholder: "Write your review here",
             verticalAlign: "top",
             textAlignVertical: "top",

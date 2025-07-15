@@ -1,17 +1,18 @@
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
-import React, { useRef, useState } from "react";
-import Heading from "@/components/TitleHead";
-import SubHeading from "@/components/SubTileHead";
-import tw from "@/lib/tailwind";
-import { OtpInput } from "react-native-otp-entry";
-import { PrimaryColor } from "@/utils/utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router, useLocalSearchParams } from "expo-router";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
   useForgetPasswordMutation,
   useVerifyOtpMutation,
 } from "@/redux/apiSlices/authSlices";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
+import SubHeading from "@/components/SubTileHead";
+import Heading from "@/components/TitleHead";
+import tw from "@/lib/tailwind";
+import { PrimaryColor } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { OtpInput } from "react-native-otp-entry";
 
 const OTPForget = () => {
   const [value, setValue] = useState(null);
@@ -91,6 +92,7 @@ const OTPForget = () => {
                 } catch (error) {}
               }}
               textInputProps={{
+                placeholderTextColor: tw.color("gray-400"),
                 accessibilityLabel: "One-Time Password",
               }}
               theme={{

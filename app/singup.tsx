@@ -6,24 +6,24 @@ import {
   IconPhone,
   IconUser,
 } from "@/assets/icon/icon";
+import {
+  useGoogleLoginMutation,
+  useRegisterMutation,
+} from "@/redux/apiSlices/authSlices";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
+import { ImgLogo } from "@/assets/images/images";
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import {
-  useGoogleLoginMutation,
-  useRegisterMutation,
-} from "@/redux/apiSlices/authSlices";
-import { ImgLogo } from "@/assets/images/images";
 
 GoogleSignin.configure({
   webClientId:
@@ -145,6 +145,7 @@ const singup = () => {
                 touched
                 errorText={errors?.name?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Enter your user name",
                 }}
                 svgFirstIcon={IconUser}
@@ -176,6 +177,7 @@ const singup = () => {
                 touched
                 errorText={errors?.email?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Email",
                 }}
                 svgFirstIcon={IconEmail}
@@ -206,6 +208,7 @@ const singup = () => {
                 touched
                 errorText={errors?.phone?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Phone Number",
                 }}
                 svgFirstIcon={IconPhone}
@@ -236,6 +239,7 @@ const singup = () => {
                 touched
                 errorText={errors?.password?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "******",
                   secureTextEntry: isShow ? false : true,
                 }}
@@ -269,6 +273,7 @@ const singup = () => {
                 touched
                 errorText={errors?.c_password?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "******",
                   secureTextEntry: isShowConfirm ? false : true,
                 }}

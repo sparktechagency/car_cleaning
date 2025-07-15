@@ -1,15 +1,16 @@
-import { View, Text, Image, Modal } from "react-native";
+import { IconEyaClose, IconEyeShow, IconPassword } from "@/assets/icon/icon";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, Modal, Text, View } from "react-native";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
-import tw from "@/lib/tailwind";
-import { IconEyaClose, IconEyeShow, IconPassword } from "@/assets/icon/icon";
-import InputText from "@/lib/inputs/InputText";
-import { Controller, useForm } from "react-hook-form";
 import TButton from "@/lib/buttons/TButton";
-import { router, useLocalSearchParams } from "expo-router";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
 import { useResetPasswordMutation } from "@/redux/apiSlices/authSlices";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const Reset = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -87,6 +88,7 @@ const Reset = () => {
                 touched
                 errorText={errors?.password?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Enter a new password",
                   secureTextEntry: isShow ? false : true,
                 }}
@@ -121,6 +123,7 @@ const Reset = () => {
                 touched
                 errorText={errors?.confirm_password?.message}
                 textInputProps={{
+                  placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Retype new password",
                   secureTextEntry: isShowConfirmPass ? false : true,
                 }}

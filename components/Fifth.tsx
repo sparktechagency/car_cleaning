@@ -1,7 +1,8 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { Text, View } from "react-native";
+
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import React from "react";
 
 const Fifth = ({ bookingInfo, setBookingInfo }) => {
   return (
@@ -22,6 +23,7 @@ const Fifth = ({ bookingInfo, setBookingInfo }) => {
         }}
         touched
         textInputProps={{
+          placeholderTextColor: tw.color("gray-400"),
           placeholder: "Enter the Appointment note",
           verticalAlign: "top",
           textAlignVertical: "top",

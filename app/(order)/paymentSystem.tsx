@@ -1,4 +1,5 @@
 import { IconCamera, IconMaster, IconVisa } from "@/assets/icon/icon";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   StyleSheet,
   Text,
@@ -10,7 +11,6 @@ import {
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
@@ -83,6 +83,7 @@ const paymentSystem = () => {
           <View style={tw`border border-gray-300 rounded-lg p-3`}>
             <View style={tw`flex-row justify-between items-center`}>
               <TextInput
+                placeholderTextColor={"#a1a1a1"}
                 placeholder="card number"
                 keyboardType="numeric"
                 style={tw`text-lg flex-1`}
@@ -94,6 +95,7 @@ const paymentSystem = () => {
           <View style={tw`flex-row mt-3`}>
             <View style={tw`flex-1 border border-gray-300 rounded-lg p-3 mr-2`}>
               <TextInput
+                placeholderTextColor={"#a1a1a1"}
                 placeholder="MM / YY"
                 keyboardType="numeric"
                 style={tw`text-lg`}
@@ -101,6 +103,7 @@ const paymentSystem = () => {
             </View>
             <View style={tw`flex-1 border border-gray-300 rounded-lg p-3`}>
               <TextInput
+                placeholderTextColor={"#a1a1a1"}
                 placeholder="CVC"
                 keyboardType="numeric"
                 secureTextEntry
@@ -114,6 +117,7 @@ const paymentSystem = () => {
           <View style={tw`mt-2`}></View>
           <View style={tw`border border-gray-300 rounded-lg p-3 mt-2`}>
             <TextInput
+              placeholderTextColor={"#a1a1a1"}
               placeholder="ZIP"
               keyboardType="numeric"
               style={tw`text-lg`}

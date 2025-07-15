@@ -1,14 +1,15 @@
-import { View, Text, Pressable, ScrollView } from "react-native";
-import React from "react";
+import { IconBackArrow } from "@/assets/icon/icon";
 import { router, useNavigation } from "expo-router";
-import tw from "@/lib/tailwind";
-import { SvgXml } from "react-native-svg";
-import { IconBackArrow, IconEmail } from "@/assets/icon/icon";
 import { Controller, useForm } from "react-hook-form";
-import InputText from "@/lib/inputs/InputText";
-import TButton from "@/lib/buttons/TButton";
-import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+
+import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
+import tw from "@/lib/tailwind";
+import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 const support = () => {
   const navigation = useNavigation();
@@ -85,6 +86,7 @@ const support = () => {
               touched
               errorText={errors?.full_name?.message}
               textInputProps={{
+                placeholderTextColor: tw.color("gray-400"),
                 placeholder: "Enter your full name",
               }}
               containerStyle={tw``}
@@ -116,6 +118,7 @@ const support = () => {
               touched
               errorText={errors?.email?.message}
               textInputProps={{
+                placeholderTextColor: tw.color("gray-400"),
                 placeholder: "Email",
               }}
               containerStyle={tw``}
@@ -141,6 +144,7 @@ const support = () => {
               touched
               errorText={errors?.subject?.message}
               textInputProps={{
+                placeholderTextColor: tw.color("gray-400"),
                 placeholder: "Enter Subject",
               }}
               containerStyle={tw``}
@@ -165,6 +169,7 @@ const support = () => {
               touched
               errorText={errors?.message?.message}
               textInputProps={{
+                placeholderTextColor: tw.color("gray-400"),
                 placeholder: "Write your thoughts or questions",
                 verticalAlign: "top",
                 textAlignVertical: "top",
