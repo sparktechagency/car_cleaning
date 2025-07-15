@@ -1,4 +1,5 @@
 import {
+  IconBook,
   IconCross,
   IconHi,
   IconMenu,
@@ -86,19 +87,28 @@ const Home = () => {
               <Text
                 style={tw`font-DegularDisplayBold flex-row items-center text-black text-2xl`}
               >
-                Hi {userInfo?.data?.name},
+                Hi {userInfo?.data?.name}.
               </Text>
               <SvgXml xml={IconHi} />
             </View>
           </View>
         </View>
+        <View style={tw`flex-row gap-3`}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={tw`w-12 h-12 p-3 justify-center  items-center text-center bg-primary rounded-full`}
+          >
+            <SvgXml xml={IconBook} />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push("/(notification)/notification")}
-          style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
-        >
-          <SvgXml xml={IconNotification} />
-        </TouchableOpacity>
+          {/* ----------- notification icon -------------- */}
+          <TouchableOpacity
+            onPress={() => router.push("/(notification)/notification")}
+            style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
+          >
+            <SvgXml xml={IconNotification} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView
@@ -130,7 +140,7 @@ const Home = () => {
               />
               <View style={tw`mx-auto w-full text-center items-center`}>
                 <Text style={tw`font-DegularDisplayBold text-2xl`}>
-                  Keep your <Text style={tw`text-primary`}> car clean</Text>{" "}
+                  Keep your <Text style={tw`text-primary`}>car clean</Text>{" "}
                   anywhere
                 </Text>
                 <Text
@@ -145,7 +155,7 @@ const Home = () => {
                     <Text
                       style={tw`text-sm font-DegularDisplayBold text-white`}
                     >
-                      Book now!
+                      Book Now
                     </Text>
                   </View>
                 </TouchableOpacity>

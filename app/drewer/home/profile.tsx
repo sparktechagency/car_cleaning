@@ -146,7 +146,7 @@ const profile = () => {
               <Text
                 style={tw`font-bold text-xl text-gray-600 w-full my-4 flex justify-center items-center text-center`}
               >
-                No Car Available..!
+                No Car Available
               </Text>
             ) : (
               <FlatList
@@ -193,7 +193,7 @@ const profile = () => {
           <Text
             style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-4`}
           >
-            Service history
+            Service History
           </Text>
           <View>
             {serviceHistory?.data?.data.length === 0 ? (
@@ -201,7 +201,7 @@ const profile = () => {
                 <Text
                   style={tw`font-DegularDisplayMedium text-lg  text-gray-600 my-4 text-center`}
                 >
-                  No service history !
+                  No Service History
                 </Text>
               </View>
             ) : (

@@ -337,7 +337,7 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputText
-                label="Vehicle model name"
+                label="Car Model"
                 labelStyle={tw`font-DegularDisplaySemibold text-xl`}
                 value={value}
                 onChangeText={(test) => onChange(test)}
@@ -363,7 +363,7 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputText
-                label="Street address"
+                label="Street Address"
                 labelStyle={tw`font-DegularDisplaySemibold text-xl`}
                 value={value}
                 onChangeText={(test) => onChange(test)}
@@ -393,7 +393,7 @@ const calendersDate = () => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <InputText
-                label="Zip code"
+                label="Zip Code"
                 labelStyle={tw`font-DegularDisplaySemibold text-xl`}
                 value={value}
                 onChangeText={(test) => onChange(test)}
@@ -412,7 +412,7 @@ const calendersDate = () => {
           />
 
           <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
-            Select service
+            Select Service
           </Text>
 
           <Controller
@@ -435,7 +435,7 @@ const calendersDate = () => {
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder="Select service"
+                placeholder="Select Service"
                 onChange={(item) => {
                   // console.log(item);
                   onChange(item.value);
@@ -469,7 +469,7 @@ const calendersDate = () => {
         {/* ------------------ calender -------------------- */}
         <View>
           <Text style={tw`font-DegularDisplaySemibold text-xl mt-4 mb-1`}>
-            select date
+            Select Date
           </Text>
 
           <Calendar
@@ -484,7 +484,7 @@ const calendersDate = () => {
           <Text
             style={tw`mt-3 font-DegularDisplaySemibold text-xl text-regularText`}
           >
-            Select time
+            Select Time
           </Text>
           <View style={tw`mt-4`}>
             <View
@@ -512,7 +512,7 @@ const calendersDate = () => {
                 <Text
                   style={tw`font-bold text-xl justify-center items-center w-full text-gray-600 text-center`}
                 >
-                  No Date Available..!
+                  No Date Available
                 </Text>
               )}
             </View>
@@ -523,7 +523,7 @@ const calendersDate = () => {
           <Text
             style={tw`mt-3 font-DegularDisplaySemibold text-xl text-regularText`}
           >
-            Appointment note
+            Appointment Notes
           </Text>
 
           <InputText
@@ -554,7 +554,7 @@ const calendersDate = () => {
             isLoading={intentResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
             // onPress={() => router.push("/(order)/paymentSystem")}
-            title="Booking"
+            title="Book"
             containerStyle={tw`flex-1 rounded-lg`}
           />
         </View>
@@ -581,7 +581,7 @@ const calendersDate = () => {
               Success!
             </Text>
             <Text style={tw`text-base text-gray-500 text-center mt-2`}>
-              Your Booking Successful
+              You Are Booked
             </Text>
 
             {/* Close Button */}

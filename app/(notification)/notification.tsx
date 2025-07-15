@@ -43,7 +43,7 @@ const notification = () => {
       >
         <SvgXml xml={IconBackArrow} />
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
-          Notification
+          Notifications
         </Text>
       </Pressable>
 

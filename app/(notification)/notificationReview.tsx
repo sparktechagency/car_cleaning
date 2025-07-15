@@ -55,7 +55,7 @@ const notificationReview = () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Success",
-          textBody: "Congrats! Your Feedback successfully Delivered",
+          textBody: "Thank you for your feedback",
         });
         navigation.goBack();
       }

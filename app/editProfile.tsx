@@ -136,8 +136,8 @@ const editProfile = () => {
       if (res?.status) {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          textBody: "You have successful this Photo",
+          title: "Deleted",
+          // textBody: "You have successful this Photo",
         });
       }
     } catch (error) {
@@ -184,7 +184,7 @@ const editProfile = () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Success",
-          textBody: "Congrats! Your Profile Image Update success",
+          // textBody: "Congrats! Your Profile Image Update success",
         });
       }
     } catch (error) {

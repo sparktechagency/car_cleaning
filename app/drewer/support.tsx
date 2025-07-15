@@ -37,7 +37,7 @@ const support = () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Success",
-          textBody: "Congrats! Your Message send.",
+          textBody: "Your message has been sent.",
         });
         router.push("/drewer/home");
       }
