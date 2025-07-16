@@ -296,7 +296,6 @@ const calendersDate = () => {
       </Pressable>
 
       <ScrollView
-        keyboardShouldPersistTaps="always"
         contentContainerStyle={tw`pb-20 `}
         showsVerticalScrollIndicator={false}
       >
