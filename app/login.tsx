@@ -194,6 +194,7 @@ const login = () => {
 
           <View style={tw`rounded-full h-12`}>
             <TButton
+              isLoading={isLoading}
               onPress={handleSubmit(handleLogin)}
               title="Sign in"
               containerStyle={tw``}
