@@ -3,7 +3,6 @@ import {
   Image,
   Platform,
   Pressable,
-  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -12,7 +11,6 @@ import {
 import { IconLogOut } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { Base } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
@@ -121,7 +119,7 @@ export default function Layout() {
       >
         {/* <Drawer.Screen name="login" /> */}
       </Drawer>
-      <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} />
+      {/* <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} /> */}
     </GestureHandlerRootView>
   );
 }

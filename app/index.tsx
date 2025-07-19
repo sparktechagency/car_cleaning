@@ -76,7 +76,7 @@ export default function App() {
       <Image
         style={[tw`w-60 h-28`]}
         resizeMode="contain"
-        source={require("@/assets/images/brosLogo.png")}
+        source={require("@/assets/images/new_logo.png")}
       />
       <ActivityIndicator
         size="large"
