@@ -55,7 +55,7 @@ const CustomDrawerContent = (props) => {
             uri: data?.data?.photo,
           }}
           style={tw`w-12 h-12 rounded-full `}
-          resizeMode="contain"
+          resizeMode="cover"
         />
         <View>
           <Text style={tw`text-lg font-bold `}>{data?.data?.name}</Text>
