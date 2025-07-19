@@ -85,18 +85,24 @@ const editProfile = () => {
 
   const imagePickSwap = async () => {
     try {
-      setSelectModalVisible(false);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
+      // console.log(result);
       if (!result.canceled) {
-        const swapUri = result.assets[0].uri;
+        const swapUri = result?.assets![0]?.uri;
 
         // Now call upload API
         handleSwapPhoto(swapUri);
+      } else {
+        Toast.show({
+          type: ALERT_TYPE.WARNING,
+          title: "Warning",
+          textBody: "Please Select One Image",
+        });
       }
     } catch (error) {
       console.log("Profile Image not updated -------------------->", error);
@@ -150,7 +156,6 @@ const editProfile = () => {
   const imagePickWithProfile = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
@@ -398,7 +403,7 @@ const editProfile = () => {
 
       {/* ========= selected modal ============= */}
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={selectModalVisible}
         onRequestClose={() => setSelectModalVisible(false)}
@@ -421,7 +426,12 @@ const editProfile = () => {
 
             <View style={tw`w-full m-4`}>
               <TouchableOpacity
-                onPress={imagePickSwap}
+                onPress={() => {
+                  setSelectModalVisible(false);
+                  setTimeout(() => {
+                    imagePickSwap();
+                  }, 300);
+                }}
                 style={tw`flex-row justify-center items-center border border-[#0063E580] w-full p-1 rounded-lg gap-2 mb-2`}
               >
                 <SvgXml xml={IconSwapImage} />

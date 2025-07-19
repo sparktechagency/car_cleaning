@@ -1,16 +1,16 @@
-import { api } from "../api/baseApi";
 import {
   IAboutUs,
   IPrivacyPolicy,
-  ISupport,
   ITermsAndConditions,
 } from "../interface/interface";
+
+import { api } from "../api/baseApi";
 
 const drawerApiSlices = api.injectEndpoints({
   endpoints: (builder) => ({
     getTermsAndConditions: builder.query<ITermsAndConditions, any>({
       query: () => ({
-        url: `/pages?type=Terms %26 Conditions`,
+        url: `/pages?type=Terms & Conditions`,
       }),
     }),
     getPrivacyAndPolicy: builder.query<IPrivacyPolicy, any>({

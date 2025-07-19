@@ -7,6 +7,7 @@ import {
 } from "@/assets/icon/icon";
 import { useNavigation, useRouter } from "expo-router";
 import {
+  FlatList,
   Image,
   Modal,
   Pressable,
@@ -22,7 +23,6 @@ import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { _HEIGHT } from "@/utils/utils";
-import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
@@ -143,11 +143,11 @@ const Home = () => {
                   Keep your <Text style={tw`text-primary`}>car clean</Text>{" "}
                   anywhere
                 </Text>
-                <Text
+                {/* <Text
                   style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
                 >
                   Mobile car detailing services in Lakewood Ranch.
-                </Text>
+                </Text> */}
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <View
                     style={tw`bg-primary w-28 h-11 rounded-full mx-auto justify-center items-center`}
@@ -171,10 +171,9 @@ const Home = () => {
               Quick service access
             </Text>
             <View style={tw``}>
-              <FlashList
+              <FlatList
                 data={data?.data}
                 renderItem={renderItem}
-                estimatedItemSize={400}
                 numColumns={3}
                 scrollEnabled={false}
                 keyExtractor={(item) => item?.id.toLocaleString()}

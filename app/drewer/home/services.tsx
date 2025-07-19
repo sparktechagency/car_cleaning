@@ -9,10 +9,10 @@ import {
 } from "react-native";
 
 import tw from "@/lib/tailwind";
-import { useRouter } from "expo-router";
-import React from "react";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { PrimaryColor } from "@/utils/utils";
+import { useRouter } from "expo-router";
+import React from "react";
 
 const services = (): JSX.Element => {
   const router = useRouter();
@@ -57,30 +57,28 @@ const services = (): JSX.Element => {
   };
 
   return (
-    <View style={tw`p-4 bg-primaryBase`}>
+    <View style={tw`flex-1 p-4 bg-primaryBase`}>
       <Text style={tw`font-DegularDisplayBold text-2xl`}>
         Quick service access
       </Text>
       {isLoading ? (
         <ActivityIndicator size="large" color={PrimaryColor} style={tw`py-6`} />
       ) : (
-        <View style={tw``}>
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                colors={["#0063E5"]}
-                refreshing={isLoading}
-                onRefresh={refetch}
-              />
-            }
-            data={data?.data}
-            renderItem={renderItem}
-            numColumns={3}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.title}
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          refreshControl={
+            <RefreshControl
+              colors={["#0063E5"]}
+              refreshing={isLoading}
+              onRefresh={refetch}
+            />
+          }
+          data={data?.data}
+          renderItem={renderItem}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.title}
+          showsHorizontalScrollIndicator={false}
+        />
       )}
     </View>
   );

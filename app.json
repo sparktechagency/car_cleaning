@@ -16,7 +16,7 @@
         "CFBundleLocalizations": [
           "fr"
         ],
-        "UIViewControllerBasedStatusBarAppearance": false
+        "UIViewControllerBasedStatusBarAppearance": true
       },
       "bundleIdentifier": "com.anonymous.car-clealing",
       "appleTeamId": "A44586Q8GH"

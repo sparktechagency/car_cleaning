@@ -19,6 +19,8 @@ const tramsandcondition = () => {
   const navigation = useNavigation();
   const { data, isLoading } = useGetTermsAndConditionsQuery({});
 
+  // console.log(data);
+
   return (
     <>
       {isLoading ? (

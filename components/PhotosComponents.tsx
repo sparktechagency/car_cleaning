@@ -1,15 +1,15 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  RefreshControl,
-  Image,
-} from "react-native";
-import React from "react";
-import { FlashList } from "@shopify/flash-list";
-import tw from "@/lib/tailwind";
 import { _HEIGHT, _WIDTH } from "@/utils/utils";
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+import tw from "@/lib/tailwind";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
+import React from "react";
 const PhotosComponents = () => {
   const { data: photoData, isLoading } = useGetPhotosQuery({});
 
@@ -37,12 +37,11 @@ const PhotosComponents = () => {
     );
   };
   return (
-    <FlashList
+    <FlatList
       refreshControl={<RefreshControl refreshing={isLoading} />}
       data={photoData?.data?.data}
       renderItem={workRenderItem}
       numColumns={2}
-      estimatedItemSize={400}
       centerContent={true}
       // columnWrapperStyle={tw`justify-between px-4`}
       scrollEnabled={false}
