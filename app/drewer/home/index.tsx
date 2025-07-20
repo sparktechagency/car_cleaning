@@ -143,11 +143,11 @@ const Home = () => {
                   Keep your <Text style={tw`text-primary`}>car clean</Text>{" "}
                   anywhere
                 </Text>
-                {/* <Text
+                <Text
                   style={tw`text-sm items-center text-center font-DegularDisplayMedium mb-4`}
                 >
-                  Mobile car detailing services in Lakewood Ranch.
-                </Text> */}
+                  Mobile car detailing services in Lakewood Ranch
+                </Text>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <View
                     style={tw`bg-primary w-28 h-11 rounded-full mx-auto justify-center items-center`}

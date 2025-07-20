@@ -10,6 +10,7 @@ import {
 import { IconBackArrow } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
 import { useGetAboutUsQuery } from "@/redux/apiSlices/draweApiSlices";
+import { PrimaryColor } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React from "react";
 import RenderHtml from "react-native-render-html";
@@ -22,7 +23,7 @@ const aboutUs = () => {
     <>
       {isLoading ? (
         <View style={tw`flex-1 justify-center items-center bg-primaryBase`}>
-          <ActivityIndicator size="large" />
+          <ActivityIndicator color={PrimaryColor} size="large" />
         </View>
       ) : (
         <ScrollView
@@ -44,19 +45,27 @@ const aboutUs = () => {
 
           {/* ======== banner section ================= */}
           <View style={tw``}>
-            <Image
-              style={tw`relative w-full h-32 mx-auto rounded-2xl my-6`}
-              source={require("../../assets/images/bg-car.jpg")}
-            />
+            <View style={tw`  w-full h-32 rounded-2xl my-6 bg-black`}>
+              <Image
+                height={100}
+                width={100}
+                style={tw`relative  w-full h-32 mx-auto opacity-55 rounded-2xl`}
+                source={require("@/assets/images/bg-car.jpg")}
+              />
+            </View>
 
-            <View style={tw`absolute bottom-5 p-4 `}>
-              <Text style={tw`font-DegularDisplayBold text-xl text-white mb-1`}>
+            <View
+              style={tw`absolute w-full h-full justify-center items-center p-4 `}
+            >
+              <Text
+                style={tw`font-DegularDisplayBold text-3xl text-white mb-1`}
+              >
                 About Us
               </Text>
-              <Text style={tw`font-DegularDisplaySemibold text-sm text-white`}>
+              {/* <Text style={tw`font-DegularDisplaySemibold text-sm text-white`}>
                 Welcome to FULL CIRCLE Detailing. Our name comes from our
                 mission to transform challenges into shining successes.
-              </Text>
+              </Text> */}
             </View>
           </View>
 

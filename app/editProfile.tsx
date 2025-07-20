@@ -126,7 +126,7 @@ const editProfile = () => {
         Toast.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Success",
-          textBody: "Your Update success this Photo",
+          // textBody: "Success",
         });
       }
     } catch (error) {
