@@ -116,7 +116,7 @@ const calendersDate = () => {
         onPress={() => {
           handleDayPress(day), handleTimeShow();
         }}
-        disabled={isPastDate}
+        disabled={isDisabled}
         style={{
           backgroundColor: isDisabled
             ? "rgba(0, 0, 0, 0.1)"
@@ -403,7 +403,7 @@ const calendersDate = () => {
                 message: "Please fill up your zip code",
               },
               pattern: {
-                value: /^[0-9]+$/, // ensure only digits
+                value: /^[0-9]+$/,
                 message: "Zip code must contain only numbers",
               },
             }}
