@@ -350,7 +350,7 @@ const singup = () => {
         >
           Have an account?{" "}
           <Link style={tw`text-primary font-bold underline`} href={"/login"}>
-            Sign in
+            Sign In
           </Link>
         </Text>
       </View>

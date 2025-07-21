@@ -400,7 +400,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Please fill up your zip code",
+                message: "Please fill in your zip code.",
               },
               pattern: {
                 value: /^[0-9]+$/,

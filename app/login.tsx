@@ -196,7 +196,7 @@ const login = () => {
             <TButton
               isLoading={isLoading}
               onPress={handleSubmit(handleLogin)}
-              title="Sign in"
+              title="Sign  In"
               containerStyle={tw``}
             />
           </View>
