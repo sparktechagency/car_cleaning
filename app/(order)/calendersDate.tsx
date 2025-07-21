@@ -15,6 +15,7 @@ import {
   Image,
   Modal,
   Pressable,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -27,6 +28,7 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { PrimaryColor } from "@/utils/utils";
 import { useStripe } from "@stripe/stripe-react-native";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Calendar } from "react-native-calendars";
@@ -49,7 +51,8 @@ const calendersDate = () => {
     refetch: singleServiceRefetch,
   } = useGetServicesByIdQuery(id);
 
-  const { data: blockedDate } = useGetBlockedServiceDateQuery({});
+  const { data: blockedDate, refetch: blockedDateRefetch } =
+    useGetBlockedServiceDateQuery({});
   const [getFreeTimes] = useLazyGetFreeTimesQuery({});
   const { data: profileData, refetch } = useGetProfileQuery({});
 
@@ -296,6 +299,13 @@ const calendersDate = () => {
       </Pressable>
 
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={blockedDateRefetch}
+            colors={[PrimaryColor]}
+          />
+        }
         contentContainerStyle={tw`pb-20 `}
         showsVerticalScrollIndicator={false}
       >
