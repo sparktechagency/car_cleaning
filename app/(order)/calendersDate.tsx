@@ -521,12 +521,7 @@ const calendersDate = () => {
             >
               {timeFetching ? (
                 <View style={tw`flex-1 justify-center items-center`}>
-                  <ActivityIndicator color={PrimaryColor} size={"large"} />
-                  <Text
-                    style={tw`text-center font-DegularDisplayMedium text-gray-500`}
-                  >
-                    Loading...
-                  </Text>
+                  <ActivityIndicator color={PrimaryColor} size={"small"} />
                 </View>
               ) : isTime ? (
                 isTime.map((time, index) => (
