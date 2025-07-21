@@ -515,12 +515,12 @@ const calendersDate = () => {
           >
             Select Time
           </Text>
-          <View style={tw`mt-4`}>
+          <View style={tw`py-4`}>
             <View
               style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
             >
               {timeFetching ? (
-                <View style={tw`flex-1 justify-center items-center`}>
+                <View style={tw`flex-1  justify-center items-center`}>
                   <ActivityIndicator color={PrimaryColor} size={"small"} />
                 </View>
               ) : isTime ? (
