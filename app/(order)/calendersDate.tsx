@@ -11,6 +11,7 @@ import { useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Modal,
@@ -51,9 +52,15 @@ const calendersDate = () => {
     refetch: singleServiceRefetch,
   } = useGetServicesByIdQuery(id);
 
-  const { data: blockedDate, refetch: blockedDateRefetch } =
-    useGetBlockedServiceDateQuery({});
-  const [getFreeTimes] = useLazyGetFreeTimesQuery({});
+  const {
+    data: blockedDate,
+    refetch: blockedDateRefetch,
+    isLoading: blockedDateLoading,
+  } = useGetBlockedServiceDateQuery({});
+  const [
+    getFreeTimes,
+    { data: freeTimes, refetch: freeTimesRefetch, isFetching: timeFetching },
+  ] = useLazyGetFreeTimesQuery({});
   const { data: profileData, refetch } = useGetProfileQuery({});
 
   const handleTimeShow = async () => {};
@@ -476,17 +483,30 @@ const calendersDate = () => {
           />
         </View>
         {/* ------------------ calender -------------------- */}
-        <View>
+        <View style={tw`  `}>
           <Text style={tw`font-DegularDisplaySemibold text-xl mt-4 mb-1`}>
             Select Date
           </Text>
 
-          <Calendar
-            current={new Date().toISOString().split("T")[0]}
-            markedDates={markedDates}
-            dayComponent={({ date, state }) => renderDay(date, state)}
-            style={tw`rounded-lg`}
-          />
+          <View style={tw`h-80 justify-center`}>
+            {blockedDateLoading ? (
+              <>
+                <ActivityIndicator color={PrimaryColor} size={"large"} />
+                <Text
+                  style={tw`text-center font-DegularDisplayMedium text-gray-500`}
+                >
+                  Loading...
+                </Text>
+              </>
+            ) : (
+              <Calendar
+                current={new Date().toISOString().split("T")[0]}
+                markedDates={markedDates}
+                dayComponent={({ date, state }) => renderDay(date, state)}
+                style={tw`rounded-lg`}
+              />
+            )}
+          </View>
         </View>
         {/*  ---------------- select time ------------------- */}
         <View>
@@ -499,7 +519,16 @@ const calendersDate = () => {
             <View
               style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
             >
-              {isTime ? (
+              {timeFetching ? (
+                <View style={tw`flex-1 justify-center items-center`}>
+                  <ActivityIndicator color={PrimaryColor} size={"large"} />
+                  <Text
+                    style={tw`text-center font-DegularDisplayMedium text-gray-500`}
+                  >
+                    Loading...
+                  </Text>
+                </View>
+              ) : isTime ? (
                 isTime.map((time, index) => (
                   <TouchableOpacity
                     style={tw`${
