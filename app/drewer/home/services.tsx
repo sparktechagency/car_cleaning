@@ -5,6 +5,7 @@ import {
   RefreshControl,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -17,12 +18,15 @@ import React from "react";
 const services = (): JSX.Element => {
   const router = useRouter();
 
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+
   const { data, isLoading, refetch } = useGetServicesQuery({});
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
-        style={tw`w-1/3 `}
+        // style={tw`w-1/3 `}
         onPress={() => {
           handleServiceDetails(item);
         }}
@@ -57,7 +61,7 @@ const services = (): JSX.Element => {
   };
 
   return (
-    <View style={tw`flex-1 p-4 bg-primaryBase`}>
+    <View style={tw`flex-1 w-full p-4 bg-primaryBase`}>
       <Text style={tw`font-DegularDisplayBold text-2xl`}>
         Quick service access
       </Text>
@@ -74,7 +78,8 @@ const services = (): JSX.Element => {
           }
           data={data?.data}
           renderItem={renderItem}
-          numColumns={3}
+          numColumns={isTablet ? 6 : 3}
+          key={isTablet ? "tablet" : "phone"}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.title}
           showsHorizontalScrollIndicator={false}

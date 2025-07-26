@@ -1,30 +1,69 @@
 import { useEffect, useState } from "react";
 import {
   Image,
+  Modal,
   Platform,
   Pressable,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
-import { IconLogOut } from "@/assets/icon/icon";
+import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
 import tw from "@/lib/tailwind";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import {
+  useDeleteUserAccountMutation,
+  useGetProfileQuery,
+} from "@/redux/apiSlices/authSlices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const CustomDrawerContent = (props) => {
+  const { setIsModalVisible, isModalVisible } = props;
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [isToken, setIsToken] = useState();
+  const [userPass, serUserPass] = useState("");
+
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
 
   const { data, isLoading, isError } = useGetProfileQuery(isToken);
+  const [deleteAccount] = useDeleteUserAccountMutation();
+
+  const handleUserDelete = async () => {
+    setIsModalVisible(false);
+    try {
+      const res = await deleteAccount({ password: userPass }).unwrap();
+      await AsyncStorage.removeItem("token");
+      router.replace("/login");
+      if (res) {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+
+          textBody: "User Deleted",
+        });
+      }
+    } catch (error) {
+      console.log(error, "user not delete successful");
+      setIsModalVisible(false);
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: "Warning",
+        textBody: "something Is Wrong",
+      });
+    }
+  };
 
   const handleUserInfo = async () => {
     const token = await AsyncStorage.getItem("token");
@@ -94,9 +133,7 @@ const CustomDrawerContent = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-        // onPress={() => router?.push("/drewer/support")}
-        >
+        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
           <View>
             <Text
               style={tw`capitalize text-red-700 font-DegularDisplayMedium text-base`}
@@ -123,22 +160,94 @@ const CustomDrawerContent = (props) => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(!isModalVisible);
+        }}
+      >
+        <View
+          style={tw`flex-1 justify-center items-center bg-black bg-opacity-50`}
+        >
+          <View
+            style={[
+              tw`bg-white  max-w-[80%] rounded-2xl p-6 ${
+                isTablet ? `h-88` : ``
+              }`,
+            ]}
+          >
+            <View style={tw`flex-row justify-between`}>
+              <View />
+              <TouchableOpacity
+                onPress={() => setIsModalVisible(false)}
+                style={tw`p-3 rounded-full justify-center items-center bg-gray-300 shadow-md`}
+              >
+                <SvgXml xml={IconCross} />
+              </TouchableOpacity>
+            </View>
+            <View style={tw`justify-center items-center mb-4`}>
+              <SvgXml xml={IconDeleteRed} />
+              <Text style={tw`text-center font-DegularDisplayBold  text-2xl `}>
+                You are going to delete your account
+              </Text>
+
+              <Text
+                style={tw`text-center font-DegularDisplayMedium  text-sm text-regularText my-2`}
+              >
+                For deleting please enter your password
+              </Text>
+            </View>
+
+            <View style={tw`my-5`}>
+              <TextInput
+                placeholder="Password"
+                style={tw`w-full border rounded-lg h-11 bg-secondary px-2`}
+                onChangeText={(i) => serUserPass(i)}
+              />
+            </View>
+
+            <TouchableOpacity
+              onPress={() => handleUserDelete()}
+              style={tw` rounded-full bg-red-500`}
+            >
+              <Text
+                style={tw`font-DegularDisplayMedium text-xl text-center p-3 text-white`}
+              >
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </DrawerContentScrollView>
   );
 };
 
 export default function Layout() {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer
-        screenOptions={{
-          headerShown: false,
-        }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        {/* <Drawer.Screen name="login" /> */}
-      </Drawer>
-      {/* <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} /> */}
-    </GestureHandlerRootView>
+    <View style={tw`flex-1`}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Drawer
+          screenOptions={{
+            headerShown: false,
+          }}
+          drawerContent={(props) => (
+            <CustomDrawerContent
+              {...props}
+              setIsModalVisible={setIsModalVisible}
+              isModalVisible={isModalVisible}
+            />
+          )}
+        >
+          {/* <Drawer.Screen name="login" /> */}
+        </Drawer>
+        {/* <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} /> */}
+      </GestureHandlerRootView>
+    </View>
   );
 }

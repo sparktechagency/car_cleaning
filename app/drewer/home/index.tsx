@@ -15,6 +15,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -22,7 +23,7 @@ import PhotosComponents from "@/components/PhotosComponents";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import { _HEIGHT } from "@/utils/utils";
+import { _HEIGHT, _WIDTH } from "@/utils/utils";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
@@ -30,6 +31,8 @@ const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
 
   // ============================ services data =-======================================================================
 
@@ -70,7 +73,7 @@ const Home = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-primaryBase px-4 `}>
+    <View style={tw`flex-1 w-full self-center bg-primaryBase px-4 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
         <View style={tw`flex-row justify-start items-center  gap-4`}>
@@ -174,7 +177,8 @@ const Home = () => {
               <FlatList
                 data={data?.data}
                 renderItem={renderItem}
-                numColumns={3}
+                numColumns={isTablet ? 6 : 3}
+                key={isTablet ? "tablet" : "phone"}
                 scrollEnabled={false}
                 keyExtractor={(item) => item?.id.toLocaleString()}
                 showsHorizontalScrollIndicator={false}
@@ -250,39 +254,47 @@ const Home = () => {
                       No Date Available..!
                     </Text>
                   ) : (
-                    data?.data?.map((item) => {
-                      return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setModalVisible(false);
-                            handleServiceDetails(item);
-                          }}
-                          activeOpacity={0.7}
-                          key={item?.id}
-                          style={tw`w-[30%] h-32  rounded-2xl 
-            bg-white
-             items-center text-center  justify-center shadow-sm `}
-                        >
-                          <View
-                            style={tw`p-4 rounded-full mb-1 bg-[#0063E51A]`}
+                    <View style={tw`w-full justify-center items-center `}>
+                      <View
+                        style={tw`w-full   flex-row flex-wrap justify-start items-center gap-3 px-3 pb-10`}
+                      >
+                        {data?.data?.map((item) => (
+                          <TouchableOpacity
+                            key={item?.id}
+                            onPress={() => {
+                              setModalVisible(false);
+                              handleServiceDetails(item);
+                            }}
+                            activeOpacity={0.7}
+                            style={[
+                              tw`h-32  bg-white rounded-2xl items-center justify-center shadow-sm `,
+                              {
+                                width: isTablet
+                                  ? (width - 120) / 6
+                                  : (width - 100) / 3,
+                              },
+                            ]}
                           >
-                            <Image
-                              width={32}
-                              height={30}
-                              resizeMode="contain"
-                              source={{ uri: item?.icon }}
-                            />
-                          </View>
-                          <Text
-                            numberOfLines={1}
-                            style={tw`font-DegularDisplaySemibold text-base  text-[#262626]
-               `}
-                          >
-                            {item?.car_type}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })
+                            <View
+                              style={tw`p-4 rounded-full  mb-1 bg-[#0063E51A]`}
+                            >
+                              <Image
+                                width={32}
+                                height={30}
+                                resizeMode="contain"
+                                source={{ uri: item?.icon }}
+                              />
+                            </View>
+                            <Text
+                              numberOfLines={1}
+                              style={tw`font-DegularDisplaySemibold text-base text-[#262626]`}
+                            >
+                              {item?.car_type}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </View>
                   )}
                 </View>
               </View>

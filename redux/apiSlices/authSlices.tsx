@@ -105,6 +105,14 @@ const authSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+
+    deleteUserAccount: builder.mutation<any, any>({
+      query: (password) => ({
+        url: `/auth/profile-delete`,
+        method: "POST",
+        body: password,
+      }),
+    }),
   }),
 });
 
@@ -123,4 +131,5 @@ export const {
   useResetPasswordMutation,
   useChangeProfileImageMutation,
   useGoogleLoginMutation,
+  useDeleteUserAccountMutation,
 } = authSlice;

@@ -5,12 +5,20 @@ import {
   RefreshControl,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import tw from "@/lib/tailwind";
 import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
 import { _HEIGHT, _WIDTH, PrimaryColor } from "@/utils/utils";
+
+const { width } = useWindowDimensions();
+const isTablet = width >= 768;
+
+const itemWidth = isTablet
+  ? width / 3 - width * 0.07
+  : width / 2 - width * 0.04;
 
 const work = (): JSX.Element => {
   const { data: photoData, isLoading, refetch } = useGetPhotosQuery({});
@@ -24,7 +32,7 @@ const work = (): JSX.Element => {
             style={[
               tw` rounded-lg`,
               {
-                width: _WIDTH / 2 - _WIDTH * 0.04,
+                width: itemWidth,
                 height: _HEIGHT * 0.124,
               },
             ]}
@@ -37,7 +45,7 @@ const work = (): JSX.Element => {
   };
 
   return (
-    <View style={tw`flex-1 bg-primaryBase`}>
+    <View style={tw`flex-1 w-full bg-primaryBase`}>
       <View style={tw`px-4 py-2`}>
         <Text style={tw`font-DegularDisplayBold text-2xl`}>Photo gallery</Text>
       </View>
@@ -52,7 +60,8 @@ const work = (): JSX.Element => {
         }
         data={photoData?.data?.data}
         renderItem={renderItem}
-        numColumns={2}
+        numColumns={isTablet ? 3 : 2}
+        key={isTablet ? "tablet" : "phone"}
         columnWrapperStyle={tw`gap-3 justify-center`}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={tw`mt-4 gap-3 pb-30`}

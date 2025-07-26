@@ -626,3 +626,8 @@ export const IconBook = `<svg width="19" height="19" viewBox="0 0 19 19" fill="n
 </svg>
 
 `;
+export const IconDeleteRed = `<svg width="37" height="49" viewBox="0 0 37 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.07143 43.1667C3.07143 46.1 5.38571 48.5 8.21429 48.5H28.7857C31.6143 48.5 33.9286 46.1 33.9286 43.1667V11.1667H3.07143V43.1667ZM36.5 3.16667H27.5L24.9286 0.5H12.0714L9.5 3.16667H0.5V8.5H36.5V3.16667Z" fill="#FF1F3D"/>
+</svg>
+
+`;

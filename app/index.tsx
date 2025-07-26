@@ -9,6 +9,7 @@ import { PrimaryColor } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import ResponsiveContainer from "@/components/ResponsiveWrapper";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -71,7 +72,7 @@ export default function App() {
 
   return (
     <View
-      style={tw`flex-1 justify-center items-center bg-primaryBase pb-[25%]`}
+      style={tw`flex-1  justify-center items-center bg-primaryBase pb-[25%]`}
     >
       <Image
         style={[tw`w-60 h-28`]}

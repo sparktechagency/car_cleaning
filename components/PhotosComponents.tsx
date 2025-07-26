@@ -4,6 +4,7 @@ import {
   Image,
   RefreshControl,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -13,9 +14,16 @@ import React from "react";
 const PhotosComponents = () => {
   const { data: photoData, isLoading } = useGetPhotosQuery({});
 
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+
+  const itemWidth = isTablet
+    ? width / 3 - width * 0.07
+    : width / 2 - width * 0.075;
+
   const workRenderItem = ({ item }: { item: any }) => {
     return (
-      <TouchableOpacity style={tw`m-1.5`}>
+      <View style={tw`m-1.5`}>
         <View style={tw``}>
           <Image
             // contentFit="scale-down"
@@ -26,14 +34,14 @@ const PhotosComponents = () => {
               tw` rounded-lg `,
 
               {
-                width: _WIDTH / 2 - _WIDTH * 0.075,
+                width: itemWidth,
                 height: _HEIGHT * 0.124,
               },
             ]}
             source={{ uri: item?.photo }}
           />
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
   return (
@@ -41,7 +49,8 @@ const PhotosComponents = () => {
       refreshControl={<RefreshControl refreshing={isLoading} />}
       data={photoData?.data?.data}
       renderItem={workRenderItem}
-      numColumns={2}
+      numColumns={isTablet ? 3 : 2}
+      key={isTablet ? "tablet" : "phone"}
       centerContent={true}
       // columnWrapperStyle={tw`justify-between px-4`}
       scrollEnabled={false}

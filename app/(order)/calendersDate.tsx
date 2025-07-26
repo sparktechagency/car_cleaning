@@ -20,6 +20,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
@@ -44,6 +45,9 @@ const calendersDate = () => {
   const [car_model, setCarModel] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
 
   const {
     data: singleServiceData,
@@ -567,12 +571,14 @@ const calendersDate = () => {
               placeholderTextColor: tw.color("gray-400"),
               placeholder: "Add other details.",
               multiline: true,
-              numberOfLines: 15,
+              numberOfLines: 20,
               verticalAlign: "top",
               textAlignVertical: "top",
             }}
-            inputStyle={tw`h-30 `}
-            containerStyle={tw`h-32`}
+            inputStyle={tw`h-28`}
+            containerStyle={[
+              tw` border border-red-400 ${isTablet ? `h-40` : `h-32`}`,
+            ]}
           />
         </View>
 
