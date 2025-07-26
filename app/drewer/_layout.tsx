@@ -68,22 +68,41 @@ const CustomDrawerContent = (props) => {
           onPress={() => router?.push("/drewer/tramsConditions")}
         >
           <View>
-            <Text style={tw`capitalize`}>Terms & conditions</Text>
+            <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
+              Terms & conditions
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/privacyPolicy")}>
           <View>
-            <Text style={tw`capitalize`}>Privacy policy</Text>
+            <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
+              Privacy policy
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/aboutUs")}>
           <View>
-            <Text style={tw`capitalize`}>About us</Text>
+            <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
+              About us
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router?.push("/drewer/support")}>
           <View>
-            <Text style={tw`capitalize`}>Support</Text>
+            <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
+              Support
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+        // onPress={() => router?.push("/drewer/support")}
+        >
+          <View>
+            <Text
+              style={tw`capitalize text-red-700 font-DegularDisplayMedium text-base`}
+            >
+              Delete account
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
