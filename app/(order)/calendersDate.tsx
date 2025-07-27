@@ -576,9 +576,7 @@ const calendersDate = () => {
               textAlignVertical: "top",
             }}
             inputStyle={tw`h-28`}
-            containerStyle={[
-              tw` border border-red-400 ${isTablet ? `h-40` : `h-32`}`,
-            ]}
+            containerStyle={[tw`  ${isTablet ? `h-40` : `h-32`}`]}
           />
         </View>
 

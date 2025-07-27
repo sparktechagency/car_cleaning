@@ -11,6 +11,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -28,6 +29,14 @@ import { _HEIGHT, _WIDTH } from "@/utils/utils";
 
 const profile = () => {
   const router = useRouter();
+
+  const { width, height } = useWindowDimensions();
+  const isTablet = width >= 768;
+
+  const itemWidth = isTablet ? width / 3 - width * 1 : width / 2 - width * 0.9;
+
+  // _HEIGHT * 0.07
+  const itemHeight = isTablet ? height * 0.1 : height * 0.07;
 
   const { data, isLoading, refetch } = useGetProfileQuery({});
   const [carPhotoMutation, { error }] = useCarPhotoMutation();
@@ -165,7 +174,8 @@ const profile = () => {
                         style={[
                           tw` rounded-lg aspect-video `,
                           {
-                            height: _HEIGHT * 0.07,
+                            width: itemWidth,
+                            height: itemHeight,
                           },
                         ]}
                         source={{ uri: item?.photo }}
@@ -177,7 +187,7 @@ const profile = () => {
             )}
           </View>
 
-          {data?.data?.car_photos?.length === 5 ? null : (
+          {data?.data?.car_photos?.length === 6 ? null : (
             <TouchableOpacity
               onPress={pickImage}
               style={tw`w-full border border-primary rounded-xl py-3 flex justify-center items-center mt-2`}

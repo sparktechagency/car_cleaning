@@ -29,6 +29,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
@@ -39,6 +40,14 @@ import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
 
 const editProfile = () => {
+  const { width, height } = useWindowDimensions();
+  const isTablet = width >= 768;
+
+  const itemWidth = isTablet ? width / 3 - width * 1 : width / 2 - width * 0.9;
+
+  // _HEIGHT * 0.07
+  const itemHeight = isTablet ? height * 0.1 : height * 0.07;
+
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectModalVisible, setSelectModalVisible] = React.useState(false);
@@ -108,7 +117,7 @@ const editProfile = () => {
       console.log("Profile Image not updated -------------------->", error);
     }
   };
-  const handleSwapPhoto = async (swapUri) => {
+  const handleSwapPhoto = async (swapUri: any) => {
     try {
       const fileName = swapUri.split("/").pop();
       const formData = new FormData();
@@ -323,15 +332,25 @@ const editProfile = () => {
           </View>
 
           <View style={tw`flex-row flex-wrap justify-between mt-2`}>
-            {data?.data?.car_photos.map((item) => (
+            {data?.data?.car_photos.map((item: any) => (
               <TouchableOpacity
                 disabled
-                style={tw`w-[30%] h-16 my-2 justify-center items-center text-center`}
+                style={[
+                  tw`w-[30%] h-16 my-2 justify-center items-center text-center`,
+                  {
+                    width: itemWidth,
+                    height: itemHeight,
+                  },
+                ]}
                 key={item.id}
               >
                 <View style={tw`relative`}>
                   <Image
-                    style={{ width: 112, height: 64, borderRadius: 8 }}
+                    style={{
+                      width: itemWidth,
+                      height: itemHeight,
+                      borderRadius: 8,
+                    }}
                     source={{ uri: item?.photo }}
                     resizeMode="cover"
                   />

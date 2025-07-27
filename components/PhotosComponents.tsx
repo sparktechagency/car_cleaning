@@ -18,12 +18,12 @@ const PhotosComponents = () => {
   const isTablet = width >= 768;
 
   const itemWidth = isTablet
-    ? width / 3 - width * 0.07
+    ? width / 3 - width * 0.04
     : width / 2 - width * 0.075;
 
   const workRenderItem = ({ item }: { item: any }) => {
     return (
-      <View style={tw`m-1.5`}>
+      <View style={tw`flex-1 justify-center items-center m-1.5`}>
         <View style={tw``}>
           <Image
             // contentFit="scale-down"

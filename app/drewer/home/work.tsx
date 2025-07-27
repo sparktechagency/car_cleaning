@@ -17,8 +17,8 @@ const { width } = useWindowDimensions();
 const isTablet = width >= 768;
 
 const itemWidth = isTablet
-  ? width / 3 - width * 0.07
-  : width / 2 - width * 0.04;
+  ? width / 3 - width * 0.04
+  : width / 2 - width * 0.75;
 
 const work = (): JSX.Element => {
   const { data: photoData, isLoading, refetch } = useGetPhotosQuery({});
