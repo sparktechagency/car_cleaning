@@ -1,3 +1,8 @@
+import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
+import {
+  useDeleteUserAccountMutation,
+  useGetProfileQuery,
+} from "@/redux/apiSlices/authSlices";
 import { useEffect, useState } from "react";
 import {
   Image,
@@ -6,27 +11,22 @@ import {
   Pressable,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
-
-import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
-import tw from "@/lib/tailwind";
-import {
-  useDeleteUserAccountMutation,
-  useGetProfileQuery,
-} from "@/redux/apiSlices/authSlices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { useRouter } from "expo-router";
-import { Drawer } from "expo-router/drawer";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
   GestureHandlerRootView,
   TextInput,
 } from "react-native-gesture-handler";
+
+import tw from "@/lib/tailwind";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
+import { useRouter } from "expo-router";
+import { Drawer } from "expo-router/drawer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 const CustomDrawerContent = (props) => {
   const { setIsModalVisible, isModalVisible } = props;
@@ -243,10 +243,7 @@ export default function Layout() {
               isModalVisible={isModalVisible}
             />
           )}
-        >
-          {/* <Drawer.Screen name="login" /> */}
-        </Drawer>
-        {/* <StatusBar backgroundColor={Base} animated barStyle={"dark-content"} /> */}
+        />
       </GestureHandlerRootView>
     </View>
   );

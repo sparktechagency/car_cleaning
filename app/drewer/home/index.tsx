@@ -15,15 +15,15 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import PhotosComponents from "@/components/PhotosComponents";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import { _HEIGHT, _WIDTH } from "@/utils/utils";
+import { _HEIGHT } from "@/utils/utils";
 import React from "react";
 import { SvgXml } from "react-native-svg";
 
@@ -67,7 +67,7 @@ const Home = () => {
 
   const handleServiceDetails = (item: any) => {
     router.push({
-      pathname: "/(order)/calendersDate",
+      pathname: "/order/calendersDate",
       params: { id: item?.id },
     });
   };
@@ -106,7 +106,7 @@ const Home = () => {
 
           {/* ----------- notification icon -------------- */}
           <TouchableOpacity
-            onPress={() => router.push("/(notification)/notification")}
+            onPress={() => router.push("/notification/notification")}
             style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
           >
             <SvgXml xml={IconNotification} />

@@ -1,9 +1,9 @@
-import { IconBackArrow } from "@/assets/icon/icon";
 import { router, useNavigation } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
+import { IconBackArrow } from "@/assets/icon/icon";
 import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";

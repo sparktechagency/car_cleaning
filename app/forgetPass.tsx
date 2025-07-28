@@ -1,6 +1,4 @@
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import { IconEmail } from "@/assets/icon/icon";
@@ -11,6 +9,8 @@ import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useForgetPasswordMutation } from "@/redux/apiSlices/authSlices";
 import { useRouter } from "expo-router";
+import React from "react";
+import { View } from "react-native";
 
 const forgetPass = () => {
   const route = useRouter();

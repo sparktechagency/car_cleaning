@@ -1,26 +1,25 @@
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   RefreshControl,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
+
 import tw from "@/lib/tailwind";
-import React from "react";
 import { useGetPhotosQuery } from "@/redux/apiSlices/homeApiSlices";
-import { _HEIGHT, _WIDTH, PrimaryColor } from "@/utils/utils";
-
-const { width } = useWindowDimensions();
-const isTablet = width >= 768;
-
-const itemWidth = isTablet
-  ? width / 3 - width * 0.04
-  : width / 2 - width * 0.75;
+import { _HEIGHT } from "@/utils/utils";
+import React from "react";
 
 const work = (): JSX.Element => {
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+
+  const itemWidth = isTablet
+    ? width / 3 - width * 0.04
+    : width / 2 - width * 0.75;
   const { data: photoData, isLoading, refetch } = useGetPhotosQuery({});
 
   const renderItem = ({ item }: { item: any }) => {

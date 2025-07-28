@@ -20,8 +20,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import { IconBackArrow } from "@/assets/icon/icon";
@@ -31,14 +31,12 @@ import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import { PrimaryColor } from "@/utils/utils";
-import { useStripe } from "@stripe/stripe-react-native";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
 
 const calendersDate = () => {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { id } = useLocalSearchParams();
   const [isTime, setIsTime] = React.useState<any | null>(null);
   const [car_brand, setCarBrand] = useState("");
@@ -247,53 +245,6 @@ const calendersDate = () => {
   };
 
   // Payment login for booking start ---------------------------------------------------
-
-  const handleSetupInitialPayment = async (item: any) => {
-    try {
-      const res = await createIntent({
-        payment_method: "pm_card_visa",
-        amount: item?.price,
-        service_name: item?.service_name,
-      }).unwrap();
-      item.stripe_payment_intent_id = res?.data?.id;
-
-      const client_secret = res?.data?.client_secret;
-
-      const { error } = await initPaymentSheet({
-        merchantDisplayName: "Example, Inc.",
-        paymentIntentClientSecret: client_secret, // retrieve this from your server
-      });
-      if (error) {
-        // handle error
-        Alert.alert("Warning", error?.message);
-      } else {
-        checkout(item);
-      }
-    } catch (error) {
-      Alert.alert("Warning", "Something is wrong");
-      console.log("payment", error);
-    }
-  };
-
-  const checkout = async (item: any) => {
-    const { error } = await presentPaymentSheet();
-
-    if (error) {
-      // handle error
-      Alert.alert("Warning", error?.message);
-    } else {
-      // success
-      try {
-        const res = await bookingSuccess(item).unwrap();
-        if (res?.status) {
-          router.replace("/drewer/home");
-        }
-      } catch (error) {
-        alert((error as any)?.message || "something happened wrong");
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <View style={tw`px-6 flex-1 bg-primaryBase`}>
@@ -590,7 +541,7 @@ const calendersDate = () => {
           <TButton
             isLoading={intentResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
-            // onPress={() => router.push("/(order)/paymentSystem")}
+            // onPress={() => router.push("/order/paymentSystem")}
             title="Book"
             containerStyle={tw`flex-1 rounded-lg`}
           />

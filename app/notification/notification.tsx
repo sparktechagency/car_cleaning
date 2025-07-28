@@ -1,22 +1,23 @@
 import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import React from "react";
-import tw from "@/lib/tailwind";
-import { useNavigation, useRouter } from "expo-router";
-import { SvgXml } from "react-native-svg";
-import { IconBackArrow } from "@/assets/icon/icon";
-import {
   useGetNotificationQuery,
   useMarkNotificationMutation,
 } from "@/redux/apiSlices/notificatinApiSlices";
+import { useNavigation, useRouter } from "expo-router";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+import { IconBackArrow } from "@/assets/icon/icon";
+import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
 import moment from "moment";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 const notification = () => {
   const navigation = useNavigation();
@@ -74,14 +75,14 @@ const notification = () => {
                     handleMark(item?.id);
                     if (item?.data?.type === "Order Completed") {
                       router.push({
-                        pathname: "/(notification)/notificationReview",
+                        pathname: "/notification/notificationReview",
                         params: {
                           service_id: item?.data?.service_id,
                         },
                       });
                     } else if (item?.data?.type === "Booking successful") {
                       router.push({
-                        pathname: "/(notification)/notificationDetails",
+                        pathname: "/notification/notificationDetails",
                         params: { booking_id: item?.data?.booking_id },
                       });
                     }

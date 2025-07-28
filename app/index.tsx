@@ -9,7 +9,6 @@ import { PrimaryColor } from "@/utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import ResponsiveContainer from "@/components/ResponsiveWrapper";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,9 +41,6 @@ export default function App() {
       DegularDisplayThinItalic: require("@/assets/fonts/DegularDisplay-ThinItalic.otf"),
     });
     SplashScreen.hideAsync();
-    // setTimeout(() => {
-    //   route?.replace("/login");
-    // }, 1000);
   }, []);
   const handlePathDecision = async () => {
     try {

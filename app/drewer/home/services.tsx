@@ -5,8 +5,8 @@ import {
   RefreshControl,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 import tw from "@/lib/tailwind";
@@ -55,7 +55,7 @@ const services = (): JSX.Element => {
 
   const handleServiceDetails = (item) => {
     router.push({
-      pathname: "/(order)/calendersDate",
+      pathname: "/order/calendersDate",
       params: { id: item?.id },
     });
   };
