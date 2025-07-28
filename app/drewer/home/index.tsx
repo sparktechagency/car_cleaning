@@ -276,12 +276,12 @@ const Home = () => {
                             ]}
                           >
                             <View
-                              style={tw`p-4 rounded-full  mb-1 bg-[#0063E51A]`}
+                              style={tw`p-2 rounded-full  mb-1 bg-[#0063E51A]`}
                             >
                               <Image
-                                width={32}
-                                height={30}
-                                resizeMode="contain"
+                                key={item?.id}
+                                style={tw`w-12 h-12 rounded-full`}
+                                resizeMode="stretch"
                                 source={{ uri: item?.icon }}
                               />
                             </View>
