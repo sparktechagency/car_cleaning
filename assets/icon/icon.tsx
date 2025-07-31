@@ -53,7 +53,7 @@ export const IconNotification = `<svg width="16" height="20" viewBox="0 0 16 20"
 </svg>
 
 `;
-export const IconHi = `<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+export const IconHi = `<svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="32" height="32" fill="url(#pattern0_357_3770)"/>
 <defs>
 <pattern id="pattern0_357_3770" patternContentUnits="objectBoundingBox" width="1" height="1">

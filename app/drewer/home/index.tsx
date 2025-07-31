@@ -21,16 +21,21 @@ import {
 
 import PhotosComponents from "@/components/PhotosComponents";
 import tw from "@/lib/tailwind";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import {
+  useGetProfileQuery,
+  useTokenCheckMutation,
+} from "@/redux/apiSlices/authSlices";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { _HEIGHT } from "@/utils/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { SvgXml } from "react-native-svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [currentToken, setCurrentToken] = React.useState(null);
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
 
@@ -38,11 +43,13 @@ const Home = () => {
 
   const { data, isLoading, refetch } = useGetServicesQuery({});
 
-  const { data: userInfo } = useGetProfileQuery({});
+  const { data: userInfo, refetch: userRefetch } = useGetProfileQuery({});
+
+  const [isToken, { isLoading: isTokenLoading }] = useTokenCheckMutation();
 
   const renderItem = ({ item }: { item: any }): JSX.Element => {
     return (
-      <TouchableOpacity onPress={() => handleServiceDetails(item)}>
+      <TouchableOpacity onPress={() => handlePathDecision(item)}>
         <View
           style={tw`w-28 h-28 m-2 flex-col justify-center items-center text-center rounded-2xl bg-white`}
         >
@@ -64,19 +71,35 @@ const Home = () => {
       </TouchableOpacity>
     );
   };
+  // ============================== services booking path name declaration ------------
 
-  const handleServiceDetails = (item: any) => {
-    router.push({
-      pathname: "/order/calendersDate",
-      params: { id: item?.id },
-    });
+  const handlePathDecision = async (item: any) => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const checkToken = await isToken({ token }).unwrap();
+      setCurrentToken(checkToken);
+      if (checkToken) {
+        router.push({
+          pathname: "/order/calendersDate",
+          params: { id: item?.id },
+        });
+      } else {
+        router.push("/login");
+      }
+    } catch (e) {
+      console.error("Error in handlePathDecision:", e);
+      router.push("/login");
+    }
   };
+  useEffect(() => {
+    userRefetch();
+  }, [isToken]);
 
   return (
     <View style={tw`flex-1 w-full self-center bg-primaryBase px-4 `}>
       {/* header parts  */}
       <View style={tw`py-4 flex-row items-center justify-between `}>
-        <View style={tw`flex-row justify-start items-center  gap-4`}>
+        <View style={tw`flex-row justify-start items-center  `}>
           <TouchableOpacity
             onPress={() => {
               (navigation as any)?.openDrawer();
@@ -88,7 +111,7 @@ const Home = () => {
           <View>
             <View style={tw`flex-row items-start gap-2`}>
               <Text
-                style={tw`font-DegularDisplayBold flex-row items-center text-black text-2xl`}
+                style={tw`font-DegularDisplayBold flex-row items-center text-black text-xl`}
               >
                 Hi {userInfo?.data?.name}.
               </Text>
@@ -105,12 +128,15 @@ const Home = () => {
           </TouchableOpacity>
 
           {/* ----------- notification icon -------------- */}
-          <TouchableOpacity
-            onPress={() => router.push("/notification/notification")}
-            style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
-          >
-            <SvgXml xml={IconNotification} />
-          </TouchableOpacity>
+
+          {currentToken && (
+            <TouchableOpacity
+              onPress={() => router.push("/notification/notification")}
+              style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}
+            >
+              <SvgXml xml={IconNotification} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -258,12 +284,12 @@ const Home = () => {
                       <View
                         style={tw`w-full   flex-row flex-wrap justify-start items-center gap-3 px-3 pb-10`}
                       >
-                        {data?.data?.map((item) => (
+                        {data?.data?.map((item: any) => (
                           <TouchableOpacity
                             key={item?.id}
                             onPress={() => {
                               setModalVisible(false);
-                              handleServiceDetails(item);
+                              handlePathDecision(item);
                             }}
                             activeOpacity={0.7}
                             style={[

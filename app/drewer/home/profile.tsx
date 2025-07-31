@@ -18,7 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 
 import tw from "@/lib/tailwind";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { SvgXml } from "react-native-svg";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
 import {
@@ -26,6 +26,7 @@ import {
   useGetServiceHistoryQuery,
 } from "@/redux/apiSlices/carApiSlices";
 import { _HEIGHT, _WIDTH } from "@/utils/utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const profile = () => {
   const router = useRouter();

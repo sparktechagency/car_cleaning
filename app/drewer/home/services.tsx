@@ -14,6 +14,8 @@ import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
 import { PrimaryColor } from "@/utils/utils";
 import { useRouter } from "expo-router";
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTokenCheckMutation } from "@/redux/apiSlices/authSlices";
 
 const services = (): JSX.Element => {
   const router = useRouter();
@@ -22,13 +24,14 @@ const services = (): JSX.Element => {
   const isTablet = width >= 768;
 
   const { data, isLoading, refetch } = useGetServicesQuery({});
+  const [isToken] = useTokenCheckMutation();
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         // style={tw`w-1/3 `}
         onPress={() => {
-          handleServiceDetails(item);
+          handlePathDecision(item);
         }}
       >
         <View
@@ -53,11 +56,24 @@ const services = (): JSX.Element => {
     );
   };
 
-  const handleServiceDetails = (item) => {
-    router.push({
-      pathname: "/order/calendersDate",
-      params: { id: item?.id },
-    });
+  // ============================== services booking path name declaration ------------
+
+  const handlePathDecision = async (item: any) => {
+    try {
+      const localToken = await AsyncStorage.getItem("token");
+      const token = await isToken({ token: localToken }).unwrap();
+      if (token) {
+        router.push({
+          pathname: "/order/calendersDate",
+          params: { id: item?.id },
+        });
+      } else {
+        router.push("/login");
+      }
+    } catch (e) {
+      console.error("Error in handlePathDecision:", e);
+      router.push("/login");
+    }
   };
 
   return (

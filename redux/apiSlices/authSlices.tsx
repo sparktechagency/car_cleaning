@@ -27,10 +27,13 @@ const authSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["user", "photo"],
     }),
-    getTokenCheck: builder.query<any, any>({
-      query: () => ({
+    tokenCheck: builder.mutation<any, any>({
+      query: (isToken) => ({
         url: `/auth/check-token`,
+        method: "POST",
+        body: isToken,
       }),
+      invalidatesTags: ["user"],
     }),
     login: builder.mutation<any, any>({
       query: (data) => ({
@@ -126,7 +129,7 @@ export const {
   useUpdateUserMutation,
   useUserListQuery,
   useLogoutMutation,
-  useGetTokenCheckQuery,
+  useTokenCheckMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useChangeProfileImageMutation,

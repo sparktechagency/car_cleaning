@@ -17,9 +17,10 @@ import { TouchableOpacity, View } from "react-native";
 
 import tw from "@/lib/tailwind";
 import { BottomTabNavigationEventMap } from "@react-navigation/bottom-tabs";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define your route params
 type RouteParamList = {
@@ -50,7 +51,21 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
           const isFocused = state.index === index;
           // console.log(state);
 
-          const onPress = () => {
+          const onPress = async () => {
+            if (route.name === "profile") {
+              try {
+                const currentToken = await AsyncStorage.getItem("token");
+                if (!currentToken) {
+                  router.push("/login");
+                  return;
+                }
+              } catch (error) {
+                console.error("Error checking token:", error);
+                router.push("/login");
+                return;
+              }
+            }
+
             const event = navigation.emit({
               type: "tabPress",
               target: route.key,
@@ -68,7 +83,7 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
               target: route.key,
             });
           };
-
+          const token = AsyncStorage.getItem("token");
           // Get the icon based on route name
           const getIcon = () => {
             switch (route.name) {

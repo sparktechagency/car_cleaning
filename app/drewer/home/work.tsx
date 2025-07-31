@@ -19,7 +19,7 @@ const work = (): JSX.Element => {
 
   const itemWidth = isTablet
     ? width / 3 - width * 0.04
-    : width / 2 - width * 0.75;
+    : width / 2 - width * 0.075;
   const { data: photoData, isLoading, refetch } = useGetPhotosQuery({});
 
   const renderItem = ({ item }: { item: any }) => {

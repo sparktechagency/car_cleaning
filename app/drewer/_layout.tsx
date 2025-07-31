@@ -2,6 +2,7 @@ import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
 import {
   useDeleteUserAccountMutation,
   useGetProfileQuery,
+  useTokenCheckMutation,
 } from "@/redux/apiSlices/authSlices";
 import { useEffect, useState } from "react";
 import {
@@ -32,14 +33,15 @@ const CustomDrawerContent = (props) => {
   const { setIsModalVisible, isModalVisible } = props;
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [isToken, setIsToken] = useState();
+  const [tokenCheck, setIsToken] = useState();
   const [userPass, serUserPass] = useState("");
 
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
 
-  const { data, isLoading, isError } = useGetProfileQuery(isToken);
+  const { data, refetch } = useGetProfileQuery(tokenCheck);
   const [deleteAccount] = useDeleteUserAccountMutation();
+  const [isToken] = useTokenCheckMutation();
 
   const handleUserDelete = async () => {
     setIsModalVisible(false);
@@ -60,17 +62,19 @@ const CustomDrawerContent = (props) => {
       Toast.show({
         type: ALERT_TYPE.WARNING,
         title: "Warning",
-        textBody: "something Is Wrong",
+        textBody: "Add correct password",
       });
     }
   };
 
   const handleUserInfo = async () => {
     const token = await AsyncStorage.getItem("token");
-    setIsToken(token);
+    const setToken = await isToken({ token }).unwrap();
+    setIsToken(setToken as any);
   };
 
   useEffect(() => {
+    refetch();
     handleUserInfo();
   }, []);
 
@@ -102,7 +106,7 @@ const CustomDrawerContent = (props) => {
         </View>
       </Pressable>
 
-      <View style={tw`gap-4 px-4 mt-10`}>
+      <View style={tw`gap-4 px-4 `}>
         <TouchableOpacity
           onPress={() => router?.push("/drewer/tramsConditions")}
         >
@@ -126,39 +130,58 @@ const CustomDrawerContent = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router?.push("/drewer/support")}>
-          <View>
-            <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
-              Support
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-          <View>
-            <Text
-              style={tw`capitalize text-red-700 font-DegularDisplayMedium text-base`}
-            >
-              Delete account
-            </Text>
-          </View>
-        </TouchableOpacity>
+        {tokenCheck && (
+          <TouchableOpacity onPress={() => router?.push("/drewer/support")}>
+            <View>
+              <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
+                Support
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {tokenCheck && (
+          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+            <View>
+              <Text
+                style={tw`capitalize text-red-700 font-DegularDisplayMedium text-base`}
+              >
+                Delete account
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={tw`mt-auto px-4 pt-5 pl-2`}>
-        <TouchableOpacity
-          onPress={async () => {
-            await AsyncStorage.removeItem("token");
-            router.push("/login");
-          }}
-          style={tw`py-5  flex-row items-center gap-2`}
-        >
-          <SvgXml xml={IconLogOut} />
-          <Text
-            style={tw`text-base capitalize text-red-500 font-DegularDisplayBold`}
+        {tokenCheck ? (
+          <TouchableOpacity
+            onPress={async () => {
+              await AsyncStorage.removeItem("token");
+              router.push("/drewer/home");
+              refetch();
+            }}
+            style={tw`py-5  flex-row items-center gap-2`}
           >
-            Log out
-          </Text>
-        </TouchableOpacity>
+            <SvgXml xml={IconLogOut} />
+            <Text
+              style={tw`text-base capitalize text-red-500 font-DegularDisplayBold`}
+            >
+              Log out
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => router.push("/login")}
+            style={tw`py-5  `}
+          >
+            <Text
+              style={tw`text-base capitalize text-primary  font-DegularDisplayBold`}
+            >
+              Log in
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <Modal

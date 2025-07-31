@@ -286,11 +286,8 @@ const editProfile = () => {
             svgFirstIcon={IconPhone}
             containerStyle={tw``}
           />
-        </View>
-
-        <View>
           <Text
-            style={tw`font-DegularDisplaySemibold text-xl text-regularText mb-2 mt-4`}
+            style={tw`font-DegularDisplaySemibold text-xl text-regularText `}
           >
             Car details
           </Text>
@@ -330,54 +327,55 @@ const editProfile = () => {
               />
             </View>
           </View>
+        </View>
 
-          <View style={tw`flex-row flex-wrap justify-between mt-2`}>
+        <View>
+          <View
+            style={[
+              tw`flex-row gap-3 flex-wrap  justify-center  `,
+              {
+                paddingVertical: isTablet ? 30 : 15,
+              },
+            ]}
+          >
             {data?.data?.car_photos.map((item: any) => (
-              <TouchableOpacity
-                disabled
+              <View
+                key={item.id}
                 style={[
-                  tw`w-[30%] h-16 my-2 justify-center items-center text-center`,
+                  tw`relative `,
                   {
-                    width: itemWidth,
+                    width: width / 4,
                     height: itemHeight,
                   },
                 ]}
-                key={item.id}
               >
-                <View style={tw`relative`}>
-                  <Image
-                    style={{
-                      width: itemWidth,
-                      height: itemHeight,
-                      borderRadius: 8,
-                    }}
-                    source={{ uri: item?.photo }}
-                    resizeMode="cover"
-                  />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectModalVisible(true);
-                      // console.log(item);
-                      setPhotoId(item?.id);
-                    }}
-                    style={tw`absolute p-1.5 top-1 justify-center items-center right-1 w-6 h-6 rounded-full bg-primary`}
-                  >
-                    <SvgXml height={16} width={16} xml={IconThreeDot} />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
+                <Image
+                  style={tw`w-full h-full rounded-lg`}
+                  source={{ uri: item?.photo }}
+                  resizeMode="cover"
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectModalVisible(true);
+                    // console.log(item);
+                    setPhotoId(item?.id);
+                  }}
+                  style={tw`absolute p-1.5 top-1 justify-center items-center right-1 w-6 h-6 rounded-full bg-primary`}
+                >
+                  <SvgXml height={16} width={16} xml={IconThreeDot} />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
-
-          <View style={tw`rounded-full w-full h-12 mt-3 `}>
-            <TButton
-              onPress={() => {
-                handleUpdateProfile();
-              }}
-              title="Save & Change"
-              containerStyle={tw``}
-            />
-          </View>
+        </View>
+        <View style={tw`rounded-full w-full h-12 mt-3 `}>
+          <TButton
+            onPress={() => {
+              handleUpdateProfile();
+            }}
+            title="Save & Change"
+            containerStyle={tw``}
+          />
         </View>
       </ScrollView>
 

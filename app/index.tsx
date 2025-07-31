@@ -1,12 +1,8 @@
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-
 import { ActivityIndicator, Image, LogBox, View } from "react-native";
-
 import tw from "@/lib/tailwind";
-import { useGetTokenCheckQuery } from "@/redux/apiSlices/authSlices";
 import { PrimaryColor } from "@/utils/utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 
@@ -16,12 +12,6 @@ LogBox.ignoreLogs([""]);
 
 export default function App() {
   const route = useRouter();
-  const {
-    data: tokenCheck,
-    isError,
-    isFetching,
-    isLoading,
-  } = useGetTokenCheckQuery({});
 
   useEffect(() => {
     Font.loadAsync({
@@ -42,29 +32,19 @@ export default function App() {
     });
     SplashScreen.hideAsync();
   }, []);
-  const handlePathDecision = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-
-      if (isFetching || isLoading) return;
-
-      if (token) {
-        if (tokenCheck) {
-          route.replace("/drewer/home");
-        } else {
-          route.replace("/login");
-        }
-      } else {
-        route.replace("/login");
-      }
-    } catch (e) {
-      route.replace("/login");
-    }
-  };
 
   useEffect(() => {
-    handlePathDecision();
-  }, [tokenCheck, isFetching, isLoading]);
+    const homePath = async () => {
+      try {
+        setTimeout(() => {
+          route.replace("/drewer/home");
+        }, 200);
+      } catch (e) {
+        console.error("Error in homePath:", e);
+      }
+    };
+    homePath();
+  }, []);
 
   return (
     <View
