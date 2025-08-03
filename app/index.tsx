@@ -45,7 +45,7 @@ export default function App() {
 
       const tokenCheck = await checkToken(token).unwrap();
 
-      console.log(tokenCheck);
+      // console.log(tokenCheck);
 
       if (tokenCheck?.status) {
         route.replace("/drewer/home");
