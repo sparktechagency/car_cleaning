@@ -5,12 +5,11 @@ import {
   Modal,
   PermissionsAndroid,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 import Animated, {
   interpolate,
   runOnJS,
@@ -18,19 +17,19 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
-} from 'react-native-gesture-handler';
-import React, {useRef, useState} from 'react';
+} from "react-native-gesture-handler";
+import React, { useRef, useState } from "react";
 
-import RNFS from 'react-native-fs';
+import RNFS from "react-native-fs";
 
-const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 interface ImageViewProps {
-  source: {uri: string}; // Image source (required)
+  source: { uri: string }; // Image source (required)
   style?: any; // Custom styles for the thumbnail
   modalBackgroundStyle?: any; // Style for the modal background
   headerStyle?: any; // Style for the header container
@@ -54,13 +53,13 @@ const ImageView: React.FC<ImageViewProps> = ({
   closeButtonStyle,
   onClose,
   onModalOpen,
-  animationConfig = {openDuration: 500, closeDuration: 300},
+  animationConfig = { openDuration: 500, closeDuration: 300 },
   gesturesEnabled = true,
   aspectRatio = 1,
   doubleTapScale = 2,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [origin, setOrigin] = useState({x: 0, y: 0, width: 0, height: 0});
+  const [origin, setOrigin] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   const scale = useSharedValue(1);
   const translateX = useSharedValue(0);
@@ -77,18 +76,18 @@ const ImageView: React.FC<ImageViewProps> = ({
   const initialImageHeight = SCREEN_WIDTH / aspectRatio;
 
   const calculateBounds = (scaleFactor: number) => {
-    'worklet';
+    "worklet";
     const scaledWidth = initialImageWidth * scaleFactor;
     const scaledHeight = initialImageHeight * scaleFactor;
 
     const maxTranslateX = Math.max((scaledWidth - SCREEN_WIDTH) / 2, 0);
     const maxTranslateY = Math.max((scaledHeight - SCREEN_HEIGHT) / 2, 0);
 
-    return {maxTranslateX, maxTranslateY};
+    return { maxTranslateX, maxTranslateY };
   };
 
   const clamp = (value: number, min: number, max: number) => {
-    'worklet';
+    "worklet";
     return Math.min(Math.max(value, min), max);
   };
 
@@ -107,7 +106,7 @@ const ImageView: React.FC<ImageViewProps> = ({
     });
 
   const pinchGesture = Gesture.Pinch()
-    .onUpdate(e => {
+    .onUpdate((e) => {
       scale.value = Math.max(1, e.scale);
     })
     .onEnd(() => {
@@ -117,19 +116,19 @@ const ImageView: React.FC<ImageViewProps> = ({
     });
 
   const panGesture = Gesture.Pan()
-    .onUpdate(e => {
+    .onUpdate((e) => {
       if (scale.value > 1) {
-        const {maxTranslateX, maxTranslateY} = calculateBounds(scale.value);
+        const { maxTranslateX, maxTranslateY } = calculateBounds(scale.value);
 
         translateX.value = clamp(
           e.translationX + cumulativeTranslateX.value,
           -maxTranslateX,
-          maxTranslateX,
+          maxTranslateX
         );
         translateY.value = clamp(
           e.translationY + cumulativeTranslateY.value,
           -maxTranslateY,
-          maxTranslateY,
+          maxTranslateY
         );
       }
     })
@@ -143,59 +142,56 @@ const ImageView: React.FC<ImageViewProps> = ({
   const combinedGesture = gesturesEnabled
     ? Gesture.Simultaneous(
         Gesture.Simultaneous(pinchGesture, panGesture),
-        doubleTapGesture,
+        doubleTapGesture
       )
     : undefined;
 
   const animatedImageStyle = useAnimatedStyle(() => {
-    'worklet';
+    "worklet";
     return {
       opacity: animatedOpacity.value,
       width: interpolate(
         animatedPosition.value,
         [0, 1],
-        [origin.width, initialImageWidth],
+        [origin.width, initialImageWidth]
       ),
       height: interpolate(
         animatedPosition.value,
         [0, 1],
-        [origin.height, initialImageHeight],
+        [origin.height, initialImageHeight]
       ),
       transform: [
         {
           translateX: interpolate(
             animatedPosition.value,
             [0, 1],
-            [origin.x + origin.width / 2 - SCREEN_WIDTH / 2, translateX.value],
+            [origin.x + origin.width / 2 - SCREEN_WIDTH / 2, translateX.value]
           ),
         },
         {
           translateY: interpolate(
             animatedPosition.value,
             [0, 1],
-            [
-              origin.y + origin.height / 2 - SCREEN_HEIGHT / 2,
-              translateY.value,
-            ],
+            [origin.y + origin.height / 2 - SCREEN_HEIGHT / 2, translateY.value]
           ),
         },
-        {scale: scale.value},
+        { scale: scale.value },
       ],
     };
   });
 
   const animatedBackgroundStyle = useAnimatedStyle(() => {
-    'worklet';
+    "worklet";
     return {
       opacity: animatedOpacity.value,
-      backgroundColor: 'black',
+      backgroundColor: "black",
       ...modalBackgroundStyle,
     };
   });
 
   const handleOpenModal = () => {
     ref.current?.measure((x, y, width, height, pageX, pageY) => {
-      setOrigin({x: pageX, y: pageY, width, height});
+      setOrigin({ x: pageX, y: pageY, width, height });
       animatedPosition.value = 0;
       animatedOpacity.value = 0;
 
@@ -212,69 +208,71 @@ const ImageView: React.FC<ImageViewProps> = ({
   };
 
   const handleCloseModal = () => {
-    'worklet';
+    "worklet";
     animatedOpacity.value = withTiming(
       0,
-      {duration: animationConfig.closeDuration},
+      { duration: animationConfig.closeDuration },
       () => {
         // Use runOnJS to call non-worklet functions
         runOnJS(setIsModalVisible)(false);
         if (onClose) {
           runOnJS(onClose)();
         }
-      },
+      }
     );
   };
 
   const handleDownload = async () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         {
-          title: 'Storage Permission Required',
-          message: 'The app needs access to your storage to download images.',
-        },
+          title: "Storage Permission Required",
+          message: "The app needs access to your storage to download images.",
+        }
       );
       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
         Alert.alert(
-          'Permission Denied',
-          'Cannot download image without storage permission.',
+          "Permission Denied",
+          "Cannot download image without storage permission."
         );
         return;
       }
     }
 
-    const fileName = source.uri.split('/').pop();
+    const fileName = source.uri.split("/").pop();
     const path = `${RNFS.DownloadDirectoryPath}/${fileName}`;
     try {
       await RNFS.downloadFile({
         fromUrl: source.uri,
         toFile: path,
       }).promise;
-      Alert.alert('Download Successful', 'Image downloaded successfully.');
+      Alert.alert("Download Successful", "Image downloaded successfully.");
     } catch (error) {
       Alert.alert(
-        'Download Failed',
-        'An error occurred while downloading the image.',
+        "Download Failed",
+        "An error occurred while downloading the image."
       );
     }
   };
 
   return (
     <>
-      <Pressable onPress={handleOpenModal}>
+      <TouchableOpacity onPress={handleOpenModal}>
         <Image ref={ref} source={source} style={[style]} />
-      </Pressable>
+      </TouchableOpacity>
 
       <Modal
         statusBarTranslucent
         animationType="fade"
         transparent
         visible={isModalVisible}
-        onRequestClose={handleCloseModal}>
+        onRequestClose={handleCloseModal}
+      >
         <GestureHandlerRootView style={styles.modalContainer}>
           <Animated.View
-            style={[styles.modalBackground, animatedBackgroundStyle]}>
+            style={[styles.modalBackground, animatedBackgroundStyle]}
+          >
             <View style={[styles.header, headerStyle]}>
               <TouchableOpacity onPress={handleCloseModal}>
                 <Text style={[styles.closeButton, closeButtonStyle]}>
@@ -307,26 +305,26 @@ const styles = StyleSheet.create({
   },
   modalBackground: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     right: 20,
     zIndex: 1,
-    flexDirection: 'row-reverse',
+    flexDirection: "row-reverse",
     gap: 15,
   },
   closeButton: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   downloadButton: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 15,
   },
 });

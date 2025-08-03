@@ -1,4 +1,18 @@
 import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import {
   useBookingIntentMutation,
   useBookingSuccessMutation,
 } from "@/redux/apiSlices/bookingSlices";
@@ -8,33 +22,18 @@ import {
   useLazyGetFreeTimesQuery,
 } from "@/redux/apiSlices/servicesApiSlices";
 import { useNavigation, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  Modal,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
 
-import { IconBackArrow } from "@/assets/icon/icon";
-import { ImgSuccess } from "@/assets/images/images";
-import TButton from "@/lib/buttons/TButton";
-import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
-import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
-import { PrimaryColor } from "@/utils/utils";
-import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Calendar } from "react-native-calendars";
 import { Dropdown } from "react-native-element-dropdown";
+import { IconBackArrow } from "@/assets/icon/icon";
+import { ImgSuccess } from "@/assets/images/images";
+import InputText from "@/lib/inputs/InputText";
+import { PrimaryColor } from "@/utils/utils";
 import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
+import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 
 const calendersDate = () => {
   const { id } = useLocalSearchParams();
@@ -248,7 +247,7 @@ const calendersDate = () => {
 
   return (
     <View style={tw`px-6 flex-1 bg-primaryBase`}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -258,7 +257,7 @@ const calendersDate = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Back
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <ScrollView
         refreshControl={

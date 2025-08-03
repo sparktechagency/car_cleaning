@@ -1,12 +1,4 @@
 import {
-  IconBook,
-  IconCross,
-  IconHi,
-  IconMenu,
-  IconNotification,
-} from "@/assets/icon/icon";
-import { useNavigation, useRouter } from "expo-router";
-import {
   FlatList,
   Image,
   Modal,
@@ -18,34 +10,45 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-
-import PhotosComponents from "@/components/PhotosComponents";
-import tw from "@/lib/tailwind";
 import {
-  useGetProfileQuery,
-  useTokenCheckMutation,
-} from "@/redux/apiSlices/authSlices";
-import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import { _HEIGHT } from "@/utils/utils";
-import React, { useEffect } from "react";
-import { SvgXml } from "react-native-svg";
+  IconBook,
+  IconCross,
+  IconHi,
+  IconMenu,
+  IconNotification,
+} from "@/assets/icon/icon";
+import React, { useState } from "react";
+import { useNavigation, useRouter } from "expo-router";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PhotosComponents from "@/components/PhotosComponents";
+import { SvgXml } from "react-native-svg";
+import { _HEIGHT } from "@/utils/utils";
+import tw from "@/lib/tailwind";
+import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [currentToken, setCurrentToken] = React.useState(null);
+  const [isToken, setIsToken] = useState<null | string>(null);
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
 
+  useGetProfileQuery(isToken);
+
+  // console.log(isToken, "is token");
   // ============================ services data =-======================================================================
 
-  const { data, isLoading, refetch } = useGetServicesQuery({});
+  const user = useSelector((state: any) => state?.user?.user);
 
-  const { data: userInfo, refetch: userRefetch } = useGetProfileQuery({});
+  // console.log(user);
 
-  const [isToken, { isLoading: isTokenLoading }] = useTokenCheckMutation();
+  const { data, isLoading, refetch, error } = useGetServicesQuery({});
+
+  // console.log(userInfo, "user info", isError, "is error");
 
   const renderItem = ({ item }: { item: any }): JSX.Element => {
     return (
@@ -75,10 +78,7 @@ const Home = () => {
 
   const handlePathDecision = async (item: any) => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const checkToken = await isToken({ token }).unwrap();
-      setCurrentToken(checkToken);
-      if (checkToken) {
+      if (user?.id) {
         router.push({
           pathname: "/order/calendersDate",
           params: { id: item?.id },
@@ -91,9 +91,15 @@ const Home = () => {
       router.push("/login");
     }
   };
-  useEffect(() => {
-    userRefetch();
-  }, [isToken]);
+
+  const handleGetToken = async () => {
+    const token = await AsyncStorage.getItem("token");
+    setIsToken(token);
+  };
+
+  React.useEffect(() => {
+    handleGetToken();
+  }, []);
 
   return (
     <View style={tw`flex-1 w-full self-center bg-primaryBase px-4 `}>
@@ -113,7 +119,7 @@ const Home = () => {
               <Text
                 style={tw`font-DegularDisplayBold flex-row items-center text-black text-xl`}
               >
-                Hi {userInfo?.data?.name}.
+                Hi {user?.name}.
               </Text>
               <SvgXml xml={IconHi} />
             </View>
@@ -129,7 +135,7 @@ const Home = () => {
 
           {/* ----------- notification icon -------------- */}
 
-          {currentToken && (
+          {user?.id && (
             <TouchableOpacity
               onPress={() => router.push("/notification/notification")}
               style={tw`w-12 h-12 p-3 items-center text-center text-white bg-primary rounded-full`}

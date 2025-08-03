@@ -1,15 +1,15 @@
-import { router, useNavigation } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
-import { Pressable, ScrollView, Text, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { Controller, useForm } from "react-hook-form";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { router, useNavigation } from "expo-router";
 
 import { IconBackArrow } from "@/assets/icon/icon";
-import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
-import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
+import tw from "@/lib/tailwind";
+import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
 
 const support = () => {
   const navigation = useNavigation();
@@ -56,7 +56,7 @@ const support = () => {
       showsVerticalScrollIndicator={false}
       style={tw`px-6 bg-primaryBase flex-1`}
     >
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -66,7 +66,7 @@ const support = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Back
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <View>
         <Controller

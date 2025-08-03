@@ -1,3 +1,4 @@
+import { addUser } from "../service/user";
 import { api } from "../api/baseApi";
 
 const authSlice = api.injectEndpoints({
@@ -10,9 +11,21 @@ const authSlice = api.injectEndpoints({
     }),
 
     getProfile: builder.query<any, any>({
-      query: () => ({
+      query: (token) => ({
         url: `/auth/profile`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          // console.log(data);
+          dispatch(addUser(data.data));
+        } catch (error) {
+          // console.log(error);
+        }
+      },
       providesTags: ["user", "photo", "service"],
     }),
 

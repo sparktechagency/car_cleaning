@@ -1,17 +1,17 @@
-import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
-import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
 
-import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
+import StarRating from "react-native-star-rating-widget";
+import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
 import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
 import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import StarRating from "react-native-star-rating-widget";
-import { SvgXml } from "react-native-svg";
+import { useNavigation } from "expo-router";
 
 const notificationReview = () => {
   const navigation = useNavigation();
@@ -73,7 +73,7 @@ const notificationReview = () => {
 
   return (
     <View style={tw`px-6 bg-primaryBase`}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -83,7 +83,7 @@ const notificationReview = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Notification
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <View>
         <Text style={tw`font-DegularDisplaySemibold text-xl mt-6`}>

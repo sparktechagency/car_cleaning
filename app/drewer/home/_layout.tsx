@@ -13,14 +13,14 @@ import {
   ParamListBase,
   TabNavigationState,
 } from "@react-navigation/native";
+import { Tabs, router } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 
-import tw from "@/lib/tailwind";
 import { BottomTabNavigationEventMap } from "@react-navigation/bottom-tabs";
-import { router, Tabs } from "expo-router";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import tw from "@/lib/tailwind";
+import { useSelector } from "react-redux";
 
 // Define your route params
 type RouteParamList = {
@@ -38,6 +38,7 @@ type MyTabBarProps = {
 };
 
 function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
+  const user = useSelector((state: any) => state?.user?.user);
   return (
     <View
       style={tw`absolute bottom-3 justify-center items-center w-full flex-1`}
@@ -53,14 +54,7 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
 
           const onPress = async () => {
             if (route.name === "profile") {
-              try {
-                const currentToken = await AsyncStorage.getItem("token");
-                if (!currentToken) {
-                  router.push("/login");
-                  return;
-                }
-              } catch (error) {
-                console.error("Error checking token:", error);
+              if (!user?.id) {
                 router.push("/login");
                 return;
               }
@@ -83,7 +77,7 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
               target: route.key,
             });
           };
-          const token = AsyncStorage.getItem("token");
+
           // Get the icon based on route name
           const getIcon = () => {
             switch (route.name) {

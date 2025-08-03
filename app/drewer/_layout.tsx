@@ -1,53 +1,50 @@
-import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
-import {
-  useDeleteUserAccountMutation,
-  useGetProfileQuery,
-  useTokenCheckMutation,
-} from "@/redux/apiSlices/authSlices";
-import { useEffect, useState } from "react";
-import {
-  Image,
-  Modal,
-  Platform,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
   GestureHandlerRootView,
   TextInput,
 } from "react-native-gesture-handler";
+import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
+import {
+  Image,
+  Modal,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-import tw from "@/lib/tailwind";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { SvgXml } from "react-native-svg";
+import { removeUser } from "@/redux/service/user";
+import tw from "@/lib/tailwind";
+import { useDeleteUserAccountMutation } from "@/redux/apiSlices/authSlices";
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useState } from "react";
 
 const CustomDrawerContent = (props) => {
+  const user = useSelector((state: any) => state?.user?.user);
   const { setIsModalVisible, isModalVisible } = props;
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [tokenCheck, setIsToken] = useState();
-  const [userPass, serUserPass] = useState("");
 
+  const [userPass, serUserPass] = useState("");
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
 
-  const { data, refetch } = useGetProfileQuery(tokenCheck);
+  const dispatch = useDispatch();
   const [deleteAccount] = useDeleteUserAccountMutation();
-  const [isToken] = useTokenCheckMutation();
 
   const handleUserDelete = async () => {
     setIsModalVisible(false);
     try {
       const res = await deleteAccount({ password: userPass }).unwrap();
       await AsyncStorage.removeItem("token");
+      dispatch(removeUser());
       router.replace("/login");
       if (res) {
         Toast.show({
@@ -67,16 +64,11 @@ const CustomDrawerContent = (props) => {
     }
   };
 
-  const handleUserInfo = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const setToken = await isToken({ token }).unwrap();
-    setIsToken(setToken as any);
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    dispatch(removeUser());
+    router.push("/drewer/home");
   };
-
-  useEffect(() => {
-    refetch();
-    handleUserInfo();
-  }, []);
 
   return (
     <DrawerContentScrollView
@@ -89,22 +81,24 @@ const CustomDrawerContent = (props) => {
       ]}
     >
       {/* User Profile Section */}
-      <Pressable
-        onPress={() => router.push("/drewer/home/profile")}
-        style={tw`flex-row p-4 justify-start items-center gap-3`}
-      >
-        <Image
-          source={{
-            uri: data?.data?.photo,
-          }}
-          style={tw`w-12 h-12 rounded-full `}
-          resizeMode="cover"
-        />
-        <View>
-          <Text style={tw`text-lg font-bold `}>{data?.data?.name}</Text>
-          <Text style={tw`text-sm text-gray-600`}>{data?.data?.email}</Text>
-        </View>
-      </Pressable>
+      {user?.id && (
+        <TouchableOpacity
+          onPress={() => router.push("/drewer/home/profile")}
+          style={tw`flex-row p-4 justify-start items-center gap-3`}
+        >
+          <Image
+            source={{
+              uri: user?.photo,
+            }}
+            style={tw`w-12 h-12 rounded-full `}
+            resizeMode="cover"
+          />
+          <View>
+            <Text style={tw`text-lg font-bold `}>{user?.name}</Text>
+            <Text style={tw`text-sm text-gray-600`}>{user?.email}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
 
       <View style={tw`gap-4 px-4 `}>
         <TouchableOpacity
@@ -130,7 +124,7 @@ const CustomDrawerContent = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        {tokenCheck && (
+        {user?.id && (
           <TouchableOpacity onPress={() => router?.push("/drewer/support")}>
             <View>
               <Text style={tw`capitalize font-DegularDisplayMedium text-black`}>
@@ -140,7 +134,7 @@ const CustomDrawerContent = (props) => {
           </TouchableOpacity>
         )}
 
-        {tokenCheck && (
+        {user?.id && (
           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
             <View>
               <Text
@@ -154,12 +148,10 @@ const CustomDrawerContent = (props) => {
       </View>
 
       <View style={tw`mt-auto px-4 pt-5 pl-2`}>
-        {tokenCheck ? (
+        {user?.id ? (
           <TouchableOpacity
             onPress={async () => {
-              await AsyncStorage.removeItem("token");
-              router.push("/drewer/home");
-              refetch();
+              handleLogout();
             }}
             style={tw`py-5  flex-row items-center gap-2`}
           >

@@ -1,23 +1,22 @@
 import {
-  useGetNotificationQuery,
-  useMarkNotificationMutation,
-} from "@/redux/apiSlices/notificatinApiSlices";
-import { useNavigation, useRouter } from "expo-router";
-import {
   ActivityIndicator,
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  useGetNotificationQuery,
+  useMarkNotificationMutation,
+} from "@/redux/apiSlices/notificatinApiSlices";
+import { useNavigation, useRouter } from "expo-router";
 
 import { IconBackArrow } from "@/assets/icon/icon";
-import tw from "@/lib/tailwind";
 import { PrimaryColor } from "@/utils/utils";
-import moment from "moment";
 import React from "react";
 import { SvgXml } from "react-native-svg";
+import moment from "moment";
+import tw from "@/lib/tailwind";
 
 const notification = () => {
   const navigation = useNavigation();
@@ -36,7 +35,7 @@ const notification = () => {
   };
   return (
     <View style={tw`flex-1 px-6 bg-primaryBase`}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -46,7 +45,7 @@ const notification = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Notifications
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       {isLoading ? (
         <View style={tw`my-4 flex justify-center items-center`}>

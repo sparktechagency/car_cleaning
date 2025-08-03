@@ -1,20 +1,20 @@
 import {
   ActivityIndicator,
   Image,
-  Pressable,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
 import { IconBackArrow } from "@/assets/icon/icon";
-import tw from "@/lib/tailwind";
-import { useGetTermsAndConditionsQuery } from "@/redux/apiSlices/draweApiSlices";
 import { PrimaryColor } from "@/utils/utils";
-import { useNavigation } from "expo-router";
 import React from "react";
 import RenderHtml from "react-native-render-html";
 import { SvgXml } from "react-native-svg";
+import tw from "@/lib/tailwind";
+import { useGetTermsAndConditionsQuery } from "@/redux/apiSlices/draweApiSlices";
+import { useNavigation } from "expo-router";
 
 const tramsandcondition = () => {
   const navigation = useNavigation();
@@ -34,7 +34,7 @@ const tramsandcondition = () => {
           showsVerticalScrollIndicator={false}
           style={tw`px-6 flex-1 bg-primaryBase`}
         >
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               navigation.goBack();
             }}
@@ -44,7 +44,7 @@ const tramsandcondition = () => {
             <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
               Back
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
           {/* ======== banner section ================= */}
           {/* <View style={tw``}>

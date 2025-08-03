@@ -1,10 +1,14 @@
 import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+
 import { ActivityIndicator, Image, LogBox, View } from "react-native";
-import tw from "@/lib/tailwind";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PrimaryColor } from "@/utils/utils";
-import { useRouter } from "expo-router";
+import tw from "@/lib/tailwind";
 import { useEffect } from "react";
+import { useRouter } from "expo-router";
+import { useTokenCheckMutation } from "@/redux/apiSlices/authSlices";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -12,6 +16,8 @@ LogBox.ignoreLogs([""]);
 
 export default function App() {
   const route = useRouter();
+
+  const [checkToken] = useTokenCheckMutation();
 
   useEffect(() => {
     Font.loadAsync({
@@ -33,17 +39,27 @@ export default function App() {
     SplashScreen.hideAsync();
   }, []);
 
-  useEffect(() => {
-    const homePath = async () => {
-      try {
-        setTimeout(() => {
-          route.replace("/drewer/home");
-        }, 200);
-      } catch (e) {
-        console.error("Error in homePath:", e);
+  const handlePathDecision = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const tokenCheck = await checkToken(token).unwrap();
+
+      console.log(tokenCheck);
+
+      if (tokenCheck?.status) {
+        route.replace("/drewer/home");
+      } else {
+        AsyncStorage.removeItem("token");
+        route.replace("/drewer/home");
       }
-    };
-    homePath();
+    } catch (e) {
+      route.replace("/drewer/home");
+    }
+  };
+
+  useEffect(() => {
+    handlePathDecision();
   }, []);
 
   return (

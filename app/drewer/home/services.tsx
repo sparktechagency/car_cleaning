@@ -9,12 +9,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { PrimaryColor } from "@/utils/utils";
+import React from "react";
 import tw from "@/lib/tailwind";
 import { useGetServicesQuery } from "@/redux/apiSlices/homeApiSlices";
-import { PrimaryColor } from "@/utils/utils";
 import { useRouter } from "expo-router";
-import React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTokenCheckMutation } from "@/redux/apiSlices/authSlices";
 
 const services = (): JSX.Element => {
@@ -61,8 +61,8 @@ const services = (): JSX.Element => {
   const handlePathDecision = async (item: any) => {
     try {
       const localToken = await AsyncStorage.getItem("token");
-      const token = await isToken({ token: localToken }).unwrap();
-      if (token) {
+
+      if (localToken) {
         router.push({
           pathname: "/order/calendersDate",
           params: { id: item?.id },

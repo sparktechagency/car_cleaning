@@ -1,11 +1,18 @@
-import { View, Text, Pressable, ActivityIndicator, Modal } from "react-native";
-import React, { useEffect, useState } from "react";
-import tw from "@/lib/tailwind";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { SvgXml } from "react-native-svg";
+import {
+  ActivityIndicator,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
-import { useGetNotificationDetailsQuery } from "@/redux/apiSlices/notificatinApiSlices";
+import React, { useEffect, useState } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+
 import { PrimaryColor } from "@/utils/utils";
+import { SvgXml } from "react-native-svg";
+import tw from "@/lib/tailwind";
+import { useGetNotificationDetailsQuery } from "@/redux/apiSlices/notificatinApiSlices";
 
 const notificationDetails = () => {
   const [details, setDetails] = useState<any>(null);
@@ -44,7 +51,7 @@ const notificationDetails = () => {
   }, [data, error]);
   return (
     <View style={tw`px-6 bg-primaryBase`}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -54,7 +61,7 @@ const notificationDetails = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Notification
         </Text>
-      </Pressable>
+      </TouchableOpacity>
       <Text
         style={tw`font-DegularDisplaySemibold text-xl text-regularText mt-6 mb-4`}
       >

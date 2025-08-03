@@ -1,5 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
   IconBackArrow,
   IconChange,
@@ -12,6 +13,17 @@ import {
   IconThreeDot,
 } from "@/assets/icon/icon";
 import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { router, useNavigation } from "expo-router";
+import {
   useChangeProfileImageMutation,
   useGetProfileQuery,
   useUpdateUserMutation,
@@ -20,24 +32,11 @@ import {
   useDeleteCarPhotoMutation,
   useUpdateCarPhotoMutation,
 } from "@/redux/apiSlices/carApiSlices";
-import { router, useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {
-  Image,
-  Modal,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
-import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
 import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
+import tw from "@/lib/tailwind";
 
 const editProfile = () => {
   const { width, height } = useWindowDimensions();
@@ -210,7 +209,7 @@ const editProfile = () => {
 
   return (
     <View style={tw`flex-1 bg-primaryBase`}>
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
           navigation.goBack();
         }}
@@ -220,7 +219,7 @@ const editProfile = () => {
         <Text style={tw`text-[#262626] font-DegularDisplayBold text-2xl`}>
           Back
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -433,12 +432,12 @@ const editProfile = () => {
           >
             <View style={tw`w-full flex-row justify-between items-center`}>
               <Text style={tw`text-2xl font-bold mt-3`}>Select one</Text>
-              <Pressable
+              <TouchableOpacity
                 style={tw`p-3`}
                 onPress={() => setSelectModalVisible(false)}
               >
                 <SvgXml xml={IconCross} />
-              </Pressable>
+              </TouchableOpacity>
             </View>
 
             <View style={tw`w-full m-4`}>
