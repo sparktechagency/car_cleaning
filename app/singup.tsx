@@ -1,4 +1,7 @@
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { Controller, useForm } from "react-hook-form";
 import {
+  IconBackArrow,
   IconEmail,
   IconEyaClose,
   IconEyeShow,
@@ -6,24 +9,23 @@ import {
   IconPhone,
   IconUser,
 } from "@/assets/icon/icon";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
 import {
   useGoogleLoginMutation,
   useRegisterMutation,
 } from "@/redux/apiSlices/authSlices";
-import { Link, router } from "expo-router";
-import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
-import { ImgLogo } from "@/assets/images/images";
-import SubHeading from "@/components/SubTileHead";
-import Heading from "@/components/TitleHead";
-import TButton from "@/lib/buttons/TButton";
-import InputText from "@/lib/inputs/InputText";
-import tw from "@/lib/tailwind";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Heading from "@/components/TitleHead";
+import { ImgLogo } from "@/assets/images/images";
+import InputText from "@/lib/inputs/InputText";
+import SubHeading from "@/components/SubTileHead";
+import { SvgXml } from "react-native-svg";
+import TButton from "@/lib/buttons/TButton";
+import tw from "@/lib/tailwind";
 
 GoogleSignin.configure({
   webClientId:
@@ -114,8 +116,21 @@ const singup = () => {
   };
 
   return (
-    <ScrollView style={tw`px-6 bg-primaryBase flex-1`}>
-      <View style={tw`py-4 justify-center mt-6 items-center`}>
+    <ScrollView style={tw` bg-primaryBase flex-1`}>
+      {router?.canGoBack() && (
+        <TouchableOpacity
+          onPress={() => {
+            router.back();
+          }}
+          style={tw`absolute flex-row items-center  px-6 mt-5 mb-6 gap-2`}
+        >
+          <SvgXml xml={IconBackArrow} />
+          <Text style={tw`text-[#262626] font-DegularDisplayBold text-xl`}>
+            Back
+          </Text>
+        </TouchableOpacity>
+      )}
+      <View style={tw`py-4 px-6 justify-center mt-6 items-center`}>
         <View style={tw`justify-center items-center`}>
           <Image resizeMode="contain" style={tw`w-56 h-40`} source={ImgLogo} />
         </View>
