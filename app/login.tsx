@@ -1,5 +1,3 @@
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
-import { Controller, useForm } from "react-hook-form";
 import {
   IconBackArrow,
   IconEmail,
@@ -7,19 +5,21 @@ import {
   IconEyeShow,
   IconPassword,
 } from "@/assets/icon/icon";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Heading from "@/components/TitleHead";
 import { ImgLogo } from "@/assets/images/images";
-import InputText from "@/lib/inputs/InputText";
 import SubHeading from "@/components/SubTileHead";
-import { SvgXml } from "react-native-svg";
+import Heading from "@/components/TitleHead";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useLoginMutation } from "@/redux/apiSlices/authSlices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SvgXml } from "react-native-svg";
 
 const login = () => {
   const [isShow, setIsShow] = useState(false);
@@ -220,7 +220,7 @@ const login = () => {
             </View>
           </View>
         </View>
-        <View style={tw`justify-end items-center mb-2`}>
+        <View style={tw`justify-end items-center my-4`}>
           <Text style={tw`font-normal text-sm font-DegularDisplayMedium`}>
             Don’t have an account?{" "}
             <Link style={tw`text-primary font-bold underline`} href={"/singup"}>
