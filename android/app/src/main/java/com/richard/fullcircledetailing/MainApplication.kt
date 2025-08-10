@@ -1,4 +1,4 @@
-package com.anonymous.car_clealing
+package com.richard.fullcircledetailing
 
 import android.app.Application
 import android.content.res.Configuration

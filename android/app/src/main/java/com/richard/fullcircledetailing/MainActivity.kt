@@ -1,4 +1,4 @@
-package com.anonymous.car_clealing
+package com.richard.fullcircledetailing
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

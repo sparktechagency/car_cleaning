@@ -18,7 +18,6 @@ import {
 } from "@/redux/apiSlices/authSlices";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Heading from "@/components/TitleHead";
 import { ImgLogo } from "@/assets/images/images";
 import InputText from "@/lib/inputs/InputText";
@@ -26,13 +25,6 @@ import SubHeading from "@/components/SubTileHead";
 import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
 import tw from "@/lib/tailwind";
-
-GoogleSignin.configure({
-  webClientId:
-    "841070320562-hs5hc7at9gu3kcu71efp6tm2jkipsg6d.apps.googleusercontent.com", // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
-  offlineAccess: true,
-  forceCodeForRefreshToken: true,
-});
 
 const singup = () => {
   const [isShow, setIsShow] = useState(false);
@@ -50,19 +42,6 @@ const singup = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
   const [googleLogin] = useGoogleLoginMutation();
-
-  const handleGoogleLogin = async () => {
-    try {
-      // Ensure Google Play services are available
-      await GoogleSignin.hasPlayServices();
-      const response = await GoogleSignin.signIn();
-      console.log("125", response);
-    } catch (error) {
-      console.error("Google Sign-In Error:", error);
-
-      // Handle specific Google Sign-In errors
-    }
-  };
 
   const {
     control,

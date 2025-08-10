@@ -31,7 +31,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.anonymous.car_clealing"/>
+        <data android:scheme="com.richard.fullcircledetailing"/>
       </intent-filter>
     </activity>
   </application>
