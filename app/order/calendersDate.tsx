@@ -210,7 +210,7 @@ const calendersDate = () => {
 
     try {
       if (!booking_time || !booking_date || !price) {
-        Alert.alert("warring", "please fil in all data!");
+        Alert.alert("warring", "Please fill in all data.");
         return;
       } else {
         const bookingInfo = {
