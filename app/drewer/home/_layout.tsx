@@ -98,8 +98,8 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
             <TouchableOpacity
               key={route.key}
               accessibilityRole="button"
-              accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              // accessibilityState={isFocused ? { selected: true } : {}}
+              // accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
@@ -107,8 +107,10 @@ function MyTabBar({ state, descriptors, navigation }: MyTabBarProps) {
             >
               <View
                 style={[
-                  tw`items-center justify-center px-4 py-3 rounded-3xl `,
-                  tw`${isFocused ? "bg-primary" : "bg-transparent"}`,
+                  tw`items-center justify-center px-4 py-3  `,
+                  tw`${
+                    isFocused ? "bg-primary rounded-3xl" : "bg-transparent"
+                  }`,
                 ]}
               >
                 <SvgXml
