@@ -1,4 +1,16 @@
 import {
+  useBookingIntentMutation,
+  useBookingSuccessMutation,
+} from "@/redux/apiSlices/bookingSlices";
+import {
+  useGetBlockedServiceDateQuery,
+  useGetServicesByIdQuery,
+  useLazyGetFreeTimesQuery,
+} from "@/redux/apiSlices/servicesApiSlices";
+import { useNavigation, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
   ActivityIndicator,
   Alert,
   Image,
@@ -10,30 +22,18 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
-import { Controller, useForm } from "react-hook-form";
-import React, { useEffect, useState } from "react";
-import {
-  useBookingIntentMutation,
-  useBookingSuccessMutation,
-} from "@/redux/apiSlices/bookingSlices";
-import {
-  useGetBlockedServiceDateQuery,
-  useGetServicesByIdQuery,
-  useLazyGetFreeTimesQuery,
-} from "@/redux/apiSlices/servicesApiSlices";
-import { useNavigation, useRouter } from "expo-router";
 
-import { Calendar } from "react-native-calendars";
-import { Dropdown } from "react-native-element-dropdown";
 import { IconBackArrow } from "@/assets/icon/icon";
 import { ImgSuccess } from "@/assets/images/images";
-import InputText from "@/lib/inputs/InputText";
-import { PrimaryColor } from "@/utils/utils";
-import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { PrimaryColor } from "@/utils/utils";
 import { useLocalSearchParams } from "expo-router/build/hooks";
+import { Calendar } from "react-native-calendars";
+import { Dropdown } from "react-native-element-dropdown";
+import { SvgXml } from "react-native-svg";
 
 const calendersDate = () => {
   const { id } = useLocalSearchParams();
@@ -210,7 +210,7 @@ const calendersDate = () => {
 
     try {
       if (!booking_time || !booking_date || !price) {
-        Alert.alert("warring", "please fil up all data!");
+        Alert.alert("warring", "please fil in all data!");
         return;
       } else {
         const bookingInfo = {
