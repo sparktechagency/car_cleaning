@@ -1,8 +1,4 @@
 import {
-  useBookingIntentMutation,
-  useBookingSuccessMutation,
-} from "@/redux/apiSlices/bookingSlices";
-import {
   useGetBlockedServiceDateQuery,
   useGetServicesByIdQuery,
   useLazyGetFreeTimesQuery,
@@ -29,6 +25,7 @@ import TButton from "@/lib/buttons/TButton";
 import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useGetProfileQuery } from "@/redux/apiSlices/authSlices";
+import { useBookingSuccessMutation } from "@/redux/apiSlices/bookingSlices";
 import { PrimaryColor } from "@/utils/utils";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { Calendar } from "react-native-calendars";
@@ -190,27 +187,28 @@ const calendersDate = () => {
       street_address: "",
       zip_code: "",
       service_type: "",
+      booking_time: "",
       booking_name: "",
     },
   });
 
-  const [createIntent, intentResult] = useBookingIntentMutation();
   const [bookingSuccess, bookingResult] = useBookingSuccessMutation();
 
   const handleServiceData = async (item) => {
+    console.log("HIST");
     const car_brand = item?.brand_name;
     const car_model = item?.model_name;
     const street_address = item?.street_address;
     const zip_code = item?.zip_code;
+    const booking_time = item?.booking_time;
     const booking_note = bookingNote;
     const service_name = singleServiceData?.data?.car_type;
     const service_id = singleServiceData?.data?.id;
     const booking_date = Object.keys(markedDates)[0];
-    const booking_time = selectTime;
 
     try {
       if (!booking_time || !booking_date || !price) {
-        Alert.alert("warring", "Please fill in all data.");
+        Alert.alert("Warring", "Please fill in all data.");
         return;
       } else {
         const bookingInfo = {
@@ -374,136 +372,191 @@ const calendersDate = () => {
                   placeholderTextColor: tw.color("gray-400"),
                   placeholder: "Your zip code",
                   keyboardType: "number-pad",
+                  maxLength: 6,
+                  autoCapitalize: "none",
                 }}
                 containerStyle={tw`w-full`}
               />
             )}
             name="zip_code"
           />
-
-          <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
-            Select Service
-          </Text>
+          <View style={tw` flex-row items-center gap-2`}>
+            <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
+              Select Service
+            </Text>
+            {errors?.service_type?.message && (
+              <Text style={tw`text-red-500 text-[10px]`}>
+                * ({errors?.service_type?.message})
+              </Text>
+            )}
+          </View>
 
           <Controller
             control={control}
             rules={{
               required: {
                 value: true,
-                message: "Please enter your model name",
+                message: "Select a service",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <Dropdown
-                style={tw` h-12 bg-[#E7E7E7] w-full rounded-xl border  p-4`}
-                placeholderStyle={tw`text-base`}
-                containerStyle={tw`rounded-lg p-2`}
-                selectedTextStyle={tw`text-base`}
-                inputSearchStyle={tw`h-10 text-base`}
-                iconStyle={tw`w-5 h-5`}
-                data={serviceSelectedData}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Service"
-                onChange={(item) => {
-                  // console.log(item);
-                  onChange(item.value);
-                  setDropValue(item);
-                }}
-                value={dropDownValue?.value}
-                renderItem={(item, selected) => (
-                  <View
-                    style={[
-                      tw`p-4 my-1 w-full bg-[#E7E7E7] rounded-xl flex-row justify-between items-center gap-2`,
-                      {
-                        backgroundColor: selected
-                          ? tw.color("gray-50")
-                          : "white",
-                      },
-                    ]}
-                  >
-                    <Text style={tw`text-base`}>{item.label}</Text>
-                    <Text
-                      style={tw` font-DegularDisplaySemibold text-base text-[#0063E5]`}
+              <>
+                <Dropdown
+                  style={tw`  bg-[#E7E7E7] w-full rounded-xl border  px-4 py-3`}
+                  placeholderStyle={tw`text-base`}
+                  containerStyle={tw`rounded-lg pt-2`}
+                  selectedTextStyle={tw`text-base`}
+                  inputSearchStyle={tw`h-10 text-base`}
+                  iconStyle={tw`w-5 h-5`}
+                  data={serviceSelectedData}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  onBlur={onBlur}
+                  placeholder="Select Service"
+                  onChange={(item) => {
+                    // console.log(item);
+                    onChange(item.value);
+                    setDropValue(item);
+                  }}
+                  value={dropDownValue?.value}
+                  renderItem={(item, selected) => (
+                    <View
+                      style={[
+                        tw`p-4 my-1 w-full bg-[#E7E7E7] rounded-xl flex-row justify-between items-center gap-2`,
+                        {
+                          backgroundColor: selected
+                            ? tw.color("gray-50")
+                            : "white",
+                        },
+                      ]}
                     >
-                      $ {item.price}
-                    </Text>
-                  </View>
-                )}
-              />
+                      <Text style={tw`text-base`}>{item.label}</Text>
+                      <Text
+                        style={tw` font-DegularDisplaySemibold text-base text-[#0063E5]`}
+                      >
+                        $ {item.price}
+                      </Text>
+                    </View>
+                  )}
+                />
+              </>
             )}
             name="service_type"
           />
         </View>
         {/* ------------------ calender -------------------- */}
-        <View style={tw`  `}>
-          <Text style={tw`font-DegularDisplaySemibold text-xl mt-4 mb-1`}>
-            Select Date
-          </Text>
 
-          <View style={tw`h-80 justify-center`}>
-            {blockedDateLoading ? (
-              <>
-                <ActivityIndicator color={PrimaryColor} size={"large"} />
-                <Text
-                  style={tw`text-center font-DegularDisplayMedium text-gray-500`}
-                >
-                  Loading...
-                </Text>
-              </>
-            ) : (
-              <Calendar
-                current={new Date().toISOString().split("T")[0]}
-                markedDates={markedDates}
-                dayComponent={({ date, state }) => renderDay(date, state)}
-                style={tw`rounded-lg`}
-              />
+        <View style={tw`py-4 gap-3 `}>
+          <View style={tw`flex-row items-center gap-2`}>
+            <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
+              Select Date
+            </Text>
+            {errors?.booking_time?.message && (
+              <Text style={tw`text-red-500 text-[10px] flex-1`}>
+                * (Please select a date, and then you can select a time.)
+              </Text>
             )}
           </View>
-        </View>
-        {/*  ---------------- select time ------------------- */}
-        <View>
-          <Text
-            style={tw`mt-3 font-DegularDisplaySemibold text-xl text-regularText`}
-          >
-            Select Time
-          </Text>
-          <View style={tw`py-4`}>
-            <View
-              style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
-            >
-              {timeFetching ? (
-                <View style={tw`flex-1  justify-center items-center`}>
-                  <ActivityIndicator color={PrimaryColor} size={"small"} />
+
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Select a time",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <>
+                <View style={tw` justify-center`}>
+                  {blockedDateLoading ? (
+                    <>
+                      <ActivityIndicator color={PrimaryColor} size={"large"} />
+                      <Text
+                        style={tw`text-center font-DegularDisplayMedium text-gray-500`}
+                      >
+                        Loading...
+                      </Text>
+                    </>
+                  ) : (
+                    <Calendar
+                      current={new Date().toISOString().split("T")[0]}
+                      markedDates={markedDates}
+                      dayComponent={({ date, state }) => renderDay(date, state)}
+                      style={tw`rounded-lg`}
+                    />
+                  )}
                 </View>
-              ) : isTime ? (
-                isTime.map((time, index) => (
-                  <TouchableOpacity
-                    style={tw`${
-                      selectTime === time ? "bg-primary" : "bg-white"
-                    } rounded-lg border w-[32%] border-gray-50`}
-                    key={index}
-                    onPress={() => setSelectTime(time)}
-                  >
-                    <Text
-                      style={tw`font-DegularDisplaySemibold text-base ${
-                        selectTime === time ? "text-white" : "text-regularText"
-                      }   rounded-2xl text-center px-6 py-3`}
-                    >
-                      {time}
-                    </Text>
-                  </TouchableOpacity>
-                ))
-              ) : (
-                <Text
-                  style={tw`font-bold text-xl justify-center items-center w-full text-gray-600 text-center`}
-                >
-                  No Date Available
-                </Text>
-              )}
-            </View>
+              </>
+            )}
+            name="booking_time"
+          />
+        </View>
+        <View>
+          <View style={tw`flex-row items-center gap-2`}>
+            <Text style={tw`font-DegularDisplaySemibold text-xl  `}>
+              Select Time
+            </Text>
+            {errors?.booking_time?.message && (
+              <Text style={tw`text-red-500 text-[10px] flex-1`}>
+                * ({errors?.booking_time?.message})
+              </Text>
+            )}
           </View>
+
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: "Select a time",
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <>
+                <View style={tw`py-4`}>
+                  <View
+                    style={tw`flex-row flex-wrap justify-start items-center gap-1 w-full`}
+                  >
+                    {timeFetching ? (
+                      <View style={tw`flex-1  justify-center items-center`}>
+                        <ActivityIndicator
+                          color={PrimaryColor}
+                          size={"small"}
+                        />
+                      </View>
+                    ) : isTime ? (
+                      isTime.map((time, index) => (
+                        <TouchableOpacity
+                          style={tw`${
+                            value === time ? "bg-primary" : "bg-white"
+                          } rounded-lg border w-[32%] border-gray-50`}
+                          key={index}
+                          onPress={() => onChange(time)}
+                        >
+                          <Text
+                            style={tw`font-DegularDisplaySemibold text-base ${
+                              value === time ? "text-white" : "text-regularText"
+                            }   rounded-2xl text-center px-6 py-3`}
+                          >
+                            {time}
+                          </Text>
+                        </TouchableOpacity>
+                      ))
+                    ) : (
+                      <Text
+                        style={tw`font-bold text-xl justify-center items-center w-full text-gray-600 text-center`}
+                      >
+                        No Date Available
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              </>
+            )}
+            name="booking_time"
+          />
         </View>
 
         <View>
@@ -538,7 +591,7 @@ const calendersDate = () => {
             titleStyle={tw`text-primary`}
           />
           <TButton
-            isLoading={intentResult?.isLoading}
+            isLoading={bookingResult?.isLoading}
             onPress={handleSubmit(handleServiceData)}
             // onPress={() => router.push("/order/paymentSystem")}
             title="Book"

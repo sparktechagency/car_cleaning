@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
-import React from "react";
 import { Stack } from "expo-router";
+import React from "react";
 
 const OrderLayout = () => {
   return (
@@ -10,7 +9,7 @@ const OrderLayout = () => {
       }}
     >
       <Stack.Screen name="calendersDate" />
-      <Stack.Screen name="paymentSystem" />
+      {/* <Stack.Screen name="paymentSystem" /> */}
     </Stack>
   );
 };
