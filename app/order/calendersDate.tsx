@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   Modal,
   RefreshControl,
@@ -207,35 +206,30 @@ const calendersDate = () => {
     const booking_date = Object.keys(markedDates)[0];
 
     try {
-      if (!booking_time || !booking_date || !price) {
-        Alert.alert("Warring", "Please fill in all data.");
-        return;
-      } else {
-        const bookingInfo = {
-          car_brand,
-          car_model,
-          street_address,
-          zip_code,
-          service_name,
-          service_id,
-          service_type,
-          booking_date,
-          booking_time,
-          booking_note,
-          price,
-        };
-        const res = await bookingSuccess(bookingInfo).unwrap();
+      const bookingInfo = {
+        car_brand,
+        car_model,
+        street_address,
+        zip_code,
+        service_name,
+        service_id,
+        service_type,
+        booking_date,
+        booking_time,
+        booking_note,
+        price,
+      };
+      const res = await bookingSuccess(bookingInfo).unwrap();
 
-        if (res?.status) {
-          setModalVisible(true);
-          setTimeout(() => {
-            setModalVisible(false);
-            router.push("/drewer/home");
-          }, 3000);
-        }
-
-        // handleSetupInitialPayment(bookingInfo);
+      if (res?.status) {
+        setModalVisible(true);
+        setTimeout(() => {
+          setModalVisible(false);
+          router.push("/drewer/home");
+        }, 3000);
       }
+
+      // handleSetupInitialPayment(bookingInfo);
     } catch (error) {
       console.log(error, "please enter the payment info ____");
     }
@@ -274,7 +268,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Please enter your brand name",
+                message: "Please enter the brand name",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -300,7 +294,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Please enter your model name",
+                message: "Please enter the model name",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -326,7 +320,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Please enter your street address",
+                message: "Please enter the street address",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -396,7 +390,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Select a service",
+                message: "Please select a service",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -454,8 +448,7 @@ const calendersDate = () => {
             </Text>
             {errors?.booking_time?.message && (
               <Text style={tw`text-red-500 text-[10px] flex-1`}>
-                * (Please select a date, and then you can able to select a
-                time.)
+                * (Please select a date)
               </Text>
             )}
           </View>
@@ -511,7 +504,7 @@ const calendersDate = () => {
             rules={{
               required: {
                 value: true,
-                message: "Select a time",
+                message: "Please select a time",
               },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
