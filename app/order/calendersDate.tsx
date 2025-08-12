@@ -454,7 +454,8 @@ const calendersDate = () => {
             </Text>
             {errors?.booking_time?.message && (
               <Text style={tw`text-red-500 text-[10px] flex-1`}>
-                * (Please select a date, and then you can select a time.)
+                * (Please select a date, and then you can able to select a
+                time.)
               </Text>
             )}
           </View>
