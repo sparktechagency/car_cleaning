@@ -38,11 +38,11 @@ const forgetPass = () => {
           params: { email: data?.email },
         });
       } else {
-        route?.push(`/toaster?content=${res?.message}&time=3000`);
+        route?.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
       route?.push(
-        `/toaster?content=${(error as any)?.message?.email}&time=3000`
+        `/toaster?content=${(error as any)?.message?.email}&time=2000`
       );
       console.log(error, "Otp don't send Please try.");
     }

@@ -59,7 +59,7 @@ const login = () => {
         await AsyncStorage.setItem("token", res?.data?.access_token);
         router.replace("/drewer/home");
       } else {
-        router?.push(`/toaster?content=${res?.message}&time=3000`);
+        router?.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
       // console.log(error);
@@ -69,7 +69,7 @@ const login = () => {
           (error as any)?.message?.email ||
           (error as any)?.message ||
           "Something went wrong"
-        }&time=3000`
+        }&time=2000`
       );
     }
   };

@@ -77,7 +77,7 @@ const singup = () => {
           params: { email: res?.data?.email },
         });
       } else {
-        router?.push(`/toaster?content=${res?.message}&time=3000`);
+        router?.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
       console.log(error, "dj dj djd djd jd jd djd ");
@@ -87,7 +87,7 @@ const singup = () => {
           (error as any)?.message?.name ||
           (error as any)?.message?.phone ||
           (error as any)?.message?.password
-        }&time=3000`
+        }&time=2000`
       );
     }
   };
