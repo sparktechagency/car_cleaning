@@ -20,6 +20,13 @@ export default function RootLayout() {
             }}
           >
             <Stack.Screen name="index" />
+            <Stack.Screen
+              name="taster"
+              options={{
+                presentation: "formSheet",
+                sheetAllowedDetents: "fitToContents",
+              }}
+            />
 
             {/* <Stack.Screen name="editProfile" />
             <Stack.Screen name="forgetPass" />

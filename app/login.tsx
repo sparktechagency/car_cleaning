@@ -4,12 +4,12 @@ import {
   IconEyaClose,
   IconEyeShow,
   IconPassword,
+  IconTikMark,
 } from "@/assets/icon/icon";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import { ImgLogo } from "@/assets/images/images";
 import SubHeading from "@/components/SubTileHead";
@@ -52,24 +52,25 @@ const login = () => {
       if (isChecked === true) {
         await AsyncStorage.setItem("loginInfo", JSON.stringify(loginUserData));
       }
+      // delete loginUserData.password;
       const res = await login(loginUserData).unwrap();
 
       if (res.status) {
         await AsyncStorage.setItem("token", res?.data?.access_token);
         router.replace("/drewer/home");
       } else {
-        Toast.show({
-          type: ALERT_TYPE.WARNING,
-          title: "Failed !",
-          textBody: "Login failed. Please check your credentials.",
-        });
+        router?.push(`/taster?content=${res?.message}&time=3000`);
       }
     } catch (error) {
-      Toast.show({
-        type: ALERT_TYPE.DANGER,
-        title: "Error!",
-        textBody: "Something went wrong.",
-      });
+      // console.log(error);
+      router?.push(
+        `/taster?content=${
+          error?.message?.password ||
+          error?.message?.email ||
+          error?.message ||
+          "Something went wrong"
+        }&time=3000`
+      );
     }
   };
 
@@ -198,7 +199,7 @@ const login = () => {
                   )}
                 >
                   {isChecked ? (
-                    <Text style={tw`text-white text-sm`}>✔</Text>
+                    <SvgXml height={15} width={15} xml={IconTikMark} />
                   ) : null}
                 </TouchableOpacity>
                 <Text>Remember me</Text>
