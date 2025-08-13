@@ -1,5 +1,4 @@
 import { Controller, useForm } from "react-hook-form";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import { IconEmail } from "@/assets/icon/icon";
 import SubHeading from "@/components/SubTileHead";
@@ -39,13 +38,12 @@ const forgetPass = () => {
           params: { email: data?.email },
         });
       } else {
-        Toast.show({
-          type: ALERT_TYPE.WARNING,
-          title: "Failed!",
-          textBody: "Can not read your email!",
-        });
+        route?.push(`/toaster?content=${res?.message}&time=3000`);
       }
     } catch (error) {
+      route?.push(
+        `/toaster?content=${(error as any)?.message?.email}&time=3000`
+      );
       console.log(error, "Otp don't send Please try.");
     }
   };

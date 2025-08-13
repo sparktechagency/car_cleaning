@@ -1,15 +1,15 @@
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { router, useNavigation } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { router, useNavigation } from "expo-router";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import { IconBackArrow } from "@/assets/icon/icon";
-import InputText from "@/lib/inputs/InputText";
-import React from "react";
-import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useSupportMutation } from "@/redux/apiSlices/draweApiSlices";
+import React from "react";
+import { SvgXml } from "react-native-svg";
 
 const support = () => {
   const navigation = useNavigation();
@@ -42,11 +42,14 @@ const support = () => {
         router.push("/drewer/home");
       }
     } catch (error) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Failed",
-        textBody: "Please Try again.",
-      });
+      router?.push(
+        `/toaster?content=${
+          (error as any)?.message?.fullname ||
+          (error as any)?.message?.email ||
+          (error as any)?.subject ||
+          (error as any)?.message?.message
+        }&time=3000`
+      );
     }
   };
 

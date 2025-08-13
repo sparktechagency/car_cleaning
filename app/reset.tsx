@@ -3,7 +3,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Image, Modal, Text, View } from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
@@ -46,11 +45,11 @@ const Reset = () => {
         }, 3000);
       }
     } catch (error) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Failed !",
-        textBody: "Something is wrong Please try again",
-      });
+      router?.push(
+        `/toaster?content=${
+          (error as any)?.message?.password || (error as any)?.message?.email
+        }&time=3000`
+      );
     }
     console.log(newPassword, "this reset pass user");
   };

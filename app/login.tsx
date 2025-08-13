@@ -59,15 +59,15 @@ const login = () => {
         await AsyncStorage.setItem("token", res?.data?.access_token);
         router.replace("/drewer/home");
       } else {
-        router?.push(`/taster?content=${res?.message}&time=3000`);
+        router?.push(`/toaster?content=${res?.message}&time=3000`);
       }
     } catch (error) {
       // console.log(error);
       router?.push(
-        `/taster?content=${
-          error?.message?.password ||
-          error?.message?.email ||
-          error?.message ||
+        `/toaster?content=${
+          (error as any)?.message?.password ||
+          (error as any)?.message?.email ||
+          (error as any)?.message ||
           "Something went wrong"
         }&time=3000`
       );

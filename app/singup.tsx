@@ -1,5 +1,3 @@
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
-import { Controller, useForm } from "react-hook-form";
 import {
   IconBackArrow,
   IconEmail,
@@ -9,22 +7,23 @@ import {
   IconPhone,
   IconUser,
 } from "@/assets/icon/icon";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Link, router } from "expo-router";
-import React, { useState } from "react";
 import {
   useGoogleLoginMutation,
   useRegisterMutation,
 } from "@/redux/apiSlices/authSlices";
+import { Link, router } from "expo-router";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Heading from "@/components/TitleHead";
 import { ImgLogo } from "@/assets/images/images";
-import InputText from "@/lib/inputs/InputText";
 import SubHeading from "@/components/SubTileHead";
-import { SvgXml } from "react-native-svg";
+import Heading from "@/components/TitleHead";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SvgXml } from "react-native-svg";
 
 const singup = () => {
   const [isShow, setIsShow] = useState(false);
@@ -78,19 +77,18 @@ const singup = () => {
           params: { email: res?.data?.email },
         });
       } else {
-        Toast.show({
-          type: ALERT_TYPE.WARNING,
-          title: "Failed !",
-          textBody: "Register failed. Please check your credentials.",
-        });
+        router?.push(`/toaster?content=${res?.message}&time=3000`);
       }
     } catch (error) {
       console.log(error, "dj dj djd djd jd jd djd ");
-      Toast.show({
-        type: ALERT_TYPE.DANGER,
-        title: "Error!",
-        textBody: "Something went wrong.",
-      });
+      router?.push(
+        `/toaster?content=${
+          (error as any)?.message?.email ||
+          (error as any)?.message?.name ||
+          (error as any)?.message?.phone ||
+          (error as any)?.message?.password
+        }&time=3000`
+      );
     }
   };
 

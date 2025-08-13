@@ -1,3 +1,4 @@
+import React, { useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -10,6 +11,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import Animated, {
   interpolate,
   runOnJS,
@@ -18,12 +24,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import React, { useRef, useState } from "react";
 
 import RNFS from "react-native-fs";
 

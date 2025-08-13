@@ -21,7 +21,7 @@ export default function RootLayout() {
           >
             <Stack.Screen name="index" />
             <Stack.Screen
-              name="taster"
+              name="toaster"
               options={{
                 presentation: "formSheet",
                 sheetAllowedDetents: "fitToContents",
