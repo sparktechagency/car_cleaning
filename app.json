@@ -44,13 +44,7 @@
           "ios": {}
         }
       ],
-      [
-        "@stripe/stripe-react-native",
-        {
-          "merchantIdentifier": "",
-          "enableGooglePay": true
-        }
-      ],
+     
       [
         "expo-splash-screen",
         {
