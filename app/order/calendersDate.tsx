@@ -34,8 +34,6 @@ import { SvgXml } from "react-native-svg";
 const calendersDate = () => {
   const { id } = useLocalSearchParams();
   const [isTime, setIsTime] = React.useState<any | null>(null);
-  const [car_brand, setCarBrand] = useState("");
-  const [car_model, setCarModel] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -160,9 +158,6 @@ const calendersDate = () => {
     if (profileData?.data?.car_brand || profileData?.data?.car_model) {
       const brand = profileData?.data?.car_brand || "";
       const model = profileData?.data?.car_model || "";
-
-      setCarBrand(brand);
-      setCarModel(model);
 
       reset({
         brand_name: brand,

@@ -1,6 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
 
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
   IconBackArrow,
   IconChange,
@@ -13,17 +12,6 @@ import {
   IconThreeDot,
 } from "@/assets/icon/icon";
 import {
-  Image,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { router, useNavigation } from "expo-router";
-import {
   useChangeProfileImageMutation,
   useGetProfileQuery,
   useUpdateUserMutation,
@@ -32,11 +20,22 @@ import {
   useDeleteCarPhotoMutation,
   useUpdateCarPhotoMutation,
 } from "@/redux/apiSlices/carApiSlices";
+import { router, useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
-import InputText from "@/lib/inputs/InputText";
-import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
+import { SvgXml } from "react-native-svg";
 
 const editProfile = () => {
   const { width, height } = useWindowDimensions();
@@ -106,11 +105,7 @@ const editProfile = () => {
         // Now call upload API
         handleSwapPhoto(swapUri);
       } else {
-        Toast.show({
-          type: ALERT_TYPE.WARNING,
-          title: "Warning",
-          textBody: "Please Select One Image",
-        });
+        router?.push(`/toaster?content=Please Select One Image&time=2000`);
       }
     } catch (error) {
       console.log("Profile Image not updated -------------------->", error);
@@ -127,18 +122,14 @@ const editProfile = () => {
         type: "image/jpeg",
       } as any);
 
-      console.log(photoId);
+      // console.log(photoId);
       const res = await swapPhoto({ data: formData, id: photoId }).unwrap();
       console.log("image Res", res);
       if (res?.status) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          // textBody: "Success",
-        });
+        router?.push(`/toaster?content=Success&time=2000`);
       }
     } catch (error) {
-      console.log("Image Update something Is Wrong ----->", error);
+      router?.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };
 
@@ -148,14 +139,10 @@ const editProfile = () => {
       const res = await deletePhot(photoId).unwrap();
       setSelectModalVisible(false);
       if (res?.status) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Deleted",
-          // textBody: "You have successful this Photo",
-        });
+        router?.push(`/toaster?content=Success&time=2000`);
       }
     } catch (error) {
-      console.log("some thing is Wrong no delete image---------->", error);
+      router?.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };
 
@@ -194,14 +181,10 @@ const editProfile = () => {
       // ================ here is call api ===========
       const res = await changeProfileImage(formData).unwrap();
       if (res?.status) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          // textBody: "Congrats! Your Profile Image Update success",
-        });
+        router?.push(`/toaster?content=Success&time=2000`);
       }
     } catch (error) {
-      console.log("Profile image something is wrong ==============", error);
+      router?.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };
 

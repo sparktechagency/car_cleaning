@@ -5,7 +5,6 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import SubHeading from "@/components/SubTileHead";
 import Heading from "@/components/TitleHead";
@@ -27,19 +26,13 @@ const OTPScreen = () => {
       const res = await forgetPassResponse({ email }).unwrap();
 
       if (res?.status) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          textBody: "Send again OTP number.",
-        });
+        router.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
       console.log(error, "Otp don't send Please try.");
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Filed!",
-        textBody: "Something is wrong please try again.",
-      });
+      router.push(
+        `/toaster?content=${(error as any)?.message?.email}&time=2000`
+      );
     }
   };
 

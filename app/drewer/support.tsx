@@ -1,7 +1,6 @@
 import { router, useNavigation } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 import { IconBackArrow } from "@/assets/icon/icon";
 import TButton from "@/lib/buttons/TButton";
@@ -34,11 +33,6 @@ const support = () => {
     try {
       const response = await supportData(data).unwrap();
       if (response?.status === true) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          textBody: "Your message has been sent.",
-        });
         router.push("/drewer/home");
       }
     } catch (error) {

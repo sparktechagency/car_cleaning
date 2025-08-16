@@ -21,6 +21,7 @@
       "appleTeamId": "A44586Q8GH"
     },
     "android": {
+       "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/android-adaptive-icon.png",
         "backgroundColor": "#ffffff"

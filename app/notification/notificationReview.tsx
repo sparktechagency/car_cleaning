@@ -1,17 +1,16 @@
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { IconBackArrow, IconWaring } from "@/assets/icon/icon";
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+import { router, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 
-import InputText from "@/lib/inputs/InputText";
-import StarRating from "react-native-star-rating-widget";
-import { SvgXml } from "react-native-svg";
 import TButton from "@/lib/buttons/TButton";
+import InputText from "@/lib/inputs/InputText";
 import tw from "@/lib/tailwind";
 import { useFeedBackSendMutation } from "@/redux/apiSlices/notificatinApiSlices";
 import { useGetServicesByIdQuery } from "@/redux/apiSlices/servicesApiSlices";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import { useNavigation } from "expo-router";
+import StarRating from "react-native-star-rating-widget";
+import { SvgXml } from "react-native-svg";
 
 const notificationReview = () => {
   const navigation = useNavigation();
@@ -52,22 +51,13 @@ const notificationReview = () => {
     try {
       const res = await data(feedBackData).unwrap();
       if (res?.status) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: "Success",
-          textBody: "Thank you for your feedback.",
-        });
         navigation.goBack();
       }
     } catch (error) {
       console.log(error, "Feed back not send Please try again --------");
       setFeedBack("");
       setRating(0);
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Field",
-        textBody: "Something is Wrong. Please Try again",
-      });
+      router.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };
 

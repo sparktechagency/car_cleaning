@@ -1,8 +1,3 @@
-import { ALERT_TYPE, Toast } from "react-native-alert-notification";
-import {
-  GestureHandlerRootView,
-  TextInput,
-} from "react-native-gesture-handler";
 import { IconCross, IconDeleteRed, IconLogOut } from "@/assets/icon/icon";
 import {
   Image,
@@ -13,18 +8,22 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Drawer } from "expo-router/drawer";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { SvgXml } from "react-native-svg";
-import { removeUser } from "@/redux/service/user";
 import tw from "@/lib/tailwind";
 import { useDeleteUserAccountMutation } from "@/redux/apiSlices/authSlices";
+import { removeUser } from "@/redux/service/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Drawer } from "expo-router/drawer";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SvgXml } from "react-native-svg";
 
 const CustomDrawerContent = (props) => {
   const user = useSelector((state: any) => state?.user?.user);
@@ -47,20 +46,12 @@ const CustomDrawerContent = (props) => {
       dispatch(removeUser());
       router.replace("/login");
       if (res) {
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-
-          textBody: "User Deleted",
-        });
+        router.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
       console.log(error, "user not delete successful");
       setIsModalVisible(false);
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Warning",
-        textBody: "Add correct password",
-      });
+      router.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };
 

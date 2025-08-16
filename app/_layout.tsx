@@ -3,32 +3,40 @@ import store from "@/redux/store";
 import { Stack } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native";
-import { AlertNotificationRoot } from "react-native-alert-notification";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 export default function RootLayout() {
+  const { bottom, top } = useSafeAreaInsets();
   return (
-    <AlertNotificationRoot>
-      <SafeAreaView style={tw`flex-1 w-full bg-primaryBase`}>
-        <Provider store={store}>
-          <Stack
-            screenOptions={{
-              statusBarAnimation: "fade",
-              statusBarStyle: "dark",
-              statusBarBackgroundColor: "#EFF2F2",
-              headerShown: false,
+    <SafeAreaView
+      style={[
+        tw`flex-1 w-full bg-primaryBase`,
+        {
+          paddingTop: top,
+          paddingBottom: bottom,
+        },
+      ]}
+    >
+      <Provider store={store}>
+        <Stack
+          screenOptions={{
+            statusBarAnimation: "fade",
+            statusBarStyle: "dark",
+            statusBarBackgroundColor: "#EFF2F2",
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen
+            name="toaster"
+            options={{
+              presentation: "formSheet",
+              sheetAllowedDetents: "fitToContents",
             }}
-          >
-            <Stack.Screen name="index" />
-            <Stack.Screen
-              name="toaster"
-              options={{
-                presentation: "formSheet",
-                sheetAllowedDetents: "fitToContents",
-              }}
-            />
+          />
 
-            {/* <Stack.Screen name="editProfile" />
+          {/* <Stack.Screen name="editProfile" />
             <Stack.Screen name="forgetPass" />
             <Stack.Screen name="login" />
             <Stack.Screen name="OTPScreen" />
@@ -53,9 +61,8 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             /> */}
-          </Stack>
-        </Provider>
-      </SafeAreaView>
-    </AlertNotificationRoot>
+        </Stack>
+      </Provider>
+    </SafeAreaView>
   );
 }
