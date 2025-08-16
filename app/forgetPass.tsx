@@ -23,13 +23,13 @@ const forgetPass = () => {
     },
   });
 
-  const [forgetPassResponse] = useForgetPasswordMutation();
+  const [forgetPassResponse, results] = useForgetPasswordMutation();
 
   const onSubmit = async (data) => {
     const emailValue = {
       email: data?.email,
     };
-    console.log(emailValue, "this forget profile data ------------------->");
+    // console.log(emailValue, "this forget profile data ------------------->");
     try {
       const res = await forgetPassResponse(emailValue).unwrap();
       if (res) {
@@ -94,6 +94,7 @@ const forgetPass = () => {
           <View style={tw`gap-3 mt-10`}>
             <View style={tw`rounded-full h-12`}>
               <TButton
+                isLoading={results?.isLoading}
                 onPress={handleSubmit(onSubmit)}
                 title="Verify"
                 containerStyle={tw``}
