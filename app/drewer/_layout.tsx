@@ -36,21 +36,24 @@ const CustomDrawerContent = (props) => {
   const isTablet = width >= 768;
 
   const dispatch = useDispatch();
-  const [deleteAccount] = useDeleteUserAccountMutation();
+  const [deleteAccount, { isLoading }] = useDeleteUserAccountMutation();
 
   const handleUserDelete = async () => {
-    setIsModalVisible(false);
     try {
       const res = await deleteAccount({ password: userPass }).unwrap();
-      await AsyncStorage.removeItem("token");
-      dispatch(removeUser());
-      router.replace("/login");
-      if (res) {
+      if (res?.status) {
+        setIsModalVisible(false);
+        await AsyncStorage.removeItem("token");
+        dispatch(removeUser());
+        router.replace("/login");
+        router.push(`/toaster?content=${res?.message}&time=2000`);
+      } else {
+        setIsModalVisible(false);
         router.push(`/toaster?content=${res?.message}&time=2000`);
       }
     } catch (error) {
-      console.log(error, "user not delete successful");
       setIsModalVisible(false);
+      console.log(error, "user not delete successful");
       router.push(`/toaster?content=Something went wrong&time=2000`);
     }
   };

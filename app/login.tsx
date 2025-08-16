@@ -54,7 +54,11 @@ const login = () => {
       }
       // delete loginUserData.password;
       const res = await login(loginUserData).unwrap();
+      // console.log(res);
 
+      if (res.need_verificaiton) {
+        router.replace("/OTPScreen");
+      }
       if (res.status) {
         await AsyncStorage.setItem("token", res?.data?.access_token);
         router.replace("/drewer/home");

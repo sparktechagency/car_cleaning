@@ -299,6 +299,7 @@ const singup = () => {
           {isChecked ? (
             <View style={tw`rounded-full h-12`}>
               <TButton
+                isLoading={isLoading}
                 onPress={handleSubmit(onRegisterInfoSubmit)}
                 title="Sign up"
                 containerStyle={[tw``]}
